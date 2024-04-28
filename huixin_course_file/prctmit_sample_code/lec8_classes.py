@@ -32,7 +32,7 @@ print(c)
 ## Try adding more built-in operations like multiply, divide
 ### Try adding a reduce method to reduce the fraction (use gcd)
 #################
-'''
+
 class Fraction(object):
     """
     A number represented as a fraction
@@ -53,6 +53,7 @@ class Fraction(object):
     def __sub__(self, other):
         """ Returns a new fraction representing the subtraction """
         top = self.num*other.denom - self.denom*other.num
+        
         bott = self.denom*other.denom
         return Fraction(top, bott)
     def __float__(self):
@@ -65,10 +66,10 @@ class Fraction(object):
 a = Fraction(1,4)
 b = Fraction(3,4)
 c = a + b # c is a Fraction object
-print(c)
-print(float(c))
-print(Fraction.__float__(c))
-print(float(b.inverse()))'''
+# print(c)
+# print(float(c))
+# print(Fraction.__float__(c))
+# print(float(b.inverse()))
 ##c = Fraction(3.14, 2.7) # assertion error
 ##print a*b # error, did not define how to multiply two Fraction objects
 
@@ -117,10 +118,10 @@ s.insert(3)
 s.insert(4)
 s.insert(3)
 print(s)
-s.member(3)
-s.member(5)
+print(s.member(3))
+print(s.member(5))
 s.insert(6)
 print(s)
-#s.remove(3)  # leads to an error
+# s.remove(3)  # leads to an error
 print(s)
 s.remove(3)
