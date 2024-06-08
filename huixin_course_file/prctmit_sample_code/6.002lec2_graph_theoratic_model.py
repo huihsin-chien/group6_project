@@ -70,6 +70,7 @@ def buildCityGraph(graphType):
     for name in ('Boston', 'Providence', 'New York', 'Chicago',
                  'Denver', 'Phoenix', 'Los Angeles'): #Create 7 nodes
         g.addNode(Node(name))
+
     g.addEdge(Edge(g.getNode('Boston'), g.getNode('Providence')))
     g.addEdge(Edge(g.getNode('Boston'), g.getNode('New York')))
     g.addEdge(Edge(g.getNode('Providence'), g.getNode('Boston')))
@@ -127,10 +128,10 @@ def testSP(source, destination):
     else:
         print('There is no path from', source, 'to', destination)
 
-testSP('Chicago', 'Boston')
-print()
-testSP('Boston', 'Phoenix')
-print()
+# testSP('Chicago', 'Boston')
+# print()
+# testSP('Boston', 'Phoenix')
+# print()
 
 printQueue = True 
 
