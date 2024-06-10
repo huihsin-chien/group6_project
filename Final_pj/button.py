@@ -12,7 +12,8 @@ class Button:
         if screen is None:
             print("Error: Screen is None!!", text)
         else:
-            print(screen , " is not None", text)
+            pass
+            # print(screen , " is not None", text)
 
         if self.screen is None:
             print("Error: Screen is None!")
