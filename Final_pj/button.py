@@ -5,16 +5,25 @@ BLACK = (0, 0, 0)
 GRAY = (169, 169, 169)
 
 class Button:
-    def __init__(self, text, pos, font, bg=GRAY, feedback=''):
+    def __init__(self, text, pos, font,screen, bg=GRAY, feedback=''):
         self.x, self.y = pos
         self.font = font
-        self.screen = pygame.display.get_surface()  # Get the screen surface
+        self.screen = screen
+        if screen is None:
+            print("Error: Screen is None!!", text)
+        else:
+            print(screen , " is not None", text)
+
+        if self.screen is None:
+            print("Error: Screen is None!")
         if feedback == '':
             self.feedback = text
         else:
             self.feedback = feedback
         self.original_text = text  # 保存原始文本
+        self.original_bg = bg
         self.change_text(text, bg)
+
 
     def change_text(self, text, bg=GRAY):
         self.rendered_text = self.font.render(text, True, WHITE)
@@ -39,6 +48,6 @@ class Button:
     def release(self, event):
         x, y = pygame.mouse.get_pos()
         if self.rect.collidepoint(x, y):
-            self.change_text(self.original_text, GRAY)
+            self.change_text(self.original_text, self.original_bg)
             return True
         return False
