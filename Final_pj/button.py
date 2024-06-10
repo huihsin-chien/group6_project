@@ -39,6 +39,6 @@ class Button:
     def release(self, event):
         x, y = pygame.mouse.get_pos()
         if self.rect.collidepoint(x, y):
-            self.change_text(self.original_text, self.bg)
+            self.change_text(self.original_text, GRAY)
             return True
         return False
