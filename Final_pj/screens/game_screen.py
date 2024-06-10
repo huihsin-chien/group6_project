@@ -10,14 +10,11 @@ BLACK = (0, 0, 0)
 GRAY = (169, 169, 169)
 
 pet = Pet()
-# screen = pygame.display.get_surface()
+
 menu_font = pygame.font.Font(settings.font_path, settings.menu_font_size)
-# shop_button = Button(u'Shop', (500, 150), menu_font,screen, GRAY, u'Shop')
-# food_button = Button(u'Food', (50, 200), menu_font,screen, GRAY, u'Food')
-# water_button = Button(u'Water', (50, 250), menu_font,screen, GRAY, u'Water')
 
 def draw_pet_attributes(screen, food_button, water_button):
-    # screen = pygame.display.get_surface()
+    
     hungry_text = menu_font.render(f'Hungry Level: {pet.hungry_level}%', True, WHITE)
     screen.blit(hungry_text, (50, 50))
 
@@ -27,13 +24,11 @@ def draw_pet_attributes(screen, food_button, water_button):
     healthy_text = menu_font.render(f'Healthy Level: {pet.healthy_level}%', True, WHITE)
     screen.blit(healthy_text, (50, 150))
 
-    # food_button = Button(u'Food', (50, 200), menu_font,screen, GRAY, u'Food')
-    # water_button = Button(u'Water', (50, 250), menu_font,screen, GRAY, u'Water')
     food_button.show()
     water_button.show()
 
 def draw_player_info(screen, shop_button):
-    # screen = pygame.display.get_surface()
+   
     state_text = menu_font.render(f'State: {pet.state}', True, WHITE)
     screen.blit(state_text, (500, 50))
 
@@ -43,11 +38,10 @@ def draw_player_info(screen, shop_button):
     hour_text = menu_font.render(f'Hour: {pet.hour}', True, WHITE)
     screen.blit(hour_text, (500, 200))
 
-    # shop_button = Button(u'Shop', (500, 150), menu_font,screen, GRAY, u'Shop')
     shop_button.show()
 
 def game_screen(screen):
-    # screen = pygame.display.get_surface()
+
     shop_button = Button(u'Shop', (500, 150), menu_font,screen, GRAY, u'Shop')
     food_button = Button(u'Food', (50, 200), menu_font,screen, GRAY, u'Food')
     water_button = Button(u'Water', (50, 250), menu_font,screen, GRAY, u'Water')
