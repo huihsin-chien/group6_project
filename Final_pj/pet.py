@@ -17,6 +17,12 @@ class Pet:
             self.hour += 1
             self.hungry_level -= 5
             self.time_since_last_hour = 0
+        if self.hour % 10 == 0:
+            self.happy_level -= 5
+            self.money += 1
+        if self.hour % 20 == 0:
+            self.healthy_level -= 5
+        
 
             # 根据hour更改state
             if self.hour < 50:
@@ -36,6 +42,7 @@ class Pet:
             else:
                 self.status = 'full'
 
+
     def feed(self):
         if self.food_amount > 0:
             self.food_amount -= 1
@@ -51,11 +58,11 @@ class Pet:
             self.healthy_level += 10
 
     def buy_food(self):
-        if self.money >= 10:
-            self.money -= 10
-            self.food_amount += 5
+        if self.money >= 3:
+            self.money -= 3
+            self.food_amount += 1
 
     def buy_water(self):
-        if self.money >= 10:
-            self.money -= 10
-            self.water_amount += 5
+        if self.money >= 1:
+            self.money -= 1
+            self.water_amount += 1
