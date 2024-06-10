@@ -53,7 +53,7 @@ def egg_hatching_screen():
     start_time = pygame.time.get_ticks()
     while True:
         current_time = pygame.time.get_ticks()
-        if current_time - start_time >= 5000:  # 5 秒后跳转到游戏界面
+        if current_time - start_time >= 1000:  # 5 秒后跳转到游戏界面
             game_screen()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
