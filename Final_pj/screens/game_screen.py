@@ -218,14 +218,15 @@ def setting_screen(screen): #volumn, resume, return to main menu
         pygame.display.update()
     
 def draw_chart(screen, data):
-    # 设置图表区域
+    if not data:
+        return
+    
     chart_rect = pygame.Rect(50, 100, 700, 400)
     pygame.draw.rect(screen, WHITE, chart_rect, 2)
 
     max_hour = max(record['hour'] for record in data)
     max_value = max(max(record['hungry_level'], record['happy_level'], record['healthy_level']) for record in data)
 
-    # 绘制图表内容
     for i, record in enumerate(data):
         x = chart_rect.x + (i * chart_rect.width // len(data))
         hungry_height = chart_rect.height * record['hungry_level'] // max_value
@@ -237,6 +238,7 @@ def draw_chart(screen, data):
         pygame.draw.rect(screen, (0, 0, 255), (x + 30, chart_rect.y + chart_rect.height - healthy_height, 10, healthy_height))
 
 def show_leaderboard_with_chart(screen):
+    from screens.main_menu import main_menu
     try:
         with open('leaderboard.json', 'r') as f:
             data = json.load(f)
@@ -247,7 +249,11 @@ def show_leaderboard_with_chart(screen):
     title_text = menu_font.render('Leaderboard', True, WHITE)
     screen.blit(title_text, (300, 50))
 
-    draw_chart(screen, data)
+    if data:
+        draw_chart(screen, data)
+    else:
+        no_data_text = menu_font.render('No data available', True, WHITE)
+        screen.blit(no_data_text, (300, 200))
 
     return_button = Button('Return', (300, 500), menu_font, screen, GRAY, 'Return')
     return_button.show()
@@ -260,6 +266,9 @@ def show_leaderboard_with_chart(screen):
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if return_button.click(event):
+                    screen.fill(BLACK)
+                    pet.reset()
+                    main_menu(screen)
                     return
             elif event.type == pygame.MOUSEBUTTONUP:
                 return_button.release(event)
@@ -289,18 +298,19 @@ def game_over_screen(screen):
                 if play_again_button.click(event):
                     pet.reset()
                     screen.fill(BLACK)
-                    main_menu(screen)  # 返回游戏主菜单
+                    main_menu(screen)
                 if leaderboard_button.click(event):
-                    show_leaderboard_with_chart(screen)  # 显示排行榜
+                    show_leaderboard_with_chart(screen)
             elif event.type == pygame.MOUSEBUTTONUP:
                 play_again_button.release(event)
                 leaderboard_button.release(event)
 
 
 
+
 import json
 
-def save_record(record, file_path= settings.leaderboard_json_path):
+def save_record(record, file_path='leaderboard.json'):
     try:
         with open(file_path, 'r') as f:
             data = json.load(f)

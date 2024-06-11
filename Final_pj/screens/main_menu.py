@@ -32,15 +32,18 @@ def main_menu(screen):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if start_button.click(event):
                     egg_hatching_screen(screen)
+                    start_button.release(event)
                 if exit_button.click(event):
                     pygame.quit()
                     sys.exit()
                 if leaderboard_button.click(event):
+                    leaderboard_button.release(event)
                     show_leaderboard(screen)
-            elif event.type == pygame.MOUSEBUTTONUP:
-                start_button.release(event)
-                exit_button.release(event)
-                leaderboard_button.release(event)
+                    
+            # elif event.type == pygame.MOUSEBUTTONUP:
+            #     start_button.release(event)
+            #     exit_button.release(event)
+            #     leaderboard_button.release(event)
 
         screen.blit(menu_background_image, (0, 0))
         start_button.show()

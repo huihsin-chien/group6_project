@@ -37,6 +37,8 @@ def show_leaderboard(screen):
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if return_button.click(event):
+                    screen.fill(BLACK)
                     return
             elif event.type == pygame.MOUSEBUTTONUP:
                 return_button.release(event)
+                

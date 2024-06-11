@@ -1,14 +1,20 @@
 [
     {
-        "hour": 36,
+        "hour": 15,
         "hungry_level": 0,
-        "happy_level": 85,
-        "healthy_level": 85
+        "happy_level": 75,
+        "healthy_level": 95
     },
     {
         "hour": 15,
         "hungry_level": 0,
-        "happy_level": 95,
+        "happy_level": 40,
+        "healthy_level": 95
+    },
+    {
+        "hour": 15,
+        "hungry_level": 0,
+        "happy_level": 40,
         "healthy_level": 95
     },
     {
