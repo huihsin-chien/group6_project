@@ -1,30 +1,39 @@
 import pygame
 import sys
 import random
+import settings
+from button import Button
 from screens.game_screen import game_screen
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GRAY = (169, 169, 169)
+heads_image = pygame.image.load('Assets\img\Male.jpg')
+tails_image = pygame.image.load('Assets\img\Female.jpg')
+menu_font = pygame.font.Font(settings.font_path, settings.menu_font_size)
 
 def egg_hatching_screen(screen):
     # screen = pygame.display.get_surface()
-    start_time = pygame.time.get_ticks()
+    screen.fill(BLACK)
+    title_text = menu_font.render('Gender Choosing', True, WHITE)
+    screen.blit(title_text, (300, 50))
+    toss_button = Button('TOSS', (450, 450), menu_font, screen, GRAY, '')
+    toss_button.show()
+
     while True:
-        current_time = pygame.time.get_ticks()
-        if current_time - start_time >= 1000:  # 1 秒后跳转到游戏界面
-            game_screen(screen)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if toss_button.click(event):
 
-        screen.fill(BLACK)  # 暂时用黑色背景表示孵蛋页面
+                    result = toss_coin()
+                    display_result(result)
+        
         pygame.display.update()
 
 
-heads_image = pygame.image.load('Assets\img\Male.jpg')
-tails_image = pygame.image.load('Assets\img\Female.jpg')
 
 def toss_coin():
     return random.choice(["Female", "Male"])
@@ -37,13 +46,8 @@ def display_result(screen, result):
         screen.blit(tails_image, (0, 0))
     pygame.display.flip()
 
-def main():
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                result = toss_coin()
-                display_result(result)
+if __name__ == "__main__":
+    pygame.init()
+    screen = pygame.display.set_mode((800, 600))  # 设置窗口大小
+    egg_hatching_screen(screen)     
 
