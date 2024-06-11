@@ -37,6 +37,7 @@ def resize_images_in_directory(directory, size):
 if __name__ == "__main__":
     # Example usage
     directory = "Assets\img"  # Replace with your image directory
+    filename = "Male.jpg"
     size = (100, 100)  # Replace with the desired size
 
     resize_images_in_directory(directory, size)
