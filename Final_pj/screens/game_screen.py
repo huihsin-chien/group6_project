@@ -6,7 +6,6 @@ import settings
 from time import time
 import random
 
-
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GRAY = (169, 169, 169)
@@ -59,12 +58,18 @@ def draw_player_info(screen, shop_button):
 
     shop_button.show()
 
+def change_direction():
+    pet.speed_x = random.choice([-1, 0, 1])
+    pet.speed_y = random.choice([-1, 0, 1])
+
 def game_screen(screen):
     last_update_time = time()
     direction_change_time = time()
-    shop_button = Button(u'Shop', (500, 150), menu_font,screen, GRAY, u'Shop')
-    food_button = Button(f'Food:{pet.food_amount}', (50, 200), menu_font,screen, GRAY, f'Food{pet.food_amount}')
-    water_button = Button(f'Water:{pet.water_amount}', (50, 250), menu_font,screen, GRAY, f'Water:{pet.water_amount}')
+    shop_button = Button(u'Shop', (500, 150), menu_font, screen, GRAY, u'Shop')
+    food_button = Button(f'Food:{pet.food_amount}', (50, 200), menu_font, screen, GRAY, f'Food{pet.food_amount}')
+    water_button = Button(f'Water:{pet.water_amount}', (50, 250), menu_font, screen, GRAY, f'Water:{pet.water_amount}')
+
+    change_direction()
 
     while True:
         for event in pygame.event.get():
@@ -77,10 +82,10 @@ def game_screen(screen):
                     open_shop(screen)
                 if food_button.click(event):
                     pet.feed()
-                    food_button = Button(f'Food:{pet.food_amount}', (50, 200), menu_font,screen, GRAY, f'Food{pet.food_amount}')
+                    food_button = Button(f'Food:{pet.food_amount}', (50, 200), menu_font, screen, GRAY, f'Food{pet.food_amount}')
                 if water_button.click(event):
                     pet.drink()
-                    water_button = Button(f'Water:{pet.water_amount}', (50, 250), menu_font,screen, GRAY, f'Water:{pet.water_amount}')
+                    water_button = Button(f'Water:{pet.water_amount}', (50, 250), menu_font, screen, GRAY, f'Water:{pet.water_amount}')
 
             elif event.type == pygame.MOUSEBUTTONUP:
                 shop_button.release(event)
@@ -90,7 +95,7 @@ def game_screen(screen):
         screen.fill(BLACK)
         draw_pet_attributes(screen, food_button, water_button)
         draw_player_info(screen, shop_button)
-        draw_pet_location(screen)
+        img_width, img_height = draw_pet_location(screen)
 
         if time() - last_update_time >= 1:
             last_update_time = time()
@@ -98,23 +103,26 @@ def game_screen(screen):
 
         if time() - direction_change_time >= 2:  # 每2秒改变一次方向
             direction_change_time = time()
-            pet.speed_x = random.choice([-2, -1, 0, 1, 2])
-            pet.speed_y = random.choice([-2, -1, 0, 1, 2])
+            change_direction()
 
         # 更新宠物的位置
         pet.x += pet.speed_x
         pet.y += pet.speed_y
 
-        # 保持宠物在屏幕范围内
+        # 保持宠物在屏幕范围内，并在接近边界时改变方向
         if pet.x < 0:
             pet.x = 0
-        elif pet.x > screen.get_width() -draw_pet_location(screen)[0]:
-            pet.x = screen.get_width() - draw_pet_location(screen)[0]
+            change_direction()
+        elif pet.x > screen.get_width() - img_width:
+            pet.x = screen.get_width() - img_width
+            change_direction()
 
         if pet.y < 0:
             pet.y = 0
-        elif pet.y > screen.get_height() - draw_pet_location(screen)[1]:
-            pet.y = screen.get_height() -  draw_pet_location(screen)[1]
+            change_direction()
+        elif pet.y > screen.get_height() - img_height:
+            pet.y = screen.get_height() - img_height
+            change_direction()
 
         pygame.display.update()
 
