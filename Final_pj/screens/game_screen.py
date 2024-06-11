@@ -3,6 +3,8 @@ import sys
 from button import Button
 from pet import Pet
 import settings
+from time import time
+import random
 
 
 WHITE = (255, 255, 255)
@@ -12,6 +14,18 @@ GRAY = (169, 169, 169)
 pet = Pet()
 
 menu_font = pygame.font.Font(settings.font_path, settings.menu_font_size)
+
+def draw_pet_location(screen):
+    if pet.state == 'baby':
+        pet_image = pygame.image.load(settings.baby_pet_image_path)
+    elif pet.state == 'teen':
+        pet_image = pygame.image.load(settings.teen_pet_image_path)
+    elif pet.state == 'adult':
+        pet_image = pygame.image.load(settings.adult_pet_image_path)
+    
+    pet.rect = pet_image.get_rect()
+    pet.rect.topleft = (pet.x, pet.y)
+    screen.blit(pet_image, pet.rect.topleft)
 
 def draw_pet_attributes(screen, food_button, water_button):
     
@@ -38,10 +52,14 @@ def draw_player_info(screen, shop_button):
     hour_text = menu_font.render(f'Hour: {pet.hour}', True, WHITE)
     screen.blit(hour_text, (500, 200))
 
+    status_text = menu_font.render(f'Status: {pet.status}', True, WHITE)
+    screen.blit(status_text, (500, 250))
+
     shop_button.show()
 
 def game_screen(screen):
-
+    last_update_time = time()
+    direction_change_time = time()
     shop_button = Button(u'Shop', (500, 150), menu_font,screen, GRAY, u'Shop')
     food_button = Button(f'Food:{pet.food_amount}', (50, 200), menu_font,screen, GRAY, f'Food{pet.food_amount}')
     water_button = Button(f'Water:{pet.water_amount}', (50, 250), menu_font,screen, GRAY, f'Water:{pet.water_amount}')
@@ -70,7 +88,31 @@ def game_screen(screen):
         screen.fill(BLACK)
         draw_pet_attributes(screen, food_button, water_button)
         draw_player_info(screen, shop_button)
-        pet.update_hour()
+
+        if time() - last_update_time >= 1:
+            last_update_time = time()
+            pet.update_hour()
+
+        if time() - direction_change_time >= 2:  # 每2秒改变一次方向
+            direction_change_time = time()
+            pet.speed_x = random.choice([-2, -1, 0, 1, 2])
+            pet.speed_y = random.choice([-2, -1, 0, 1, 2])
+
+        # 更新宠物的位置
+        pet.x += pet.speed_x
+        pet.y += pet.speed_y
+
+        # 保持宠物在屏幕范围内
+        if pet.x < 0:
+            pet.x = 0
+        elif pet.x > screen.get_width():
+            pet.x = screen.get_width()
+
+        if pet.y < 0:
+            pet.y = 0
+        elif pet.y > screen.get_height():
+            pet.y = screen.get_height()
+
         pygame.display.update()
 
 def open_shop(screen):
