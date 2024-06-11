@@ -71,13 +71,14 @@ def game_screen(screen):
 
     while True:
         current_time = time()
+        if pet.status == 'dead':
+            game_over_screen(screen)
+            break
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            if pet.status == 'dead':
-                game_over_screen(screen)
-                break
+            
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if shop_button.click(event):
