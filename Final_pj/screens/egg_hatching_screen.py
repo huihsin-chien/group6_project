@@ -8,8 +8,8 @@ from screens.game_screen import game_screen
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GRAY = (169, 169, 169)
-heads_image = pygame.image.load('Assets\img\Male.jpg')
-tails_image = pygame.image.load('Assets\img\Female.jpg')
+heads_image = pygame.image.load('Assets\img\Resized\Male.jpg')
+tails_image = pygame.image.load('Assets\img\Resized\Female.jpg')
 menu_font = pygame.font.Font(settings.font_path, settings.menu_font_size)
 
 def egg_hatching_screen(screen):
@@ -30,6 +30,8 @@ def egg_hatching_screen(screen):
 
                     result = toss_coin()
                     display_result(screen,result)
+                    pygame.time.wait(5000)
+                    game_screen(screen)
         
         pygame.display.update()
 
@@ -39,11 +41,11 @@ def toss_coin():
     return random.choice(["Female", "Male"])
 
 def display_result(screen, result):
-    screen.fill((255, 255, 255))  # 清屏，填充白色
+    screen.fill((BLACK))  # 清屏，填充白色
     if result == "Female":
-        screen.blit(heads_image, (0, 0))
+        screen.blit(heads_image, (300, 300))
     else:
-        screen.blit(tails_image, (0, 0))
+        screen.blit(tails_image, (300, 300))
     pygame.display.flip()
 
 if __name__ == "__main__":
