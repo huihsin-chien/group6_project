@@ -15,6 +15,10 @@ pet = Pet()
 
 menu_font = pygame.font.Font(settings.font_path, settings.menu_font_size)
 
+def draw_progress_bar(screen, x, y, width, height, color, percentage):
+    pygame.draw.rect(screen, BLACK, (x, y, width+1, height+1))
+    pygame.draw.rect(screen, color, (x, y, width * percentage / 100, height))
+
 def draw_pet_location(screen, pet_image_path):
     pet_image = pygame.image.load(pet_image_path)
     pet.rect = pet_image.get_rect()
@@ -24,14 +28,17 @@ def draw_pet_location(screen, pet_image_path):
     return (img_width, img_height)
 
 def draw_pet_attributes(screen, food_button, water_button):
-    hungry_text = menu_font.render(f'Hungry Level: {pet.hungry_level}%', True, WHITE)
+    hungry_text = menu_font.render(f'Hungry Level', True, WHITE)
     screen.blit(hungry_text, (50, 50))
+    draw_progress_bar(screen, 50, 100, 200, 20, (255, 0, 0), pet.hungry_level)
 
-    happy_text = menu_font.render(f'Happy Level: {pet.happy_level}%', True, WHITE)
+    happy_text = menu_font.render(f'Happy Level', True, WHITE)
     screen.blit(happy_text, (50, 100))
+    draw_progress_bar(screen, 50, 150, 200, 20, (255, 255, 0), pet.happy_level)
 
-    healthy_text = menu_font.render(f'Healthy Level: {pet.healthy_level}%', True, WHITE)
+    healthy_text = menu_font.render(f'Healthy Level', True, WHITE)
     screen.blit(healthy_text, (50, 150))
+    draw_progress_bar(screen, 50, 200, 200, 20, (0, 255, 0), pet.healthy_level)
 
     food_button.show()
     water_button.show()
