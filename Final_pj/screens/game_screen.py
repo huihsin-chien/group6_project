@@ -101,13 +101,15 @@ def game_screen(screen):
             last_update_time = time()
             pet.update_hour()
 
-        if time() - direction_change_time >= 2:  # 每2秒改变一次方向
+        if time() - direction_change_time >= 1:  # 每2秒改变一次方向
             direction_change_time = time()
             change_direction()
 
         # 更新宠物的位置
-        pet.x += pet.speed_x
-        pet.y += pet.speed_y
+        if time() - last_update_time >= 0.5 and time() - last_update_time <= 0.55 or \
+            time() - last_update_time >= 0.95 and time() - last_update_time <= 1 :
+            pet.x += pet.speed_x
+            pet.y += pet.speed_y
 
         # 保持宠物在屏幕范围内，并在接近边界时改变方向
         if pet.x < 0:

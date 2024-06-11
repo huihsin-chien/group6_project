@@ -13,8 +13,8 @@ class Pet:
         self.time_since_last_hour = 0  # 距离上次小时的时间
         self.x = 100
         self.y = 100
-        self.speed_x = 2
-        self.speed_y = 2
+        self.speed_x = 0.0000001
+        self.speed_y = 0.0000001
 
 
     def update_hour(self):
