@@ -29,7 +29,7 @@ def egg_hatching_screen(screen):
                 if toss_button.click(event):
 
                     result = toss_coin()
-                    display_result(result)
+                    display_result(screen,result)
         
         pygame.display.update()
 
