@@ -183,27 +183,6 @@ def open_shop(screen):
         screen.blit(water_text, (500, 200))
         pygame.display.update()
 
-def game_over_screen(screen):
-    from screens.main_menu import main_menu
-    game_over_text = menu_font.render(u'Game Over', True, WHITE)
-    screen.fill(BLACK)
-    screen.blit(game_over_text, (300, 200))
-    record_text = menu_font.render(f'Your final hour: {pet.hour}', True, WHITE)
-    screen.blit(record_text, (300, 250))
-    play_again_button = Button(u'Play Again', (300, 300), menu_font, screen, GRAY, u'Play Again')
-    play_again_button.show()
-    pygame.display.update()
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if play_again_button.click(event):
-                    pet.reset()
-                    screen.fill(BLACK)
-                    main_menu(screen)  
-
 def setting_screen(screen): #volumn, resume, return to main menu
     from screens.main_menu import main_menu
     vol_up_button = Button(u'Volume Up', (300, 200), menu_font, screen, GRAY, u'Volume Up')
@@ -238,3 +217,96 @@ def setting_screen(screen): #volumn, resume, return to main menu
         return_to_main_menu_button.show()
         pygame.display.update()
     
+def draw_chart(screen, data):
+    # 设置图表区域
+    chart_rect = pygame.Rect(50, 100, 700, 400)
+    pygame.draw.rect(screen, WHITE, chart_rect, 2)
+
+    max_hour = max(record['hour'] for record in data)
+    max_value = max(max(record['hungry_level'], record['happy_level'], record['healthy_level']) for record in data)
+
+    # 绘制图表内容
+    for i, record in enumerate(data):
+        x = chart_rect.x + (i * chart_rect.width // len(data))
+        hungry_height = chart_rect.height * record['hungry_level'] // max_value
+        happy_height = chart_rect.height * record['happy_level'] // max_value
+        healthy_height = chart_rect.height * record['healthy_level'] // max_value
+
+        pygame.draw.rect(screen, (255, 0, 0), (x, chart_rect.y + chart_rect.height - hungry_height, 10, hungry_height))
+        pygame.draw.rect(screen, (0, 255, 0), (x + 15, chart_rect.y + chart_rect.height - happy_height, 10, happy_height))
+        pygame.draw.rect(screen, (0, 0, 255), (x + 30, chart_rect.y + chart_rect.height - healthy_height, 10, healthy_height))
+
+def show_leaderboard_with_chart(screen):
+    try:
+        with open('leaderboard.json', 'r') as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        data = []
+
+    screen.fill(BLACK)
+    title_text = menu_font.render('Leaderboard', True, WHITE)
+    screen.blit(title_text, (300, 50))
+
+    draw_chart(screen, data)
+
+    return_button = Button('Return', (300, 500), menu_font, screen, GRAY, 'Return')
+    return_button.show()
+    pygame.display.update()
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if return_button.click(event):
+                    return
+            elif event.type == pygame.MOUSEBUTTONUP:
+                return_button.release(event)
+
+
+def game_over_screen(screen):
+    from screens.main_menu import main_menu
+    game_over_text = menu_font.render(u'Game Over', True, WHITE)
+    screen.fill(BLACK)
+    screen.blit(game_over_text, (300, 200))
+    record_text = menu_font.render(f'Your final hour: {pet.hour}', True, WHITE)
+    screen.blit(record_text, (300, 250))
+    play_again_button = Button(u'Play Again', (300, 300), menu_font, screen, GRAY, u'Play Again')
+    leaderboard_button = Button(u'Leaderboard', (300, 400), menu_font, screen, GRAY, u'Leaderboard')
+    play_again_button.show()
+    leaderboard_button.show()
+    pygame.display.update()
+
+    save_record(pet.get_summary())
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if play_again_button.click(event):
+                    pet.reset()
+                    screen.fill(BLACK)
+                    main_menu(screen)  # 返回游戏主菜单
+                if leaderboard_button.click(event):
+                    show_leaderboard_with_chart(screen)  # 显示排行榜
+            elif event.type == pygame.MOUSEBUTTONUP:
+                play_again_button.release(event)
+                leaderboard_button.release(event)
+
+
+
+import json
+
+def save_record(record, file_path= settings.leaderboard_json_path):
+    try:
+        with open(file_path, 'r') as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        data = []
+
+    data.append(record)
+    with open(file_path, 'w') as f:
+        json.dump(data, f, indent=4)

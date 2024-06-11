@@ -132,3 +132,10 @@ class Pet:
         self.y = 100
         self.speed_x = 0.0000001
         self.speed_y = 0.0000001
+    def get_summary(self):
+        return {
+            'hour': self.hour,
+            'hungry_level': self.hungry_level,
+            'happy_level': self.happy_level,
+            'healthy_level': self.healthy_level,
+        }
