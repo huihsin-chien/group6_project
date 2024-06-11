@@ -25,7 +25,9 @@ def draw_pet_location(screen):
     
     pet.rect = pet_image.get_rect()
     pet.rect.topleft = (pet.x, pet.y)
+    img_width, img_height = pet_image.get_size()
     screen.blit(pet_image, pet.rect.topleft)
+    return (img_width, img_height)
 
 def draw_pet_attributes(screen, food_button, water_button):
     
@@ -88,6 +90,7 @@ def game_screen(screen):
         screen.fill(BLACK)
         draw_pet_attributes(screen, food_button, water_button)
         draw_player_info(screen, shop_button)
+        draw_pet_location(screen)
 
         if time() - last_update_time >= 1:
             last_update_time = time()
@@ -105,13 +108,13 @@ def game_screen(screen):
         # 保持宠物在屏幕范围内
         if pet.x < 0:
             pet.x = 0
-        elif pet.x > screen.get_width():
-            pet.x = screen.get_width()
+        elif pet.x > screen.get_width() -draw_pet_location(screen)[0]:
+            pet.x = screen.get_width() - draw_pet_location(screen)[0]
 
         if pet.y < 0:
             pet.y = 0
-        elif pet.y > screen.get_height():
-            pet.y = screen.get_height()
+        elif pet.y > screen.get_height() - draw_pet_location(screen)[1]:
+            pet.y = screen.get_height() -  draw_pet_location(screen)[1]
 
         pygame.display.update()
 
