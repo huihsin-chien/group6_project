@@ -216,7 +216,8 @@ def setting_screen(screen): #volumn, resume, return to main menu
         resume_button.show()
         return_to_main_menu_button.show()
         pygame.display.update()
-    
+
+
 def draw_chart(screen, data):
     if not data:
         return
@@ -225,20 +226,24 @@ def draw_chart(screen, data):
     pygame.draw.rect(screen, WHITE, chart_rect, 2)
 
     max_hour = max(record['hour'] for record in data)
-    max_value = max(max(record['hungry_level'], record['happy_level'], record['healthy_level']) for record in data)
+    
+    # 绘制纵坐标和刻度线
+    num_ticks = 10
+    tick_interval = max_hour / num_ticks
+    for i in range(num_ticks + 1):
+        y = chart_rect.y + chart_rect.height - (i * chart_rect.height // num_ticks)
+        hour_value = i * tick_interval
+        tick_text = menu_font.render(f'{hour_value:.1f}', True, WHITE)
+        screen.blit(tick_text, (chart_rect.x - 50, y - 10))
+        pygame.draw.line(screen, WHITE, (chart_rect.x - 5, y), (chart_rect.x, y), 2)
 
     for i, record in enumerate(data):
         x = chart_rect.x + (i * chart_rect.width // len(data))
-        hungry_height = chart_rect.height * record['hungry_level'] // max_value
-        happy_height = chart_rect.height * record['happy_level'] // max_value
-        healthy_height = chart_rect.height * record['healthy_level'] // max_value
+        hour_height = chart_rect.height * record['hour'] // max_hour
 
-        pygame.draw.rect(screen, (255, 0, 0), (x, chart_rect.y + chart_rect.height - hungry_height, 10, hungry_height))
-        pygame.draw.rect(screen, (0, 255, 0), (x + 15, chart_rect.y + chart_rect.height - happy_height, 10, happy_height))
-        pygame.draw.rect(screen, (0, 0, 255), (x + 30, chart_rect.y + chart_rect.height - healthy_height, 10, healthy_height))
+        pygame.draw.rect(screen, (0, 0, 255), (x, chart_rect.y + chart_rect.height - hour_height, 20, hour_height))
 
 def show_leaderboard_with_chart(screen):
-    from screens.main_menu import main_menu
     try:
         with open('leaderboard.json', 'r') as f:
             data = json.load(f)
@@ -266,12 +271,12 @@ def show_leaderboard_with_chart(screen):
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if return_button.click(event):
-                    screen.fill(BLACK)
-                    pet.reset()
-                    main_menu(screen)
+                    game_over_screen(screen)
                     return
             elif event.type == pygame.MOUSEBUTTONUP:
                 return_button.release(event)
+
+
 
 
 def game_over_screen(screen):
