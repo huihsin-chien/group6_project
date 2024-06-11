@@ -1,5 +1,6 @@
 import pygame
 import sys
+import random
 from screens.game_screen import game_screen
 
 WHITE = (255, 255, 255)
@@ -20,3 +21,29 @@ def egg_hatching_screen(screen):
 
         screen.fill(BLACK)  # 暂时用黑色背景表示孵蛋页面
         pygame.display.update()
+
+
+heads_image = pygame.image.load('Assets\img\Male.jpg')
+tails_image = pygame.image.load('Assets\img\Female.jpg')
+
+def toss_coin():
+    return random.choice(["Female", "Male"])
+
+def display_result(screen, result):
+    screen.fill((255, 255, 255))  # 清屏，填充白色
+    if result == "Female":
+        screen.blit(heads_image, (0, 0))
+    else:
+        screen.blit(tails_image, (0, 0))
+    pygame.display.flip()
+
+def main():
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                result = toss_coin()
+                display_result(result)
+
