@@ -116,7 +116,7 @@ def game_screen(screen):
             last_update_time = current_time
             pet.update_hour()
 
-        if current_time - direction_change_time >= 1:  # 每1秒改变一次方向
+        if current_time - direction_change_time >= 1:  # change direction every 1 second
             direction_change_time = current_time
             change_direction()
 
@@ -125,7 +125,7 @@ def game_screen(screen):
             pet.x += pet.speed_x
             pet.y += pet.speed_y
 
-        # 保持宠物在屏幕范围内，并在接近边界时改变方向
+        #check if pet is out of screen
         if pet.x < 0:
             pet.x = 0
             change_direction()
@@ -165,7 +165,7 @@ def open_shop(screen):
         buy_food_button.show()
         buy_water_button.show()
         return_to_game_button.show()
-        # 绘制宠物属性: food amount, water amount, money
+
         money_text = menu_font.render(f'Money: {pet.money}', True, WHITE)
         screen.blit(money_text, (500, 100))
         food_text = menu_font.render(f'Food: {pet.food_amount}', True, WHITE)
@@ -193,4 +193,4 @@ def game_over_screen(screen):
                 if play_again_button.click(event):
                     pet.reset()
                     screen.fill(BLACK)
-                    main_menu(screen)  # 返回游戏主菜单
+                    main_menu(screen)  
