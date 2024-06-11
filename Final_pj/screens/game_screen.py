@@ -43,7 +43,7 @@ def draw_pet_attributes(screen, food_button, water_button):
     food_button.show()
     water_button.show()
 
-def draw_player_info(screen, shop_button):
+def draw_player_info(screen, shop_button, settings_button):
     state_text = menu_font.render(f'State: {pet.state}', True, WHITE)
     screen.blit(state_text, (500, 50))
 
@@ -55,7 +55,7 @@ def draw_player_info(screen, shop_button):
 
     status_text = menu_font.render(f'Status: {pet.status}', True, WHITE)
     screen.blit(status_text, (500, 250))
-
+    settings_button.show()
     shop_button.show()
 
 def change_direction():
@@ -68,6 +68,7 @@ def game_screen(screen):
     shop_button = Button(u'Shop', (500, 150), menu_font, screen, GRAY, u'Shop')
     food_button = Button(f'Food:{pet.food_amount}', (50, 200), menu_font, screen, GRAY, f'Food{pet.food_amount}')
     water_button = Button(f'Water:{pet.water_amount}', (50, 250), menu_font, screen, GRAY, f'Water:{pet.water_amount}')
+    settings_button = Button(u'Settings', (500, 200), menu_font, screen, GRAY, u'Settings')
 
     pet_image_path = settings.baby_pet_image_path if pet.state == 'baby' else (settings.teen_pet_image_path if pet.state == 'teen' else settings.adult_pet_image_path)
     happy_pet_image_path = settings.happy_pet_image_path  # 假设这是宠物开心状态的图片路径
@@ -96,7 +97,8 @@ def game_screen(screen):
                 if water_button.click(event):
                     pet.drink()
                     water_button = Button(f'Water:{pet.water_amount}', (50, 250), menu_font, screen, GRAY, f'Water:{pet.water_amount}')
-
+                if settings_button.click(event):
+                    setting_screen(screen)
                 # 检查是否点击宠物
                 if pet.rect.collidepoint(event.pos):
                     pet.touch_pet()
@@ -116,7 +118,7 @@ def game_screen(screen):
 
         screen.fill(BLACK)
         draw_pet_attributes(screen, food_button, water_button)
-        draw_player_info(screen, shop_button)
+        draw_player_info(screen, shop_button, settings_button)
         img_width, img_height = draw_pet_location(screen, pet_image_path)
 
         if current_time - last_update_time >= 1:
@@ -201,3 +203,38 @@ def game_over_screen(screen):
                     pet.reset()
                     screen.fill(BLACK)
                     main_menu(screen)  
+
+def setting_screen(screen): #volumn, resume, return to main menu
+    from screens.main_menu import main_menu
+    vol_up_button = Button(u'Volume Up', (300, 200), menu_font, screen, GRAY, u'Volume Up')
+    vol_down_button = Button(u'Volume Down', (300, 300), menu_font, screen, GRAY, u'Volume Down')
+    resume_button = Button(u'Resume', (300, 400), menu_font, screen, GRAY, u'Resume')
+    return_to_main_menu_button = Button(u'Return to Main Menu', (300, 500), menu_font, screen, GRAY, u'Return to Main Menu')
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if vol_up_button.click(event):
+                    pass
+                if vol_down_button.click(event):
+                    pass
+                if resume_button.click(event):
+                    game_screen(screen)
+                if return_to_main_menu_button.click(event):
+                    pet.reset()
+                    screen.fill(BLACK)
+                    main_menu(screen)
+            elif event.type == pygame.MOUSEBUTTONUP:
+                vol_up_button.release(event)
+                vol_down_button.release(event)
+                resume_button.release(event)
+                return_to_main_menu_button.release(event)
+        screen.fill(BLACK)
+        vol_up_button.show()
+        vol_down_button.show()
+        resume_button.show()
+        return_to_main_menu_button.show()
+        pygame.display.update()
+    
