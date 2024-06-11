@@ -11,6 +11,7 @@ menu_font = pygame.font.Font(settings.font_path, settings.menu_font_size)
 
 def show_leaderboard(screen):
     scroll_offset = 0  # 用于记录滚动偏移量
+    scroll_speed = 20  # 滚动速度
 
     screen.fill(BLACK)
     title_text = menu_font.render('Leaderboard', True, WHITE)
@@ -29,12 +30,18 @@ def show_leaderboard(screen):
         screen.fill(BLACK)  # 清空屏幕
         screen.blit(title_text, (300, 50))  # 重新绘制标题
 
-        y_offset = 100 + scroll_offset  # 基于滚动偏移量调整起始y位置
+        # 计算内容高度
+        content_height = 100 + len(data) * 50
+
+        y_offset = 100 - scroll_offset  # 基于滚动偏移量调整起始y位置
 
         for record in data:
-            record_text = menu_font.render(f"Hour: {record['hour']}, Hungry: {record['hungry_level']}, Happy: {record['happy_level']}, Healthy: {record['healthy_level']}", True, WHITE)
-            screen.blit(record_text, (50, y_offset))
+            # 仅显示在可见区域内的记录
+            if 100 <= y_offset:  # 确保文字在标题下方并在Return按钮上方显示
+                record_text = menu_font.render(f"Hour: {record['hour']}, Hungry: {record['hungry_level']}, Happy: {record['happy_level']}, Healthy: {record['healthy_level']}", True, WHITE)
+                screen.blit(record_text, (50, y_offset))
             y_offset += 50
+
 
         return_button.show()
 
@@ -49,7 +56,15 @@ def show_leaderboard(screen):
             elif event.type == pygame.MOUSEBUTTONUP:
                 return_button.release(event)
             elif event.type == pygame.MOUSEWHEEL:  # 捕获鼠标滚轮事件
-                scroll_offset += event.y * 20  # 调整滚动偏移量，乘以20以增加滚动速度
-                scroll_offset = max(min(scroll_offset, 0), -(y_offset - 500))  # 限制滚动范围
+                scroll_offset += event.y * scroll_speed  # 调整滚动偏移量，乘以20以增加滚动速度
+                max_scroll_offset = min(0, 500 - content_height)  # 限制最大滚动偏移量
+                scroll_offset = max(max_scroll_offset, scroll_offset)  # 限制滚动范围
+                for record in data:
+                    # 仅显示在可见区域内的记录
+                    if 100 <= y_offset :  # 确保文字在标题下方并在Return按钮上方显示
+                        # print(1)
+                        record_text = menu_font.render(f"Hour: {record['hour']}, Hungry: {record['hungry_level']}, Happy: {record['happy_level']}, Healthy: {record['healthy_level']}", True, WHITE)
+                        screen.blit(record_text, (50, y_offset - scroll_offset) if y_offset - scroll_offset >= 100 else (50, y_offset))
+                    y_offset += 50
 
         pygame.display.update()
