@@ -6,6 +6,7 @@ import settings
 from time import time
 import random
 
+
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GRAY = (169, 169, 169)
@@ -14,14 +15,8 @@ pet = Pet()
 
 menu_font = pygame.font.Font(settings.font_path, settings.menu_font_size)
 
-def draw_pet_location(screen):
-    if pet.state == 'baby':
-        pet_image = pygame.image.load(settings.baby_pet_image_path)
-    elif pet.state == 'teen':
-        pet_image = pygame.image.load(settings.teen_pet_image_path)
-    elif pet.state == 'adult':
-        pet_image = pygame.image.load(settings.adult_pet_image_path)
-    
+def draw_pet_location(screen, pet_image_path):
+    pet_image = pygame.image.load(pet_image_path)
     pet.rect = pet_image.get_rect()
     pet.rect.topleft = (pet.x, pet.y)
     img_width, img_height = pet_image.get_size()
@@ -29,7 +24,6 @@ def draw_pet_location(screen):
     return (img_width, img_height)
 
 def draw_pet_attributes(screen, food_button, water_button):
-    
     hungry_text = menu_font.render(f'Hungry Level: {pet.hungry_level}%', True, WHITE)
     screen.blit(hungry_text, (50, 50))
 
@@ -43,7 +37,6 @@ def draw_pet_attributes(screen, food_button, water_button):
     water_button.show()
 
 def draw_player_info(screen, shop_button):
-   
     state_text = menu_font.render(f'State: {pet.state}', True, WHITE)
     screen.blit(state_text, (500, 50))
 
@@ -69,13 +62,22 @@ def game_screen(screen):
     food_button = Button(f'Food:{pet.food_amount}', (50, 200), menu_font, screen, GRAY, f'Food{pet.food_amount}')
     water_button = Button(f'Water:{pet.water_amount}', (50, 250), menu_font, screen, GRAY, f'Water:{pet.water_amount}')
 
+    pet_image_path = settings.baby_pet_image_path if pet.state == 'baby' else (settings.teen_pet_image_path if pet.state == 'teen' else settings.adult_pet_image_path)
+    happy_pet_image_path = settings.happy_pet_image_path  # 假设这是宠物开心状态的图片路径
+    pet_happy_start_time = 0
+    pet_is_happy = False
+
     change_direction()
 
     while True:
+        current_time = time()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            if pet.status == 'dead':
+                game_over_screen(screen)
+                break
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if shop_button.click(event):
@@ -87,27 +89,38 @@ def game_screen(screen):
                     pet.drink()
                     water_button = Button(f'Water:{pet.water_amount}', (50, 250), menu_font, screen, GRAY, f'Water:{pet.water_amount}')
 
+                # 检查是否点击宠物
+                if pet.rect.collidepoint(event.pos):
+                    pet.touch_pet()
+                    pet_image_path = happy_pet_image_path
+                    pet_happy_start_time = current_time
+                    pet_is_happy = True
+
             elif event.type == pygame.MOUSEBUTTONUP:
                 shop_button.release(event)
                 food_button.release(event)
                 water_button.release(event)
 
+        # 恢复宠物原始图片
+        if pet_is_happy and current_time - pet_happy_start_time > 2:  # 2秒钟后恢复原始图片
+            pet_image_path = settings.baby_pet_image_path if pet.state == 'baby' else (settings.teen_pet_image_path if pet.state == 'teen' else settings.adult_pet_image_path)
+            pet_is_happy = False
+
         screen.fill(BLACK)
         draw_pet_attributes(screen, food_button, water_button)
         draw_player_info(screen, shop_button)
-        img_width, img_height = draw_pet_location(screen)
+        img_width, img_height = draw_pet_location(screen, pet_image_path)
 
-        if time() - last_update_time >= 1:
-            last_update_time = time()
+        if current_time - last_update_time >= 1:
+            last_update_time = current_time
             pet.update_hour()
 
-        if time() - direction_change_time >= 1:  # 每2秒改变一次方向
-            direction_change_time = time()
+        if current_time - direction_change_time >= 1:  # 每1秒改变一次方向
+            direction_change_time = current_time
             change_direction()
 
-        # 更新宠物的位置
-        if time() - last_update_time >= 0.5 and time() - last_update_time <= 0.55 or \
-            time() - last_update_time >= 0.95 and time() - last_update_time <= 1 :
+        if current_time - last_update_time >= 0.5 and current_time - last_update_time <= 0.55 or \
+           current_time - last_update_time >= 0.95 and current_time - last_update_time <= 1:
             pet.x += pet.speed_x
             pet.y += pet.speed_y
 
@@ -129,7 +142,6 @@ def game_screen(screen):
         pygame.display.update()
 
 def open_shop(screen):
-    # screen = pygame.display.get_surface()
     buy_food_button = Button(u'Food: 3 dollar', (300, 200), menu_font, screen, GRAY, u'Food: 3 dollar')
     buy_water_button = Button(u'Water: 1 dollar', (300, 300), menu_font, screen, GRAY, u'Water: 1 dollar')
     return_to_game_button = Button(u'Return to Game', (300, 400), menu_font, screen, GRAY, u'Return to Game')
@@ -152,7 +164,7 @@ def open_shop(screen):
         buy_food_button.show()
         buy_water_button.show()
         return_to_game_button.show()
-        ### draw_pet_attributes: food amount, water amount, money
+        # 绘制宠物属性: food amount, water amount, money
         money_text = menu_font.render(f'Money: {pet.money}', True, WHITE)
         screen.blit(money_text, (500, 100))
         food_text = menu_font.render(f'Food: {pet.food_amount}', True, WHITE)
@@ -160,3 +172,24 @@ def open_shop(screen):
         water_text = menu_font.render(f'Water: {pet.water_amount}', True, WHITE)
         screen.blit(water_text, (500, 200))
         pygame.display.update()
+
+def game_over_screen(screen):
+    from screens.main_menu import main_menu
+    game_over_text = menu_font.render(u'Game Over', True, WHITE)
+    screen.fill(BLACK)
+    screen.blit(game_over_text, (300, 200))
+    record_text = menu_font.render(f'Your final hour: {pet.hour}', True, WHITE)
+    screen.blit(record_text, (300, 250))
+    play_again_button = Button(u'Play Again', (300, 300), menu_font, screen, GRAY, u'Play Again')
+    play_again_button.show()
+    pygame.display.update()
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if play_again_button.click(event):
+                    pet.reset()
+                    screen.fill(BLACK)
+                    main_menu(screen)  # 返回游戏主菜单

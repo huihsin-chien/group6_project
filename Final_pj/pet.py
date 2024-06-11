@@ -22,7 +22,7 @@ class Pet:
         if self.time_since_last_hour <= 9:  # 每3秒钟更新一次hour
             self.hour += 1
             if self.time_since_last_hour == 3 or self.time_since_last_hour == 6 or self.time_since_last_hour == 9:
-                self.hungry_level -= 5
+                self.hungry_level -= 10
             if self.time_since_last_hour == 5 or self.time_since_last_hour == 0:
                 self.happy_level -= 5
                 self.money += 1
@@ -107,3 +107,28 @@ class Pet:
         if self.money >= 1:
             self.money -= 1
             self.water_amount += 1
+    
+    def touch_pet(self):
+        if self.happy_level < 100:
+            if (self.happy_level + 5) > 100:
+                self.happy_level = 100
+            else:
+                self.happy_level += 5
+        else:
+            self.happy_level = 100
+    
+    def reset(self):
+        self.hour = 0  # 寵物活了幾小時
+        self.status = 'hungry'  # 寵物狀態（hungry, full）
+        self.hungry_level = 50  # 飢餓程度（0-100%）
+        self.happy_level = 50  # 快樂程度（0-100%）
+        self.healthy_level = 100  # 健康程度（0-100%）
+        self.state = 'baby'  # 寵物狀態（baby, teens, adult）
+        self.food_amount = 10  # 玩家擁有的食物數量
+        self.water_amount = 10  # 玩家擁有的水數量
+        self.money = 100  # 玩家擁有的金錢數量
+        self.time_since_last_hour = 0  # 距离上次小时的时间
+        self.x = 100
+        self.y = 100
+        self.speed_x = 0.0000001
+        self.speed_y = 0.0000001
