@@ -21,6 +21,10 @@ def draw_progress_bar(screen, x, y, width, height, color, percentage):
 
 def draw_pet_location(screen, pet_image_path):
     pet_image = pygame.image.load(pet_image_path)
+    #-----------------设置透明色-----------------
+    # transparent_color = (24,255,17)  # 背景是綠色
+    # pet_image.set_colorkey(transparent_color)
+    #-------------------------------------------
     pet.rect = pet_image.get_rect()
     pet.rect.topleft = (pet.x, pet.y)
     img_width, img_height = pet_image.get_size()
