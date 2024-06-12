@@ -156,7 +156,7 @@ def game_screen(screen):
             pet_is_happy = False
 
         # 恢复宠物原始图片在语音识别后3秒钟
-        if pet_is_speeching and current_time - pet_speech_start_time > 3:  # 3秒钟后恢复原始图片
+        if pet_is_speeching and current_time - pet_speech_start_time > 30:  # 3秒钟后恢复原始图片
             pet_image_path = settings.baby_pet_image_path if pet.state == 'baby' else (settings.teen_pet_image_path if pet.state == 'teen' else settings.adult_pet_image_path)
             pet_is_speeching = False
 

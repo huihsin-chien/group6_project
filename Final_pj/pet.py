@@ -4,7 +4,7 @@ import sys
 import settings
 from time import time
 from button import Button
-from screens.game_screen import game_screen
+# from screens.game_screen import game_screen
 
 
 class Pet:
@@ -59,7 +59,7 @@ class Pet:
             self.status = 'full'
 
 
-    def feed(self, screen):
+    def feed(self):
         if self.food_amount > 0:
             self.food_amount -= 1
             # self.eating = True
