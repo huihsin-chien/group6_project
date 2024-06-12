@@ -36,14 +36,13 @@ def show_leaderboard(screen):
         y_offset = 100 - scroll_offset  # 基于滚动偏移量调整起始y位置
 
         for record in data:
-            print(2)
+            # print(record)
+            # print(2)
             # 仅显示在可见区域内的记录
-            if 100 <= y_offset:  # 确保文字在标题下方并在Return按钮上方显示
+            if 100 <= y_offset <= 450:  # 确保文字在标题下方并在Return按钮上方显示
                 record_text = menu_font.render(f"Hour: {record['hour']}, Hungry: {record['hungry_level']}, Happy: {record['happy_level']}, Healthy: {record['healthy_level']}", True, WHITE)
                 screen.blit(record_text, (50, y_offset))
             y_offset += 50
-
-
         return_button.show()
 
         for event in pygame.event.get():
@@ -60,5 +59,7 @@ def show_leaderboard(screen):
                 scroll_offset += event.y * scroll_speed  # 调整滚动偏移量，乘以20以增加滚动速度
                 max_scroll_offset = min(0, 500 - content_height)  # 限制最大滚动偏移量
                 scroll_offset = max(max_scroll_offset, scroll_offset)  # 限制滚动范围
+                if(scroll_offset < 0):
+                    scroll_offset = 0
 
         pygame.display.update()
