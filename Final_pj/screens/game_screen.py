@@ -96,7 +96,10 @@ def game_screen(screen):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if shop_button.click(event):
-                    open_shop(screen)
+                    open_shop(screen, pet)
+                    food_button = Button(f'Food:{pet.food_amount}', (50, 200), menu_font, screen, GRAY, f'Food{pet.food_amount}')
+                    water_button = Button(f'Water:{pet.water_amount}', (50, 250), menu_font, screen, GRAY, f'Water:{pet.water_amount}')
+                    shop_button.release(event)
                 if food_button.click(event):
                     pet.feed()
                     food_button = Button(f'Food:{pet.food_amount}', (50, 200), menu_font, screen, GRAY, f'Food{pet.food_amount}')
@@ -104,7 +107,7 @@ def game_screen(screen):
                     pet.drink()
                     water_button = Button(f'Water:{pet.water_amount}', (50, 250), menu_font, screen, GRAY, f'Water:{pet.water_amount}')
                 if settings_button.click(event):
-                    setting_screen(screen)
+                    setting_screen(screen, pet)
                 # 检查是否点击宠物
                 if pet.rect.collidepoint(event.pos):
                     pet.touch_pet()
