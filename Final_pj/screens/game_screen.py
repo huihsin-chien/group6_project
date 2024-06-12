@@ -113,15 +113,7 @@ def game_screen(screen):
                     eat2_image = pygame.image.load(settings.baby_eat2_image_path)
                     eat1_image = pygame.transform.scale(eat1_image, (150,150))
                     eat2_image = pygame.transform.scale(eat2_image, (150,150))
-                    
-                    animate_images(screen, eat1_image, eat2_image, duration=3, switch_interval=0.5)
-                        # draw_pet_location(screen, settings.listen_to_speech_pet_path)
-                        # draw_pet_attributes(screen, food_button, water_button,speech_recognition_button)
-                        # draw_player_info(screen, shop_button, settings_button)
-                        # pygame.display.update()
-                        # screen.blit(current_image, (0, 0))
-                        # # 更新顯示
-                        # pygame.display.flip()
+                    animate_images(screen, eat1_image, eat2_image, duration=3, switch_interval=0.5, x=pet.x, y=pet.y)
                     food_button = Button(f'Food:{pet.food_amount}', (50, 200), menu_font, screen, GRAY, f'Food{pet.food_amount}')
                 if water_button.click(event):
                     pet.drink()

@@ -1,6 +1,7 @@
 import pygame
 import sys
 from time import time
+from pet import Pet
 
 pygame.init()
 # eat1_image = pygame.image.load("path/to/your/eat1_image.png")
@@ -9,8 +10,8 @@ pygame.init()
 # # 缩放图片
 # eat1_image = pygame.transform.scale(eat1_image, (150, 150))
 # eat2_image = pygame.transform.scale(eat2_image, (150, 150))
-
-def animate_images(screen, img1, img2, duration=3, switch_interval=0.5):
+pet = Pet()
+def animate_images(screen, img1, img2, duration=3, switch_interval=0.5, x = pet.x, y = pet.y):
     start_time = time()
     last_switch_time = start_time
     current_image = img1
@@ -27,7 +28,7 @@ def animate_images(screen, img1, img2, duration=3, switch_interval=0.5):
             last_switch_time = current_time
             current_image = img2 if current_image == img1 else img1
         
-        screen.blit(current_image, (0, 0))
+        screen.blit(current_image, (x, y))
         
         # 更新显示
         pygame.display.flip()
@@ -37,4 +38,5 @@ def animate_images(screen, img1, img2, duration=3, switch_interval=0.5):
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+
 
