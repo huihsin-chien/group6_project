@@ -13,6 +13,7 @@ GRAY = (169, 169, 169)
 
 def main_menu(screen):
     menu_background_image = pygame.image.load(settings.menu_background_image_path)
+    menu_background_image = pygame.transform.scale(menu_background_image, settings.screen_size)
     menu_font = pygame.font.Font(settings.font_path, settings.menu_font_size)
 
     start_button = Button(u'開始遊戲', (300, 200), menu_font, screen, GRAY, u'開始遊戲')
