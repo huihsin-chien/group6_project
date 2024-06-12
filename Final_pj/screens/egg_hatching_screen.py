@@ -28,7 +28,7 @@ def egg_hatching_screen(screen):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if toss_button.click(event):
                     result = toss_coin()
-                    display_result(screen,result)
+                    display_result(screen, result)
                     pygame.time.wait(5000)
                     game_screen(screen)
         
