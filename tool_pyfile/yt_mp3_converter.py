@@ -19,6 +19,6 @@ def download_youtube_video_as_mp3(youtube_url, output_path):
     print(f"下載並轉換完成: {mp3_filename}")
 
 # 使用範例
-youtube_url = 'https://youtu.be/46HaUZSkJDY?si=yCVlFmtcFFh7tx0c'
-output_path = 'OneDrive\git_repo\group6_project\huixin_pygame_pt'
+youtube_url = 'https://www.youtube.com/watch?v=tu5XohUR3Pg'
+output_path = 'C:/Users/88696/Documents/GitHub/group6_project/Final_pj/Assets/Bgm'
 download_youtube_video_as_mp3(youtube_url, output_path)
