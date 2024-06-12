@@ -11,8 +11,8 @@ class Pet:
         self.water_amount = 10  # 玩家擁有的水數量
         self.money = 100  # 玩家擁有的金錢數量
         self.time_since_last_hour = 0  # 距离上次小时的时间
-        self.x = 100
-        self.y = 100
+        self.x = 200
+        self.y = 400
         self.speed_x = 0.0000001
         self.speed_y = 0.0000001
 

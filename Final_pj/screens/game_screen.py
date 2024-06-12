@@ -61,8 +61,8 @@ def draw_player_info(screen, shop_button, settings_button):
     shop_button.show()
 
 def change_direction():
-    pet.speed_x = random.choice([-1, 0, 1])
-    pet.speed_y = random.choice([-1, 0, 1])
+    pet.speed_x = random.choice([-1,0,1]) #([-1, 0, 1])
+    pet.speed_y = random.choice([-1,0,1])
 
 def game_screen(screen):
     last_update_time = time()
