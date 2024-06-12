@@ -18,6 +18,9 @@ def main_menu(screen):
     start_button = Button(u'開始遊戲', (300, 200), menu_font, screen, GRAY, u'開始遊戲')
     exit_button = Button(u'結束遊戲', (300, 300), menu_font, screen, GRAY, u'結束遊戲')
     leaderboard_button = Button(u'查看排行榜', (300, 400), menu_font, screen, GRAY, u'查看排行榜')
+    music_path = "Assets/Bgm/bl cut.mp3"
+    pygame.mixer.music.load(music_path)
+    pygame.mixer.music.play(-1)  # Play the music in a loop
     # if screen is None:
     #     print("Error: Screen is None!!")
     # else:
@@ -26,8 +29,10 @@ def main_menu(screen):
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                pygame.mixer.music.stop()
                 pygame.quit()
                 sys.exit()
+                
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if start_button.click(event):
