@@ -36,8 +36,6 @@ def show_leaderboard(screen):
         y_offset = 100 - scroll_offset  # 基于滚动偏移量调整起始y位置
 
         for record in data:
-            # print(record)
-            # print(2)
             # 仅显示在可见区域内的记录
             if 100 <= y_offset <= 450:  # 确保文字在标题下方并在Return按钮上方显示
                 record_text = menu_font.render(f"Hour: {record['hour']}, Hungry: {record['hungry_level']}, Happy: {record['happy_level']}, Healthy: {record['healthy_level']}", True, WHITE)
