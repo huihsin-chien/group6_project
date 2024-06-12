@@ -146,7 +146,7 @@
     {
         "hour": 15,
         "hungry_level": 0,
-        "happy_level": 70,
+        "happy_level": 40,
         "healthy_level": 95
     },
     {
@@ -156,10 +156,28 @@
         "healthy_level": 95
     },
     {
-        "hour": 18,
+        "hour": 15,
         "hungry_level": 0,
-        "happy_level": 50,
-        "healthy_level": 90
+        "happy_level": 65,
+        "healthy_level": 95
+    },
+    {
+        "hour": 39,
+        "hungry_level": 0,
+        "happy_level": 80,
+        "healthy_level": 85
+    },
+    {
+        "hour": 48,
+        "hungry_level": 0,
+        "happy_level": 85,
+        "healthy_level": 85
+    },
+    {
+        "hour": 48,
+        "hungry_level": 0,
+        "happy_level": 85,
+        "healthy_level": 85
     },
     {
         "hour": 15,
@@ -171,18 +189,6 @@
         "hour": 15,
         "hungry_level": 0,
         "happy_level": 40,
-        "healthy_level": 95
-    },
-    {
-        "hour": 15,
-        "hungry_level": 0,
-        "happy_level": 60,
-        "healthy_level": 95
-    },
-    {
-        "hour": 15,
-        "hungry_level": 0,
-        "happy_level": 60,
         "healthy_level": 95
     }
 ]
