@@ -5,19 +5,17 @@ from pet import Pet
 import settings
 from time import time
 import random
-
+from utils import draw_progress_bar, draw_chart, save_record
+import json
+from screens.shop_screen import open_shop
+from screens.setting_screen import setting_screen
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GRAY = (169, 169, 169)
 
 pet = Pet()
-
 menu_font = pygame.font.Font(settings.font_path, settings.menu_font_size)
-
-def draw_progress_bar(screen, x, y, width, height, color, percentage):
-    pygame.draw.rect(screen, BLACK, (x, y, width+1, height+1))
-    pygame.draw.rect(screen, color, (x, y, width * percentage / 100, height))
 
 def draw_pet_location(screen, pet_image_path):
     pet_image = pygame.image.load(pet_image_path)
@@ -25,7 +23,7 @@ def draw_pet_location(screen, pet_image_path):
     pet.rect.topleft = (pet.x, pet.y)
     img_width, img_height = pet_image.get_size()
     screen.blit(pet_image, pet.rect.topleft)
-    return (img_width, img_height)
+    return img_width, img_height
 
 def draw_pet_attributes(screen, food_button, water_button):
     hungry_text = menu_font.render(f'Hungry Level', True, WHITE)
@@ -78,6 +76,10 @@ def game_screen(screen):
     change_direction()
 
     while True:
+        game_background_image = pygame.image.load(settings.game_background_image_path)
+        game_background_image = pygame.transform.scale(game_background_image, settings.screen_size)
+        screen.blit(game_background_image, (0, 0))
+        
         current_time = time()
         if pet.status == 'dead':
             game_over_screen(screen)
@@ -116,7 +118,7 @@ def game_screen(screen):
             pet_image_path = settings.baby_pet_image_path if pet.state == 'baby' else (settings.teen_pet_image_path if pet.state == 'teen' else settings.adult_pet_image_path)
             pet_is_happy = False
 
-        screen.fill(BLACK)
+
         draw_pet_attributes(screen, food_button, water_button)
         draw_player_info(screen, shop_button, settings_button)
         img_width, img_height = draw_pet_location(screen, pet_image_path)
@@ -138,110 +140,19 @@ def game_screen(screen):
         if pet.x < 0:
             pet.x = 0
             change_direction()
-        elif pet.x > screen.get_width() - img_width:
-            pet.x = screen.get_width() - img_width
+        elif pet.x > game_background_image.get_width() - img_width:
+            pet.x = game_background_image.get_width() - img_width
             change_direction()
 
         if pet.y < 0:
             pet.y = 0
             change_direction()
-        elif pet.y > screen.get_height() - img_height:
-            pet.y = screen.get_height() - img_height
+        elif pet.y > game_background_image.get_height() - img_height:
+            pet.y = game_background_image.get_height() - img_height
             change_direction()
 
         pygame.display.update()
 
-def open_shop(screen):
-    buy_food_button = Button(u'Food: 3 dollar', (300, 200), menu_font, screen, GRAY, u'Food: 3 dollar')
-    buy_water_button = Button(u'Water: 1 dollar', (300, 300), menu_font, screen, GRAY, u'Water: 1 dollar')
-    return_to_game_button = Button(u'Return to Game', (300, 400), menu_font, screen, GRAY, u'Return to Game')
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if buy_food_button.click(event):
-                    pet.buy_food()
-                if buy_water_button.click(event):
-                    pet.buy_water()
-                if return_to_game_button.click(event):
-                    game_screen(screen)
-            elif event.type == pygame.MOUSEBUTTONUP:
-                buy_food_button.release(event)
-                buy_water_button.release(event)
-        screen.fill(BLACK)
-        buy_food_button.show()
-        buy_water_button.show()
-        return_to_game_button.show()
-
-        money_text = menu_font.render(f'Money: {pet.money}', True, WHITE)
-        screen.blit(money_text, (500, 100))
-        food_text = menu_font.render(f'Food: {pet.food_amount}', True, WHITE)
-        screen.blit(food_text, (500, 150))
-        water_text = menu_font.render(f'Water: {pet.water_amount}', True, WHITE)
-        screen.blit(water_text, (500, 200))
-        pygame.display.update()
-
-def setting_screen(screen): #volumn, resume, return to main menu
-    from screens.main_menu import main_menu
-    vol_up_button = Button(u'Volume Up', (300, 200), menu_font, screen, GRAY, u'Volume Up')
-    vol_down_button = Button(u'Volume Down', (300, 300), menu_font, screen, GRAY, u'Volume Down')
-    resume_button = Button(u'Resume', (300, 400), menu_font, screen, GRAY, u'Resume')
-    return_to_main_menu_button = Button(u'Return to Main Menu', (300, 500), menu_font, screen, GRAY, u'Return to Main Menu')
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if vol_up_button.click(event):
-                    pass
-                if vol_down_button.click(event):
-                    pass
-                if resume_button.click(event):
-                    game_screen(screen)
-                if return_to_main_menu_button.click(event):
-                    pet.reset()
-                    screen.fill(BLACK)
-                    main_menu(screen)
-            elif event.type == pygame.MOUSEBUTTONUP:
-                vol_up_button.release(event)
-                vol_down_button.release(event)
-                resume_button.release(event)
-                return_to_main_menu_button.release(event)
-        screen.fill(BLACK)
-        vol_up_button.show()
-        vol_down_button.show()
-        resume_button.show()
-        return_to_main_menu_button.show()
-        pygame.display.update()
-
-
-def draw_chart(screen, data):
-    if not data:
-        return
-    
-    chart_rect = pygame.Rect(50, 100, 700, 400)
-    pygame.draw.rect(screen, WHITE, chart_rect, 2)
-
-    max_hour = max(record['hour'] for record in data)
-    
-    # 绘制纵坐标和刻度线
-    num_ticks = 10
-    tick_interval = max_hour / num_ticks
-    for i in range(num_ticks + 1):
-        y = chart_rect.y + chart_rect.height - (i * chart_rect.height // num_ticks)
-        hour_value = i * tick_interval
-        tick_text = menu_font.render(f'{hour_value:.1f}', True, WHITE)
-        screen.blit(tick_text, (chart_rect.x - 50, y - 10))
-        pygame.draw.line(screen, WHITE, (chart_rect.x - 5, y), (chart_rect.x, y), 2)
-
-    for i, record in enumerate(data):
-        x = chart_rect.x + (i * chart_rect.width // len(data))
-        hour_height = chart_rect.height * record['hour'] // max_hour
-
-        pygame.draw.rect(screen, (0, 0, 255), (x, chart_rect.y + chart_rect.height - hour_height, 20, hour_height))
 
 def show_leaderboard_with_chart(screen):
     try:
@@ -311,17 +222,3 @@ def game_over_screen(screen):
                 leaderboard_button.release(event)
 
 
-
-
-import json
-
-def save_record(record, file_path='leaderboard.json'):
-    try:
-        with open(file_path, 'r') as f:
-            data = json.load(f)
-    except FileNotFoundError:
-        data = []
-
-    data.append(record)
-    with open(file_path, 'w') as f:
-        json.dump(data, f, indent=4)

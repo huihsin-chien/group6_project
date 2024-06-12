@@ -4,18 +4,18 @@ from transformers import pipeline
 def recognize_speech():
     recognizer = sr.Recognizer()
     with sr.Microphone() as source:
-        print("请说话...")
+        print("請說話...")
         recognizer.adjust_for_ambient_noise(source)
         audio = recognizer.listen(source)
 
     try:
         text = recognizer.recognize_google(audio, language="zh-TW")
-        print("你说了: " + text)
+        print("你說了: " + text)
         return text
     except sr.UnknownValueError:
-        print("无法识别语音")
+        print("無法識別語音")
     except sr.RequestError as e:
-        print("请求错误; {0}".format(e))
+        print("請求錯誤; {0}".format(e))
     return ""
 
 def analyze_sentiment(text):
@@ -28,6 +28,8 @@ if __name__ == "__main__":
     text = recognize_speech()
     if text:
         if "麥當勞" in text:
-            print("检测到麥當勞关键词")
+            print("偵測到麥當勞")
+        if text == "去讀書":
+            print("Sooo sad...")
         sentiment = analyze_sentiment(text)
         print("情感分析结果: " + sentiment)
