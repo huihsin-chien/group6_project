@@ -27,5 +27,7 @@ def analyze_sentiment(text):
 if __name__ == "__main__":
     text = recognize_speech()
     if text:
+        if "麥當勞" in text:
+            print("检测到麥當勞关键词")
         sentiment = analyze_sentiment(text)
         print("情感分析结果: " + sentiment)
