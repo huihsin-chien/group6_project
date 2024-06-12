@@ -2,6 +2,9 @@
 import pygame
 import sys
 import settings
+from time import time
+from button import Button
+from screens.game_screen import game_screen
 
 
 class Pet:
