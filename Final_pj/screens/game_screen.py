@@ -100,7 +100,7 @@ def game_screen(screen):
                 if settings_button.click(event):
                     setting_screen(screen)
                 # 检查是否点击宠物
-                if pet.reset.collidepoint(event.pos):
+                if pet.rect.collidepoint(event.pos):
                     pet.touch_pet()
                     pet_image_path = happy_pet_image_path
                     pet_happy_start_time = current_time

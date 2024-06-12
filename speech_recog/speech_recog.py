@@ -6,7 +6,7 @@ def recognize_speech():
 
     # 使用麦克风作为音频源
     with sr.Microphone() as source:
-        print("请说话...")
+        print("請說話...")
         
         # 调整麦克风噪音水平
         recognizer.adjust_for_ambient_noise(source)
@@ -16,13 +16,13 @@ def recognize_speech():
 
     try:
         # 使用Google Web Speech API进行语音识别
-        text = recognizer.recognize_google(audio, language="zh-CN")
-        print("你说了: " + text)
+        text = recognizer.recognize_google(audio, language="zh-TW")
+        print("你說了: " + text)
         return text
     except sr.UnknownValueError:
-        print("无法识别语音")
+        print("無法識別語音")
     except sr.RequestError as e:
-        print("请求错误; {0}".format(e))
+        print("請求錯誤; {0}".format(e))
     return ""
 
 if __name__ == "__main__":
