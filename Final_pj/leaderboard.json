@@ -216,9 +216,57 @@
         "healthy_level": 95
     },
     {
-        "hour": 24,
+        "hour": 15,
         "hungry_level": 0,
-        "happy_level": 90,
-        "healthy_level": 100
+        "happy_level": 40,
+        "healthy_level": 95
+    },
+    {
+        "hour": 15,
+        "hungry_level": 0,
+        "happy_level": 40,
+        "healthy_level": 95
+    },
+    {
+        "hour": 15,
+        "hungry_level": 0,
+        "happy_level": 40,
+        "healthy_level": 95
+    },
+    {
+        "hour": 15,
+        "hungry_level": 0,
+        "happy_level": 40,
+        "healthy_level": 95
+    },
+    {
+        "hour": 15,
+        "hungry_level": 0,
+        "happy_level": 40,
+        "healthy_level": 95
+    },
+    {
+        "hour": 15,
+        "hungry_level": 0,
+        "happy_level": 50,
+        "healthy_level": 95
+    },
+    {
+        "hour": 15,
+        "hungry_level": 0,
+        "happy_level": 50,
+        "healthy_level": 95
+    },
+    {
+        "hour": 45,
+        "hungry_level": 0,
+        "happy_level": 75,
+        "healthy_level": 85
+    },
+    {
+        "hour": 15,
+        "hungry_level": 0,
+        "happy_level": 40,
+        "healthy_level": 95
     }
 ]
