@@ -30,7 +30,7 @@ def draw_pet_location(screen, pet_image_path):
     screen.blit(pet_image, pet.rect.topleft)
     return img_width, img_height
 
-def draw_pet_attributes(screen, food_button, water_button,speech_recognition_button):
+def draw_pet_attributes(screen, food_button, water_button, speech_recognition_button):
     hungry_text = menu_font.render(f'Hungry Level', True, WHITE)
     screen.blit(hungry_text, (50, 50))
     draw_progress_bar(screen, 50, 100, 200, 20, (255, 0, 0), pet.hungry_level)
@@ -77,8 +77,12 @@ def game_screen(screen):
 
     pet_image_path = settings.baby_pet_image_path if pet.state == 'baby' else (settings.teen_pet_image_path if pet.state == 'teen' else settings.adult_pet_image_path)
     happy_pet_image_path = settings.happy_pet_image_path  # 假设这是宠物开心状态的图片路径
+    sad_pet_image_path = settings.sad_pet_image_path  # 假设这是宠物悲伤状态的图片路径
+    listen_to_speech_pet_path = settings.listen_to_speech_pet_path  # 假设这是宠物在听语音时的图片路径
     pet_happy_start_time = 0
     pet_is_happy = False
+    pet_speech_start_time = 0
+    pet_is_speeching = False
 
     change_direction()
 
@@ -86,26 +90,25 @@ def game_screen(screen):
         game_background_image = pygame.image.load(settings.game_background_image_path)
         game_background_image = pygame.transform.scale(game_background_image, settings.screen_size)
         screen.blit(game_background_image, (0, 0))
-        
+
         current_time = time()
-        if pet.status == 'dead':
+        if pet.status == 'dead' or pet.happy_level <= 0 or pet.hungry_level <= 0 or pet.healthy_level <= 0:
             game_over_screen(screen)
             break
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if shop_button.click(event):
                     open_shop(screen, pet)
-                    food_button = Button(f'Food:{pet.food_amount}', (50, 200), menu_font, screen, GRAY, f'Food{pet.food_amount}')
+                    food_button = Button(f'Food:{pet.food_amount}', (50, 200), menu_font, screen, GRAY, f'Food:{pet.food_amount}')
                     water_button = Button(f'Water:{pet.water_amount}', (50, 250), menu_font, screen, GRAY, f'Water:{pet.water_amount}')
                     shop_button.release(event)
                 if food_button.click(event):
                     pet.feed()
-                    food_button = Button(f'Food:{pet.food_amount}', (50, 200), menu_font, screen, GRAY, f'Food{pet.food_amount}')
+                    food_button = Button(f'Food:{pet.food_amount}', (50, 200), menu_font, screen, GRAY, f'Food:{pet.food_amount}')
                 if water_button.click(event):
                     pet.drink()
                     water_button = Button(f'Water:{pet.water_amount}', (50, 250), menu_font, screen, GRAY, f'Water:{pet.water_amount}')
@@ -115,29 +118,32 @@ def game_screen(screen):
                 if pet.rect.collidepoint(event.pos):
                     pet.touch_pet()
                     pet_image_path = happy_pet_image_path
-                    
                     pet_happy_start_time = current_time
                     pet_is_happy = True
-                #speech recognition button
+                # speech recognition button
                 if speech_recognition_button.click(event):
-                    # pet_image_path = settings.listen_to_speech_pet_path
-                    draw_pet_location(screen, settings.listen_to_speech_pet_path)
-                    draw_pet_attributes(screen, food_button, water_button,speech_recognition_button)
+                    pet_image_path = listen_to_speech_pet_path
+                    draw_pet_location(screen, listen_to_speech_pet_path)
+                    draw_pet_attributes(screen, food_button, water_button, speech_recognition_button)
                     draw_player_info(screen, shop_button, settings_button)
                     pygame.display.update()
-                    sentiment = recognize_speech()
+                    sentiment, text = recognize_speech()
+                    pet_speech_start_time = current_time
+                    pet_is_speeching = True
                     if sentiment == 'positive (stars 4 and 5)':
-                        pet.happy_level += 10
-                        # print(pet.happy_level)
+                        pet_image_path = happy_pet_image_path
+                        if "麥當勞" in text:
+                            pet.happy_level += 15
+                        else:
+                            pet.happy_level += 10
                     elif sentiment == 'negative (stars 1, 2 and 3)':
-                        pet.happy_level -= 10
-                        # print(pet.happy_level)
-                    elif sentiment == None:
+                        pet_image_path = sad_pet_image_path
+                        if "去讀書" in text:
+                            pet.happy_level -= 100
+                        else:
+                            pet.happy_level -= 10
+                    elif sentiment is None:
                         pass
-                    draw_pet_location(screen, pet_image_path)
-                    draw_pet_attributes(screen, food_button, water_button,speech_recognition_button)
-                    draw_player_info(screen, shop_button, settings_button)
-                    pygame.display.update()
 
             elif event.type == pygame.MOUSEBUTTONUP:
                 shop_button.release(event)
@@ -145,12 +151,16 @@ def game_screen(screen):
                 water_button.release(event)
 
         # 恢复宠物原始图片
-        if pet_is_happy and current_time - pet_happy_start_time > 2:  # 2秒钟后恢复原始图片
+        if pet_is_happy and current_time - pet_happy_start_time > 20:  # 2秒钟后恢复原始图片
             pet_image_path = settings.baby_pet_image_path if pet.state == 'baby' else (settings.teen_pet_image_path if pet.state == 'teen' else settings.adult_pet_image_path)
             pet_is_happy = False
 
+        # 恢复宠物原始图片在语音识别后3秒钟
+        if pet_is_speeching and current_time - pet_speech_start_time > 3:  # 3秒钟后恢复原始图片
+            pet_image_path = settings.baby_pet_image_path if pet.state == 'baby' else (settings.teen_pet_image_path if pet.state == 'teen' else settings.adult_pet_image_path)
+            pet_is_speeching = False
 
-        draw_pet_attributes(screen, food_button, water_button,speech_recognition_button)
+        draw_pet_attributes(screen, food_button, water_button, speech_recognition_button)
         draw_player_info(screen, shop_button, settings_button)
         img_width, img_height = draw_pet_location(screen, pet_image_path)
 
@@ -183,7 +193,6 @@ def game_screen(screen):
             change_direction()
 
         pygame.display.update()
-
 
 def show_leaderboard_with_chart(screen):
     try:
@@ -218,9 +227,6 @@ def show_leaderboard_with_chart(screen):
             elif event.type == pygame.MOUSEBUTTONUP:
                 return_button.release(event)
 
-
-
-
 def game_over_screen(screen):
     from screens.main_menu import main_menu
     game_over_text = menu_font.render(u'Game Over', True, WHITE)
@@ -251,5 +257,3 @@ def game_over_screen(screen):
             elif event.type == pygame.MOUSEBUTTONUP:
                 play_again_button.release(event)
                 leaderboard_button.release(event)
-
-

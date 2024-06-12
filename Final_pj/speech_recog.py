@@ -14,7 +14,7 @@ def recognize_speech():
         # return text
     except sr.UnknownValueError:
         print("無法識別語音")
-        return 
+        return None, None
     except sr.RequestError as e:
         print("請求錯誤; {0}".format(e))
     # return ""
@@ -22,19 +22,19 @@ def recognize_speech():
     if text:
         if "麥當勞" in text:
             print("偵測到麥當勞")
-            return 'positive (stars 4 and 5)'
+            return 'positive (stars 4 and 5)', text
         if text == "去讀書":
             print("Sooo sad...")
-            return 'negative (stars 1, 2 and 3)'
+            return 'negative (stars 1, 2 and 3)',text
         if "暑假" in text:
             print("偵測到暑假")
-            return 'positive (stars 4 and 5)'
+            return 'positive (stars 4 and 5)', text
         if "大會考" in text:
             print("偵測到大會考")
-            return 'negative (stars 1, 2 and 3)'
+            return 'negative (stars 1, 2 and 3)',text
         sentiment = analyze_sentiment(text)
         print("情感分析结果: " + sentiment)
-        return sentiment
+        return sentiment, text
 
 
 def analyze_sentiment(text):
