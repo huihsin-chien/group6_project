@@ -146,15 +146,15 @@ def game_screen(screen):
         if pet.x < 0:
             pet.x = 0
             change_direction()
-        elif pet.x > screen.get_width() - img_width:
-            pet.x = screen.get_width() - img_width
+        elif pet.x > game_background_image.get_width() - img_width:
+            pet.x = game_background_image.get_width() - img_width
             change_direction()
 
         if pet.y < 0:
             pet.y = 0
             change_direction()
-        elif pet.y > screen.get_height() - img_height:
-            pet.y = screen.get_height() - img_height
+        elif pet.y > game_background_image.get_height() - img_height:
+            pet.y = game_background_image.get_height() - img_height
             change_direction()
 
         pygame.display.update()
