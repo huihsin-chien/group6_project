@@ -82,6 +82,10 @@ def game_screen(screen):
     change_direction()
 
     while True:
+        game_background_image = pygame.image.load(settings.game_background_image_path)
+        game_background_image = pygame.transform.scale(game_background_image, settings.screen_size)
+        screen.blit(game_background_image, (0, 0))
+        
         current_time = time()
         if pet.status == 'dead':
             game_over_screen(screen)
@@ -120,7 +124,7 @@ def game_screen(screen):
             pet_image_path = settings.baby_pet_image_path if pet.state == 'baby' else (settings.teen_pet_image_path if pet.state == 'teen' else settings.adult_pet_image_path)
             pet_is_happy = False
 
-        screen.fill(BLACK)
+
         draw_pet_attributes(screen, food_button, water_button)
         draw_player_info(screen, shop_button, settings_button)
         img_width, img_height = draw_pet_location(screen, pet_image_path)
