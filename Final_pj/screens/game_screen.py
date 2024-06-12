@@ -9,6 +9,7 @@ from utils import draw_progress_bar, draw_chart, save_record
 import json
 from screens.shop_screen import open_shop
 from screens.setting_screen import setting_screen
+from speech_recog import recognize_speech
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -29,7 +30,7 @@ def draw_pet_location(screen, pet_image_path):
     screen.blit(pet_image, pet.rect.topleft)
     return img_width, img_height
 
-def draw_pet_attributes(screen, food_button, water_button):
+def draw_pet_attributes(screen, food_button, water_button,speech_recognition_button):
     hungry_text = menu_font.render(f'Hungry Level', True, WHITE)
     screen.blit(hungry_text, (50, 50))
     draw_progress_bar(screen, 50, 100, 200, 20, (255, 0, 0), pet.hungry_level)
@@ -42,6 +43,7 @@ def draw_pet_attributes(screen, food_button, water_button):
     screen.blit(healthy_text, (50, 150))
     draw_progress_bar(screen, 50, 200, 200, 20, (0, 255, 0), pet.healthy_level)
 
+    speech_recognition_button.show()
     food_button.show()
     water_button.show()
 
@@ -71,6 +73,7 @@ def game_screen(screen):
     food_button = Button(f'Food:{pet.food_amount}', (50, 200), menu_font, screen, GRAY, f'Food{pet.food_amount}')
     water_button = Button(f'Water:{pet.water_amount}', (50, 250), menu_font, screen, GRAY, f'Water:{pet.water_amount}')
     settings_button = Button(u'Settings', (500, 200), menu_font, screen, GRAY, u'Settings')
+    speech_recognition_button = Button(u'Speech Recognition', (500, 300), menu_font, screen, GRAY, u'Speech Recognition')
 
     pet_image_path = settings.baby_pet_image_path if pet.state == 'baby' else (settings.teen_pet_image_path if pet.state == 'teen' else settings.adult_pet_image_path)
     happy_pet_image_path = settings.happy_pet_image_path  # 假设这是宠物开心状态的图片路径
@@ -112,8 +115,29 @@ def game_screen(screen):
                 if pet.rect.collidepoint(event.pos):
                     pet.touch_pet()
                     pet_image_path = happy_pet_image_path
+                    
                     pet_happy_start_time = current_time
                     pet_is_happy = True
+                #speech recognition button
+                if speech_recognition_button.click(event):
+                    # pet_image_path = settings.listen_to_speech_pet_path
+                    draw_pet_location(screen, settings.listen_to_speech_pet_path)
+                    draw_pet_attributes(screen, food_button, water_button,speech_recognition_button)
+                    draw_player_info(screen, shop_button, settings_button)
+                    pygame.display.update()
+                    sentiment = recognize_speech()
+                    if sentiment == 'positive (stars 4 and 5)':
+                        pet.happy_level += 10
+                        # print(pet.happy_level)
+                    elif sentiment == 'negative (stars 1, 2 and 3)':
+                        pet.happy_level -= 10
+                        # print(pet.happy_level)
+                    elif sentiment == None:
+                        pass
+                    draw_pet_location(screen, pet_image_path)
+                    draw_pet_attributes(screen, food_button, water_button,speech_recognition_button)
+                    draw_player_info(screen, shop_button, settings_button)
+                    pygame.display.update()
 
             elif event.type == pygame.MOUSEBUTTONUP:
                 shop_button.release(event)
@@ -126,7 +150,7 @@ def game_screen(screen):
             pet_is_happy = False
 
 
-        draw_pet_attributes(screen, food_button, water_button)
+        draw_pet_attributes(screen, food_button, water_button,speech_recognition_button)
         draw_player_info(screen, shop_button, settings_button)
         img_width, img_height = draw_pet_location(screen, pet_image_path)
 
