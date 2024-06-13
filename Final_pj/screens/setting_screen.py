@@ -24,9 +24,11 @@ def setting_screen(screen, pet): #volumn, resume, return to main menu
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if vol_up_button.click(event):
-                    pass
+                    # pass
+                    pygame.mixer.music.set_volume(min(1, pygame.mixer.music.get_volume() + 10))
                 if vol_down_button.click(event):
-                    pass
+                    # pass
+                    pygame.mixer.music.set_volume(max(0, pygame.mixer.music.get_volume() - 10))
                 if resume_button.click(event):
                     # game_screen(screen)
                     return

@@ -13,6 +13,7 @@ from speech_recog import recognize_speech
 from screens.update import animate_images
 from screens.music import play_sound_effect
 from screens.achievement import achievement
+from time import time
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -72,6 +73,7 @@ def change_direction():
     pet.speed_y = random.choice([-1,0,1])
 
 def game_screen(screen):
+    clock = pygame.time.Clock()
     last_update_time = time()
     direction_change_time = time()
     shop_button = Button(u'Shop', (500, 150), menu_font, screen, GRAY, u'Shop')
@@ -110,13 +112,21 @@ def game_screen(screen):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if shop_button.click(event):
                     open_shop(screen, pet)
-                    food_button = Button(f'Food:{pet.food_amount}', (50, 200), menu_font, screen, GRAY, f'Food:{pet.food_amount}')
+                    # 重新初始化按钮以确保它们正确显示
+                    print(1)
+                    
+                    food_button = Button(f'Food:{pet.food_amount}', (50, 200), menu_font, screen, GRAY, f'Food{pet.food_amount}')
                     water_button = Button(f'Water:{pet.water_amount}', (50, 250), menu_font, screen, GRAY, f'Water:{pet.water_amount}')
-                    achieve_button = Button(u'Achieve', (500, 400), menu_font, screen, GRAY, u'Achievement')
-                    shop_button.release(event)
+                    achieve_button = Button(u'Achievement', (500, 400), menu_font, screen, GRAY, u'Achievement')
+                    # shop_button.release(event)
+                    # 重新绘制游戏屏幕
+                    game_background_image = pygame.image.load(settings.game_background_image_path)
+                    game_background_image = pygame.transform.scale(game_background_image, settings.screen_size)
+                    screen.blit(game_background_image, (0, 0))
+                    pygame.display.update()
+                    continue
                 if food_button.click(event):
                     return_val = pet.feed()
-                    
                     eat1_image = pygame.image.load(settings.baby_eat1_image_path)
                     eat2_image = pygame.image.load(settings.baby_eat2_image_path)
                     eat1_image = pygame.transform.scale(eat1_image, (150,150))
@@ -150,10 +160,7 @@ def game_screen(screen):
                         play_sound_effect(music_path)
                         animate_images(screen, drink1_image, drink2_image, duration=2, switch_interval=0.2, x=pet.x, y=pet.y)
                         pygame.mixer.music.unpause()
-                    
-                    # play_sound_effect(music_path)
-                    # animate_images(screen, drink1_image, drink2_image, duration=2, switch_interval=0.2, x=pet.x, y=pet.y)
-                    # pygame.mixer.music.unpause()
+
                     water_button = Button(f'Water:{pet.water_amount}', (50, 250), menu_font, screen, GRAY, f'Water:{pet.water_amount}')
                 if settings_button.click(event):
                     setting_screen(screen, pet)
