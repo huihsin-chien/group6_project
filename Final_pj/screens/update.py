@@ -16,6 +16,7 @@ def animate_images(screen, img1, img2, duration=2, switch_interval=0.2, x = pet.
         
         # 检查是否需要停止动画
         if current_time - start_time > duration:
+            # pygame.mixer.music.unpause()
             break
         
         # 检查是否需要切换图片

@@ -6,6 +6,7 @@ from button import Button
 import settings
 from screens.egg_hatching_screen import egg_hatching_screen
 from screens.show_leaderboard import show_leaderboard
+from screens.music import sound_effects
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -19,6 +20,7 @@ def main_menu(screen):
     start_button = Button(u'開始遊戲', (300, 200), menu_font, screen, GRAY, u'開始遊戲')
     exit_button = Button(u'結束遊戲', (300, 300), menu_font, screen, GRAY, u'結束遊戲')
     leaderboard_button = Button(u'查看排行榜', (300, 400), menu_font, screen, GRAY, u'查看排行榜')
+    # sound_effects(False, None)
     music_path = "Assets/Bgm/bl cut.mp3"
     pygame.mixer.music.load(music_path)
     pygame.mixer.music.play(-1)  # Play the music in a loop

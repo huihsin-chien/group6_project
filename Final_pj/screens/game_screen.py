@@ -11,6 +11,8 @@ from screens.shop_screen import open_shop
 from screens.setting_screen import setting_screen
 from speech_recog import recognize_speech
 from screens.update import animate_images
+from screens.music import play_sound_effect
+import threading
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -116,12 +118,23 @@ def game_screen(screen):
                     eat1_image = pygame.transform.scale(eat1_image, (150,150))
                     eat2_image = pygame.transform.scale(eat2_image, (150,150))
                     music_path = "Assets/Bgm/eat.mp3"
-                    pygame.mixer.music.load(music_path)
-                    pygame.mixer.music.play(1)
+                    # sound_effects(True, music_path)
+                    # pygame.mixer.music.load(music_path)
+                    # pygame.mixer.music.play(1)
+                    play_sound_effect(music_path)
                     animate_images(screen, eat1_image, eat2_image, duration=2, switch_interval=0.2, x=pet.x, y=pet.y)
+                    pygame.mixer.music.unpause()
                     food_button = Button(f'Food:{pet.food_amount}', (50, 200), menu_font, screen, GRAY, f'Food{pet.food_amount}')
                 if water_button.click(event):
                     pet.drink()
+                    drink1_image = pygame.image.load(settings.baby_eat1_image_path)
+                    drink2_image = pygame.image.load(settings.baby_eat2_image_path)
+                    drink1_image = pygame.transform.scale(drink1_image, (150,150))
+                    drink2_image = pygame.transform.scale(drink2_image, (150,150))
+                    music_path = "Assets/Bgm/drink.mp3"
+                    play_sound_effect(music_path)
+                    animate_images(screen, drink1_image, drink2_image, duration=2, switch_interval=0.2, x=pet.x, y=pet.y)
+                    pygame.mixer.music.unpause()
                     water_button = Button(f'Water:{pet.water_amount}', (50, 250), menu_font, screen, GRAY, f'Water:{pet.water_amount}')
                 if settings_button.click(event):
                     setting_screen(screen, pet)
