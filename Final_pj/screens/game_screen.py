@@ -72,7 +72,8 @@ def change_direction():
     pet.speed_x = random.choice([-1,0,1]) #([-1, 0, 1])
     pet.speed_y = random.choice([-1,0,1])
 
-def game_screen(screen):
+def game_screen(screen, pet):
+
     clock = pygame.time.Clock()
     last_update_time = time()
     direction_change_time = time()
@@ -121,13 +122,13 @@ def game_screen(screen):
                     # shop_button.release(event)
                     # 重新绘制游戏屏幕
                     game_background_image = pygame.image.load(settings.game_background_image_path)
-                    game_background_image = pygame.transform.scale(game_background_image, settings.screen_size)
+                    game_background_image = pygame.transform.scale(game_background_image, settings.screen_size)s
                     screen.blit(game_background_image, (0, 0))
                     pygame.display.update()
                     continue
                 if food_button.click(event):
                     return_val = pet.feed()
-                    eat1_image = pygame.image.load(settings.baby_eat1_image_path)
+                    eat1_image = pygame.image.load(settings.baby_boy_eat1_image_path if pet.gender == 'male' else settings.baby_girl_eat1_image_path)
                     eat2_image = pygame.image.load(settings.baby_eat2_image_path)
                     eat1_image = pygame.transform.scale(eat1_image, (150,150))
                     eat2_image = pygame.transform.scale(eat2_image, (150,150))

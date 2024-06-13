@@ -5,7 +5,9 @@ import settings
 from button import Button
 from screens.game_screen import game_screen
 from screens.petname_input import petname
+from pet import Pet
 
+pet = Pet()
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GRAY = (169, 169, 169)
@@ -29,10 +31,11 @@ def egg_hatching_screen(screen):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if toss_button.click(event):
                     result = toss_coin()
+                    pet.gender = result
                     display_result(screen, result)
                     pygame.time.wait(500)
                     if petname(screen) == True:
-                        game_screen(screen)
+                        game_screen(screen, pet)
         
         pygame.display.update()
 
