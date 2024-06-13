@@ -2,8 +2,9 @@ import pygame
 import sys
 from button import Button
 import settings
+from pet import Pet
 
-
+pet = Pet()
 pygame.init()
 
 pygame.display.set_caption("幫你的小寶貝取名字吧")
@@ -39,7 +40,9 @@ def petname(screen):
                     input_active = False
                 # 检查鼠标点击位置是否在确认按钮内
                 if confirm_button.collidepoint(event.pos):
-                    print(f"愛寵名: {user_text}")
+                    pet.name += user_text
+                    print(f"愛寵名: {pet.name}")
+                    
                     return True
             elif event.type == pygame.KEYDOWN:
                 if input_active:

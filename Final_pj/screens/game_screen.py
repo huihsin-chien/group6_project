@@ -12,7 +12,6 @@ from screens.setting_screen import setting_screen
 from speech_recog import recognize_speech
 from screens.update import animate_images
 from screens.music import play_sound_effect
-import threading
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -260,7 +259,7 @@ def game_over_screen(screen):
     game_over_text = menu_font.render(u'Game Over', True, WHITE)
     screen.fill(BLACK)
     screen.blit(game_over_text, (300, 200))
-    record_text = menu_font.render(f'Your final hour: {pet.hour}', True, WHITE)
+    record_text = menu_font.render(f'{pet.name} final hour: {pet.hour}', True, WHITE)
     screen.blit(record_text, (300, 250))
     play_again_button = Button(u'Play Again', (300, 300), menu_font, screen, GRAY, u'Play Again')
     leaderboard_button = Button(u'Leaderboard', (300, 400), menu_font, screen, GRAY, u'Leaderboard')

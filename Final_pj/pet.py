@@ -22,6 +22,7 @@ class Pet:
         self.y = 400
         self.speed_x = 0.0000001
         self.speed_y = 0.0000001
+        self.name = ''
 
 
     def update_hour(self):
