@@ -115,7 +115,8 @@ def game_screen(screen):
                     achieve_button = Button(u'Achieve', (500, 400), menu_font, screen, GRAY, u'Achievement')
                     shop_button.release(event)
                 if food_button.click(event):
-                    pet.feed()
+                    return_val = pet.feed()
+                    
                     eat1_image = pygame.image.load(settings.baby_eat1_image_path)
                     eat2_image = pygame.image.load(settings.baby_eat2_image_path)
                     eat1_image = pygame.transform.scale(eat1_image, (150,150))
@@ -124,20 +125,35 @@ def game_screen(screen):
                     # sound_effects(True, music_path)
                     # pygame.mixer.music.load(music_path)
                     # pygame.mixer.music.play(1)
-                    play_sound_effect(music_path)
-                    animate_images(screen, eat1_image, eat2_image, duration=2, switch_interval=0.2, x=pet.x, y=pet.y)
-                    pygame.mixer.music.unpause()
+                    
+                    if return_val == 'no food':
+                        # print(1)
+                        pass
+                    else:
+                        play_sound_effect(music_path)
+                        animate_images(screen, eat1_image, eat2_image, duration=2, switch_interval=0.2, x=pet.x, y=pet.y)
+                        pygame.mixer.music.unpause()
+
                     food_button = Button(f'Food:{pet.food_amount}', (50, 200), menu_font, screen, GRAY, f'Food{pet.food_amount}')
                 if water_button.click(event):
-                    pet.drink()
+                    return_val = pet.drink()
                     drink1_image = pygame.image.load(settings.baby_eat1_image_path)
                     drink2_image = pygame.image.load(settings.baby_eat2_image_path)
                     drink1_image = pygame.transform.scale(drink1_image, (150,150))
                     drink2_image = pygame.transform.scale(drink2_image, (150,150))
                     music_path = "Assets/Bgm/drink.mp3"
-                    play_sound_effect(music_path)
-                    animate_images(screen, drink1_image, drink2_image, duration=2, switch_interval=0.2, x=pet.x, y=pet.y)
-                    pygame.mixer.music.unpause()
+
+                    if return_val == 'no water':
+                        # print(1)
+                        pass
+                    else:
+                        play_sound_effect(music_path)
+                        animate_images(screen, drink1_image, drink2_image, duration=2, switch_interval=0.2, x=pet.x, y=pet.y)
+                        pygame.mixer.music.unpause()
+                    
+                    # play_sound_effect(music_path)
+                    # animate_images(screen, drink1_image, drink2_image, duration=2, switch_interval=0.2, x=pet.x, y=pet.y)
+                    # pygame.mixer.music.unpause()
                     water_button = Button(f'Water:{pet.water_amount}', (50, 250), menu_font, screen, GRAY, f'Water:{pet.water_amount}')
                 if settings_button.click(event):
                     setting_screen(screen, pet)
@@ -323,10 +339,10 @@ def play_game(screen, pet):
             paddle_rect.x -= 10
         if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
             paddle_rect.x += 10
-        if keys[pygame.K_UP] or keys[pygame.K_w]:
-            paddle_rect.y -= 10
-        if keys[pygame.K_DOWN] or keys[pygame.K_s]:
-            paddle_rect.y += 10
+        # if keys[pygame.K_UP] or keys[pygame.K_w]:
+        #     paddle_rect.y -= 10
+        # if keys[pygame.K_DOWN] or keys[pygame.K_s]:
+        #     paddle_rect.y += 10
 
         # 防止球拍移出屏幕
         if paddle_rect.left < 0:
@@ -377,9 +393,10 @@ def ball_game_over_screen(screen, pet, font):
     record_text = font.render(f'Your final money: {pet.money}', True, WHITE)
     screen.blit(record_text, (300, 250))
     play_again_button = Button(u'Play Again', (300, 300), font, screen, GRAY, u'Play Again')
+    return_button = Button(u'Return', (300, 400), font, screen, GRAY, u'Return')
     # leaderboard_button = Button(u'Leaderboard', (300, 400), font, screen, GRAY, u'Leaderboard')
+    return_button.show()
     play_again_button.show()
-    # leaderboard_button.show()
     pygame.display.update()
 
     # save_record(pet.get_summary())
@@ -393,9 +410,13 @@ def ball_game_over_screen(screen, pet, font):
                 if play_again_button.click(event):
                     # pet.reset()
                     screen.fill(BLACK)
+                    play_game(screen, pet)
                     # main()
                 # if leaderboard_button.click(event):
                 #     show_leaderboard_with_chart(screen)
+                if return_button.click(event):
+                    game_screen(screen)
+
             elif event.type == pygame.MOUSEBUTTONUP:
                 play_again_button.release(event)
                 # leaderboard_button.release(event)

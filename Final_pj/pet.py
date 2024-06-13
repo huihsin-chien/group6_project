@@ -14,8 +14,8 @@ class Pet:
         self.happy_level = 50  # 快樂程度（0-100%）
         self.healthy_level = 100  # 健康程度（0-100%）
         self.state = 'baby'  # 寵物狀態（baby, teens, adult）
-        self.food_amount = 10  # 玩家擁有的食物數量
-        self.water_amount = 10  # 玩家擁有的水數量
+        self.food_amount = 2  # 玩家擁有的食物數量
+        self.water_amount = 2  # 玩家擁有的水數量
         self.money = 100  # 玩家擁有的金錢數量
         self.time_since_last_hour = 0  # 距离上次小时的时间
         self.x = 200
@@ -91,7 +91,9 @@ class Pet:
                     self.healthy_level += 5
             else:
                 self.healthy_level = 100
-
+            return "success"
+        else:
+            return "no food"
     def drink(self):
         if self.water_amount > 0:
             self.water_amount -= 1
@@ -111,7 +113,9 @@ class Pet:
                     self.healthy_level += 10
             else:
                 self.healthy_level = 100
-
+            return "success"
+        else:
+            return "no water"
     def buy_food(self):
         if self.money >= 3:
             self.money -= 3
