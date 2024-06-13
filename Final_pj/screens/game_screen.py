@@ -314,6 +314,7 @@ def game_over_screen(screen):
 def play_game(screen, pet):
     # ball_game_main()
     paddle_image = pygame.image.load(settings.paddle_image_path)
+    paddle_image = pygame.transform.scale(paddle_image, (100, 100))
     paddle_rect = paddle_image.get_rect()
     paddle_rect.topleft = (screen.get_width() // 2 - paddle_rect.width // 2, screen.get_height() - paddle_rect.height - 10)
 
