@@ -329,7 +329,7 @@ def play_game(screen, pet):
 
     ball = pygame.Rect(screen.get_width() // 2, screen.get_height() // 2, ball_radius * 2, ball_radius * 2)
     font = pygame.font.SysFont(None, 36)
-
+    last_score_time = time()
     # def ball_game_main():
         # global ball_speed_x, ball_speed_y, score
     ball_speed_x = 5
@@ -374,20 +374,28 @@ def play_game(screen, pet):
         if ball.top <= 0:
             ball_speed_y = -ball_speed_y
 
-        # 碰到球拍
-        if ball.colliderect(paddle_rect):
-            ball_speed_y = -ball_speed_y
-            pet.money += 1
+        if (ball.colliderect(paddle_rect) and
+            ball.bottom >= paddle_rect.top and
+            ball.bottom <= paddle_rect.top + 5 and  # Ensure it's hitting near the top edge
+            ball_speed_y > 0):  # Ensure the ball is moving downwards
 
-        # 球掉到地板
+            ball_speed_y = -ball_speed_y
+
+            # Score cooldown to prevent rapid scoring
+            current_time = time()
+            if current_time - last_score_time > 0.1:  # 0.1 seconds cooldown
+                pet.money += 1
+                last_score_time = current_time
+
+        # Ball falls to the bottom
         if ball.top >= screen.get_height():
             running = False
-            ball_game_over_screen(screen,pet, font)
+            ball_game_over_screen(screen, pet, font)
 
         ball_draw_objects(screen, paddle_image, paddle_rect, ball, font, pet)
         clock.tick(60)
 def ball_draw_objects(screen, paddle_image, paddle_rect, ball, font, pet):
-    screen.fill(BLACK)
+    screen.fill((100,100,100))
     screen.blit(paddle_image, paddle_rect.topleft)
     pygame.draw.ellipse(screen, WHITE, ball)
     score_text = font.render(f"money: {pet.money}", True, WHITE)
