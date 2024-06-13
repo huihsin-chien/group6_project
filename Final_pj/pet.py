@@ -29,7 +29,13 @@ class Pet:
         if self.time_since_last_hour <= 9:  # 每3秒钟更新一次hour
             self.hour += 1
             if self.time_since_last_hour == 3 or self.time_since_last_hour == 6 or self.time_since_last_hour == 9:
-                self.hungry_level -= 10
+                # self.hungry_level -= 10
+                if self.state == 'baby':
+                    self.hungry_level -= 5
+                elif self.state == 'teen':
+                    self.hungry_level -= 10
+                else:
+                    self.hungry_level -= 15
             if self.time_since_last_hour == 5 or self.time_since_last_hour == 0:
                 self.happy_level -= 5
                 self.money += 1
