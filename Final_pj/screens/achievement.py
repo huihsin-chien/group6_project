@@ -78,7 +78,7 @@ class AchievementPage:
             achievement.draw(screen)
 
 # 主函數
-def main():
+def achievement():
     clock = pygame.time.Clock()
     achievement_page = AchievementPage()
     show_achievement_page = False
@@ -103,5 +103,3 @@ def main():
         pygame.display.flip()
         clock.tick(30)
 
-if __name__ == "__main__":
-    main()

@@ -12,6 +12,7 @@ from screens.setting_screen import setting_screen
 from speech_recog import recognize_speech
 from screens.update import animate_images
 from screens.music import play_sound_effect
+from screens.achievement import achievement
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -32,7 +33,7 @@ def draw_pet_location(screen, pet_image_path):
     screen.blit(pet_image, pet.rect.topleft)
     return img_width, img_height
 
-def draw_pet_attributes(screen, food_button, water_button, speech_recognition_button):
+def draw_pet_attributes(screen, food_button, water_button, achieve_button, speech_recognition_button):
     hungry_text = menu_font.render(f'Hungry Level', True, WHITE)
     screen.blit(hungry_text, (50, 50))
     draw_progress_bar(screen, 50, 100, 200, 20, (255, 0, 0), pet.hungry_level)
@@ -48,6 +49,7 @@ def draw_pet_attributes(screen, food_button, water_button, speech_recognition_bu
     speech_recognition_button.show()
     food_button.show()
     water_button.show()
+    achieve_button.show()
 
 def draw_player_info(screen, shop_button, settings_button,play_game_earn_money_button):
     state_text = menu_font.render(f'State: {pet.state}', True, WHITE)
@@ -75,6 +77,7 @@ def game_screen(screen):
     shop_button = Button(u'Shop', (500, 150), menu_font, screen, GRAY, u'Shop')
     food_button = Button(f'Food:{pet.food_amount}', (50, 200), menu_font, screen, GRAY, f'Food{pet.food_amount}')
     water_button = Button(f'Water:{pet.water_amount}', (50, 250), menu_font, screen, GRAY, f'Water:{pet.water_amount}')
+    achieve_button = Button(u'Achievement', (500, 400), menu_font, screen, GRAY, u'Achievement')
     settings_button = Button(u'Settings', (500, 200), menu_font, screen, GRAY, u'Settings')
     speech_recognition_button = Button(u'Speech Recognition', (500, 300), menu_font, screen, GRAY, u'Speech Recognition')
     play_game_earn_money_button = Button(u'Play Game to Earn Money', (500, 350), menu_font, screen, GRAY, u'Play Game to Earn Money')
@@ -109,6 +112,7 @@ def game_screen(screen):
                     open_shop(screen, pet)
                     food_button = Button(f'Food:{pet.food_amount}', (50, 200), menu_font, screen, GRAY, f'Food:{pet.food_amount}')
                     water_button = Button(f'Water:{pet.water_amount}', (50, 250), menu_font, screen, GRAY, f'Water:{pet.water_amount}')
+                    achieve_button = Button(u'Achieve', (500, 400), menu_font, screen, GRAY, u'Achievement')
                     shop_button.release(event)
                 if food_button.click(event):
                     pet.feed()
@@ -147,7 +151,7 @@ def game_screen(screen):
                 if speech_recognition_button.click(event):
                     pet_image_path = listen_to_speech_pet_path
                     draw_pet_location(screen, listen_to_speech_pet_path)
-                    draw_pet_attributes(screen, food_button, water_button, speech_recognition_button)
+                    draw_pet_attributes(screen, food_button, water_button, achieve_button, speech_recognition_button)
                     draw_player_info(screen, shop_button, settings_button,play_game_earn_money_button)
                     pygame.display.update()
                     sentiment, text = recognize_speech()
@@ -172,10 +176,15 @@ def game_screen(screen):
                     play_game(screen, pet)
                     play_game_earn_money_button = Button(u'Play Game to Earn Money', (500, 350), menu_font, screen, GRAY, u'Play Game to Earn Money')
 
+                if achieve_button.click(event):
+                    achievement()
+                    achieve_button = Button(u'Achieve', (500, 400), menu_font, screen, GRAY, u'Achievement')
+
             elif event.type == pygame.MOUSEBUTTONUP:
                 shop_button.release(event)
                 food_button.release(event)
                 water_button.release(event)
+
 
         # 恢复宠物原始图片
         if pet_is_happy and current_time - pet_happy_start_time > 20:  # 2秒钟后恢复原始图片
@@ -187,7 +196,7 @@ def game_screen(screen):
             pet_image_path = settings.baby_pet_image_path if pet.state == 'baby' else (settings.teen_pet_image_path if pet.state == 'teen' else settings.adult_pet_image_path)
             pet_is_speeching = False
 
-        draw_pet_attributes(screen, food_button, water_button, speech_recognition_button)
+        draw_pet_attributes(screen, food_button, water_button, achieve_button, speech_recognition_button)
         draw_player_info(screen, shop_button, settings_button,play_game_earn_money_button)
         img_width, img_height = draw_pet_location(screen, pet_image_path)
 
