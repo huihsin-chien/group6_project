@@ -103,7 +103,7 @@ def game_screen(screen, pet):
     pet_image_path = settings.baby_pet_image_path if pet.state == 'baby' else (settings.teen_pet_image_path if pet.state == 'teen' else settings.adult_pet_image_path)
     happy_pet_image_path = settings.happy_pet_image_path
     sad_pet_image_path = settings.sad_pet_image_path
-    listen_to_speech_pet_path = settings.listen_to_speech_pet_path
+    listen_to_speech_pet_path = settings_general.listen_to_speech_pet_path
     pet_happy_start_time = 0
     pet_is_happy = False
     pet_sad_start_time = 0
