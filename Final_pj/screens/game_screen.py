@@ -11,7 +11,7 @@ import json
 from screens.shop_screen import open_shop
 from screens.setting_screen import setting_screen
 from speech_recog import recognize_speech
-from screens.update import animate_images
+# from screens.update import animate_images
 from screens.music import play_sound_effect
 from screens.achievement import achievement
 from time import time
@@ -134,7 +134,7 @@ def game_screen(screen, pet):
 
                     if return_val != 'no food':
                         play_sound_effect(music_path)
-                        animate_images(screen, eat1_image, eat2_image, duration=2, switch_interval=0.2, x=pet.x, y=pet.y)
+                        animate_images(screen, pet, eat1_image, eat2_image, duration=2, switch_interval=0.2, x=pet.x, y=pet.y)
                         pygame.mixer.music.unpause()
 
                     food_button = Button(f'Food:{pet.food_amount}', (50, 200), menu_font, screen, GRAY, f'Food{pet.food_amount}')
@@ -148,7 +148,7 @@ def game_screen(screen, pet):
 
                     if return_val != 'no water':
                         play_sound_effect(music_path)
-                        animate_images(screen, drink1_image, drink2_image, duration=2, switch_interval=0.2, x=pet.x, y=pet.y)
+                        animate_images(screen,pet, drink1_image, drink2_image, duration=2, switch_interval=0.2, x=pet.x, y=pet.y)
                         pygame.mixer.music.unpause()
 
                     water_button = Button(f'Water:{pet.water_amount}', (50, 250), menu_font, screen, GRAY, f'Water:{pet.water_amount}')
@@ -176,10 +176,7 @@ def game_screen(screen, pet):
                             pet.happy_level += 10
                     elif sentiment == 'negative (stars 1, 2 and 3)':
                         pet_image_path = sad_pet_image_path
-                        if "麥當勞" in text:
-                            pet.happy_level -= 5
-                        else:
-                            pet.happy_level -= 10
+  
 
                     continue
                 if achieve_button.click(event):
@@ -441,3 +438,44 @@ def ball_game_over_screen(screen, pet, font):
             elif event.type == pygame.MOUSEBUTTONUP:
                 play_again_button.release(event)
                 # leaderboard_button.release(event)
+
+
+def animate_images(screen,pet, img1, img2, duration=2, switch_interval=0.2, x = pet.x, y = pet.y):
+    start_time = time()
+    last_switch_time = start_time
+    current_image = img1
+    food_button = Button(f'Food:{pet.food_amount}', (50, 200), menu_font, screen, GRAY, f'Food{pet.food_amount}')
+    water_button = Button(f'Water:{pet.water_amount}', (50, 250), menu_font, screen, GRAY, f'Water:{pet.water_amount}')
+    achieve_button = Button(u'Achievement', (500, 400), menu_font, screen, GRAY, u'Achievement')
+    speech_recognition_button = Button(u'Speech Recognition', (500, 300), menu_font, screen, GRAY, u'Speech Recognition')
+    shop_button = Button(u'Shop', (500, 150), menu_font, screen, GRAY, u'Shop')
+    settings_button = Button(u'Settings', (500, 200), menu_font, screen, GRAY, u'Settings')
+    play_game_earn_money_button = Button(u'Play Game to Earn Money', (500, 350), menu_font, screen, GRAY, u'Play Game to Earn Money')
+    draw_pet_attributes(screen, pet, food_button, water_button, achieve_button, speech_recognition_button)
+    draw_player_info(screen, pet, shop_button, settings_button, play_game_earn_money_button)
+    
+    while True:
+        current_time = time()
+        
+        # 检查是否需要停止动画
+        if current_time - start_time > duration:
+            # pygame.mixer.music.unpause()
+            break
+        
+        # 检查是否需要切换图片
+        if current_time - last_switch_time >= switch_interval:
+            last_switch_time = current_time
+            current_image = img2 if current_image == img1 else img1
+        
+        
+        screen.blit(current_image, (x, y))
+        
+        # 更新显示
+        pygame.display.flip()
+        
+
+        # 检查退出事件
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
