@@ -14,6 +14,7 @@ def play_sound_effect(sound_effect_path = None):
     if sound_effect_path is None:
         return
     else:
+        
         sound_effect = pygame.mixer.Sound(sound_effect_path)
         sound_effect.play()
     # while pygame.mixer.get_busy():
