@@ -4,7 +4,6 @@ import sys
 # import settings
 from time import time
 from button import Button
-# from settings_male import Pet_img
 
 class Pet:
     def __init__(self):
@@ -31,7 +30,7 @@ class Pet:
         # Assuming an initial size for the pet's image
         # self.image = pygame.image.load(settings.baby_pet_image_path)
 
-        from settings_male import Pet_img
+        from Final_pj.settings_gs import Pet_img
         self.image = pygame.image.load(Pet_img.load_images(self, 'baby'))
         self.rect = self.image.get_rect(topleft=(self.x, self.y))
 
