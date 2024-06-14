@@ -430,9 +430,12 @@ def play_game(screen, pet):
         ball_draw_objects(screen, paddle_image, paddle_rect, ball, font, pet)
         clock.tick(60)
 def ball_draw_objects(screen, paddle_image, paddle_rect, ball, font, pet):
-    screen.fill((100,100,100))
+    import settings_general as settings
+    game_background_image = pygame.image.load(settings.game_background_image_path)
+    game_background_image = pygame.transform.scale(game_background_image, settings.screen_size)
+    screen.blit(game_background_image, (0, 0))    
     screen.blit(paddle_image, paddle_rect.topleft)
-    pygame.draw.ellipse(screen, WHITE, ball)
+    pygame.draw.ellipse(screen, (0,0,255), ball)
     score_text = font.render(f"money: {pet.money}", True, WHITE)
     screen.blit(score_text, (10, 10))
     pygame.display.flip()
