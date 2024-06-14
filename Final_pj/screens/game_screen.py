@@ -140,8 +140,6 @@ def game_screen(screen, pet):
                     return_val = pet.feed()
                     eat1_image = pygame.image.load(Pet_img.load_images(pet, 'eat1'))
                     eat2_image = pygame.image.load(Pet_img.load_images(pet, 'eat2'))
-                    eat1_image = pygame.transform.scale(eat1_image, (150, 150))
-                    eat2_image = pygame.transform.scale(eat2_image, (150, 150))
                     music_path = "Assets/Bgm/eat.mp3"
 
                     if return_val != 'no food':
@@ -154,8 +152,6 @@ def game_screen(screen, pet):
                     return_val = pet.drink()
                     drink1_image = pygame.image.load(Pet_img.load_images(pet, 'drink1'))
                     drink2_image = pygame.image.load(Pet_img.load_images(pet, 'drink2'))
-                    drink1_image = pygame.transform.scale(drink1_image, (150, 150))
-                    drink2_image = pygame.transform.scale(drink2_image, (150, 150))
                     music_path = "Assets/Bgm/drink.mp3"
 
                     if return_val != 'no water':
@@ -168,7 +164,7 @@ def game_screen(screen, pet):
                     setting_screen(screen, pet)
                 if pet.rect.collidepoint(event.pos):
                     pet.touch_pet()
-                    pet_image_path = Pet_img.load_images(pet, 'happy')
+                    pet_image_path = Pet_img.load_images(pet, 'touch')
                     pet_happy_start_time = current_time
                     pet_is_happy = True
                     music_path = "Assets/Bgm/happy.mp3"
