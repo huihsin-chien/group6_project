@@ -20,8 +20,16 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GRAY = (169, 169, 169)
 
+
+text_color = (255, 255, 255)
+outline_color = (0, 0, 0)
+outline_thickness = 2
+shadow_color = (0, 0, 0)
+shadow_offset = (2, 2)
+
+
 pet = Pet()
-menu_font = pygame.font.Font(settings_general.font_path, settings_general.menu_font_size)
+game_screen_font = pygame.font.Font(settings_general.font_path, settings_general.game_screen_font_size)
 
 def draw_pet_location(screen, pet, pet_image_path):
     pet.image = pygame.image.load(pet_image_path)
@@ -31,17 +39,19 @@ def draw_pet_location(screen, pet, pet_image_path):
     return img_width, img_height
 
 def draw_pet_attributes(screen,pet, food_button, water_button, achieve_button, speech_recognition_button):
-    hungry_text = menu_font.render(f'Hungry Level', True, WHITE)
-    screen.blit(hungry_text, (50, 50))
-    draw_progress_bar(screen, 50, 100, 200, 20, (255, 0, 0), pet.hungry_level)
+    hungry_text = render_text_with_outline(f'飢餓度', game_screen_font, text_color, outline_color, outline_thickness)
+    screen.blit(hungry_text, (25, 0))
 
-    happy_text = menu_font.render(f'Happy Level', True, WHITE)
-    screen.blit(happy_text, (50, 100))
-    draw_progress_bar(screen, 50, 150, 200, 20, (255, 255, 0), pet.happy_level)
+    # draw_progress_bar
+    draw_progress_bar(screen, 100, 10, 200, 18, (255, 0, 0), pet.hungry_level)
 
-    healthy_text = menu_font.render(f'Healthy Level', True, WHITE)
-    screen.blit(healthy_text, (50, 150))
-    draw_progress_bar(screen, 50, 200, 200, 20, (0, 255, 0), pet.healthy_level)
+    happy_text = render_text_with_outline(f'快樂度', game_screen_font, text_color, outline_color, outline_thickness)
+    screen.blit(happy_text, (25, 25))
+    draw_progress_bar(screen, 100, 35, 200, 18, (255, 255, 0), pet.happy_level)
+
+    healthy_text = render_text_with_outline(f'健康度', game_screen_font, text_color, outline_color, outline_thickness)
+    screen.blit(healthy_text, (25, 50))
+    draw_progress_bar(screen, 100, 60, 200, 18, (0, 255, 0), pet.healthy_level)
 
     speech_recognition_button.show()
     food_button.show()
@@ -49,24 +59,25 @@ def draw_pet_attributes(screen,pet, food_button, water_button, achieve_button, s
     achieve_button.show()
 
 def draw_player_info(screen,pet, shop_button, settings_button, play_game_earn_money_button):
-    state_text = menu_font.render(f'State: {pet.state}', True, WHITE)
-    screen.blit(state_text, (500, 50))
+    state_text = render_text_with_outline(f'成長階段: {pet.state}', game_screen_font, text_color, outline_color, outline_thickness)
+    screen.blit(state_text, (550, 0))
 
-    money_text = menu_font.render(f'Money: {pet.money}', True, WHITE)
-    screen.blit(money_text, (500, 100))
+    money_text = render_text_with_outline(f'阿堵物: {pet.money}', game_screen_font, text_color, outline_color, outline_thickness)
+    screen.blit(money_text, (550, 25))
 
-    hour_text = menu_font.render(f'Hour: {pet.hour}', True, WHITE)
-    screen.blit(hour_text, (500, 200))
+    hour_text = render_text_with_outline(f'壽命(hr): {pet.hour}', game_screen_font, text_color, outline_color, outline_thickness)
+    screen.blit(hour_text, (550, 50))
 
-    status_text = menu_font.render(f'Status: {pet.status}', True, WHITE)
-    screen.blit(status_text, (500, 250))
+    status_text = render_text_with_outline(f'狀態: {pet.status}', game_screen_font, text_color, outline_color, outline_thickness)
+    screen.blit(status_text, (550, 75))
+
     settings_button.show()
     shop_button.show()
     play_game_earn_money_button.show()
 
 def change_direction(pet):
     pet.speed_x = random.choice([-1, 0, 1])
-    pet.speed_y = random.choice([-1, 0, 1])
+    # pet.speed_y = random.choice([-1, 0, 1])
     pet.update_position()  # Update position after changing direction
 
 
@@ -79,13 +90,15 @@ def game_screen(screen, pet):
     clock = pygame.time.Clock()
     last_update_time = time()
     direction_change_time = time()
-    shop_button = Button(u'Shop', (500, 150), menu_font, screen, GRAY, u'Shop')
-    food_button = Button(f'Food:{pet.food_amount}', (50, 200), menu_font, screen, GRAY, f'Food{pet.food_amount}')
-    water_button = Button(f'Water:{pet.water_amount}', (50, 250), menu_font, screen, GRAY, f'Water:{pet.water_amount}')
-    achieve_button = Button(u'Achievement', (500, 400), menu_font, screen, GRAY, u'Achievement')
-    settings_button = Button(u'Settings', (500, 200), menu_font, screen, GRAY, u'Settings')
-    speech_recognition_button = Button(u'Speech Recognition', (500, 300), menu_font, screen, GRAY, u'Speech Recognition')
-    play_game_earn_money_button = Button(u'Play Game to Earn Money', (500, 350), menu_font, screen, GRAY, u'Play Game to Earn Money')
+    
+    food_button = Button(f'食物:{pet.food_amount}', (25, 80), game_screen_font, screen, GRAY, f'食物{pet.food_amount}')
+    water_button = Button(f'水:{pet.water_amount}', (25, 110), game_screen_font, screen, GRAY, f'水:{pet.water_amount}')
+    achieve_button = Button(u'成就', (25, 140), game_screen_font, screen, GRAY, u'成就')
+    
+    settings_button = Button(u'設定', (550, 105), game_screen_font, screen, GRAY, u'設定')
+    speech_recognition_button = Button(u'說些什麼吧...', (550, 135), game_screen_font, screen, GRAY, u'說些什麼吧...')
+    shop_button = Button(u'商店', (550, 165), game_screen_font, screen, GRAY, u'商店')
+    play_game_earn_money_button = Button(u'賺錢', (550, 195), game_screen_font, screen, GRAY, u'賺錢')
 
     pet_image_path = settings.baby_pet_image_path if pet.state == 'baby' else (settings.teen_pet_image_path if pet.state == 'teen' else settings.adult_pet_image_path)
     happy_pet_image_path = settings.happy_pet_image_path
@@ -118,9 +131,10 @@ def game_screen(screen, pet):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if shop_button.click(event):
                     open_shop(screen, pet)
-                    food_button = Button(f'Food:{pet.food_amount}', (50, 200), menu_font, screen, GRAY, f'Food{pet.food_amount}')
-                    water_button = Button(f'Water:{pet.water_amount}', (50, 250), menu_font, screen, GRAY, f'Water:{pet.water_amount}')
-                    achieve_button = Button(u'Achievement', (500, 400), menu_font, screen, GRAY, u'Achievement')
+                    food_button = Button(f'食物:{pet.food_amount}', (25, 80), game_screen_font, screen, GRAY, f'食物{pet.food_amount}')
+                    water_button = Button(f'水:{pet.water_amount}', (25, 110), game_screen_font, screen, GRAY, f'水:{pet.water_amount}')
+                    achieve_button = Button(u'成就', (25, 140), game_screen_font, screen, GRAY, u'成就')
+                    
                     game_background_image = pygame.image.load(settings.game_background_image_path)
                     game_background_image = pygame.transform.scale(game_background_image, settings.screen_size)
                     screen.blit(game_background_image, (0, 0))
@@ -139,7 +153,7 @@ def game_screen(screen, pet):
                         animate_images(screen, pet, eat1_image, eat2_image, duration=2, switch_interval=0.2, x=pet.x, y=pet.y)
                         pygame.mixer.music.unpause()
 
-                    food_button = Button(f'Food:{pet.food_amount}', (50, 200), menu_font, screen, GRAY, f'Food{pet.food_amount}')
+                    food_button = Button(f'食物:{pet.food_amount}', (25, 80), game_screen_font, screen, GRAY, f'食物{pet.food_amount}')
                 if water_button.click(event):
                     return_val = pet.drink()
                     drink1_image = pygame.image.load(settings.baby_eat1_image_path)
@@ -153,7 +167,7 @@ def game_screen(screen, pet):
                         animate_images(screen,pet, drink1_image, drink2_image, duration=2, switch_interval=0.2, x=pet.x, y=pet.y)
                         pygame.mixer.music.unpause()
 
-                    water_button = Button(f'Water:{pet.water_amount}', (50, 250), menu_font, screen, GRAY, f'Water:{pet.water_amount}')
+                    water_button = Button(f'水:{pet.water_amount}', (25, 110), game_screen_font, screen, GRAY, f'水:{pet.water_amount}')
                 if settings_button.click(event):
                     setting_screen(screen, pet)
                 if pet.rect.collidepoint(event.pos):
@@ -194,7 +208,7 @@ def game_screen(screen, pet):
                     achievement()
                 if play_game_earn_money_button.click(event):
                     play_game(screen, pet)
-                    play_game_earn_money_button = Button(u'Play Game to Earn Money', (500, 350), menu_font, screen, GRAY, u'Play Game to Earn Money')
+                    play_game_earn_money_button = Button(u'賺錢', (550, 195), game_screen_font, screen, GRAY, u'賺錢')
             elif event.type == pygame.MOUSEBUTTONUP:
                 shop_button.release(event)
                 food_button.release(event)
@@ -279,16 +293,16 @@ def show_leaderboard_with_chart(screen):
         data = []
 
     screen.fill(BLACK)
-    title_text = menu_font.render('Leaderboard', True, WHITE)
+    title_text = game_screen_font.render('Leaderboard', True, WHITE)
     screen.blit(title_text, (300, 50))
 
     if data:
         draw_chart(screen, data)
     else:
-        no_data_text = menu_font.render('No data available', True, WHITE)
+        no_data_text = game_screen_font.render('No data available', True, WHITE)
         screen.blit(no_data_text, (300, 200))
 
-    return_button = Button('Return', (300, 500), menu_font, screen, GRAY, 'Return')
+    return_button = Button('Return', (300, 500), game_screen_font, screen, GRAY, 'Return')
     return_button.show()
     pygame.display.update()
 
@@ -306,13 +320,13 @@ def show_leaderboard_with_chart(screen):
 
 def game_over_screen(screen,pet):
     from screens.main_menu import main_menu
-    game_over_text = menu_font.render(u'Game Over', True, WHITE)
+    game_over_text = game_screen_font.render(u'Game Over', True, WHITE)
     screen.fill(BLACK)
     screen.blit(game_over_text, (300, 200))
-    record_text = menu_font.render(f'{pet.name} final hour: {pet.hour}', True, WHITE)
+    record_text = game_screen_font.render(f'{pet.name} final hour: {pet.hour}', True, WHITE)
     screen.blit(record_text, (300, 250))
-    play_again_button = Button(u'Play Again', (300, 300), menu_font, screen, GRAY, u'Play Again')
-    leaderboard_button = Button(u'Leaderboard', (300, 400), menu_font, screen, GRAY, u'Leaderboard')
+    play_again_button = Button(u'Play Again', (300, 300), game_screen_font, screen, GRAY, u'Play Again')
+    leaderboard_button = Button(u'Leaderboard', (300, 400), game_screen_font, screen, GRAY, u'Leaderboard')
     play_again_button.show()
     leaderboard_button.show()
     pygame.display.update()
@@ -463,13 +477,14 @@ def animate_images(screen,pet, img1, img2, duration=2, switch_interval=0.2, x = 
     start_time = time()
     last_switch_time = start_time
     current_image = img1
-    food_button = Button(f'Food:{pet.food_amount}', (50, 200), menu_font, screen, GRAY, f'Food{pet.food_amount}')
-    water_button = Button(f'Water:{pet.water_amount}', (50, 250), menu_font, screen, GRAY, f'Water:{pet.water_amount}')
-    achieve_button = Button(u'Achievement', (500, 400), menu_font, screen, GRAY, u'Achievement')
-    speech_recognition_button = Button(u'Speech Recognition', (500, 300), menu_font, screen, GRAY, u'Speech Recognition')
-    shop_button = Button(u'Shop', (500, 150), menu_font, screen, GRAY, u'Shop')
-    settings_button = Button(u'Settings', (500, 200), menu_font, screen, GRAY, u'Settings')
-    play_game_earn_money_button = Button(u'Play Game to Earn Money', (500, 350), menu_font, screen, GRAY, u'Play Game to Earn Money')
+    food_button = Button(f'食物:{pet.food_amount}', (25, 80), game_screen_font, screen, GRAY, f'食物{pet.food_amount}')
+    water_button = Button(f'水:{pet.water_amount}', (25, 110), game_screen_font, screen, GRAY, f'水:{pet.water_amount}')
+    achieve_button = Button(u'成就', (25, 140), game_screen_font, screen, GRAY, u'成就')
+    
+    settings_button = Button(u'設定', (550, 105), game_screen_font, screen, GRAY, u'設定')
+    speech_recognition_button = Button(u'說些什麼吧...', (550, 135), game_screen_font, screen, GRAY, u'說些什麼吧...')
+    shop_button = Button(u'商店', (550, 165), game_screen_font, screen, GRAY, u'商店')
+    play_game_earn_money_button = Button(u'賺錢', (550, 195), game_screen_font, screen, GRAY, u'賺錢')
     draw_pet_attributes(screen, pet, food_button, water_button, achieve_button, speech_recognition_button)
     draw_player_info(screen, pet, shop_button, settings_button, play_game_earn_money_button)
     
@@ -498,3 +513,49 @@ def animate_images(screen,pet, img1, img2, duration=2, switch_interval=0.2, x = 
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+
+
+def render_text_with_outline(text, font, text_color, outline_color, outline_thickness):
+    # Render the outline text
+    outline_surface = font.render(text, True, outline_color)
+    text_surface = font.render(text, True, text_color)
+
+    width = text_surface.get_width() + outline_thickness * 2
+    height = text_surface.get_height() + outline_thickness * 2
+
+    # Create a new surface with the desired dimensions
+    surface = pygame.Surface((width, height), pygame.SRCALPHA, 32)
+    surface = surface.convert_alpha()
+
+    # Draw the outline text in all 8 directions around the original text
+    for dx in range(-outline_thickness, outline_thickness + 1):
+        for dy in range(-outline_thickness, outline_thickness + 1):
+            if dx != 0 or dy != 0:
+                surface.blit(outline_surface, (dx + outline_thickness, dy + outline_thickness))
+
+    # Draw the original text on top of the outlines
+    surface.blit(text_surface, (outline_thickness, outline_thickness))
+
+    return surface
+
+def render_text_with_shadow(text, font, text_color, shadow_color, shadow_offset):
+    # Render the shadow text
+    shadow_surface = font.render(text, True, shadow_color)
+    text_surface = font.render(text, True, text_color)
+
+    width = text_surface.get_width() + abs(shadow_offset[0])
+    height = text_surface.get_height() + abs(shadow_offset[1])
+
+    # Create a new surface with the desired dimensions
+    surface = pygame.Surface((width, height), pygame.SRCALPHA, 32)
+    surface = surface.convert_alpha()
+
+    # Draw the shadow text
+    surface.blit(shadow_surface, shadow_offset)
+
+    # Draw the original text on top of the shadow
+    surface.blit(text_surface, (0, 0))
+
+    return surface
+    #function call
+    #text_surface = render_text_with_shadow(text, font, text_color, shadow_color, shadow_offset)

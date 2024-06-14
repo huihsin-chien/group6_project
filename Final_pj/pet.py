@@ -20,7 +20,7 @@ class Pet:
         self.x = 200
         self.y = 400
         self.speed_x = 1
-        self.speed_y = 1
+        self.speed_y = 0
         self.name = ''
         self.gender = ''
         

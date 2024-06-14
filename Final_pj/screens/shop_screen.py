@@ -14,10 +14,12 @@ def open_shop(screen, pet):
     shop_background_image = pygame.image.load(settings.shop_background_image_path)
     shop_background_image = pygame.transform.scale(shop_background_image, settings.screen_size)
     # buy_food_button = Button(u'Food: 3 dollar', (10, 400), menu_font, screen, GRAY, u'Food: 3 dollar')
-    button_image_path = "Assets/img/bamboo.png"
-    buy_food_button = img_Button(u'3 dollar', (30, 400), menu_font, screen, button_image_path, u'- 3兩')
-    buy_water_button = Button(u'Water: 1 dollar', (200, 400), menu_font, screen, GRAY, u'Water: 1 dollar')
-    return_to_game_button = Button(u'Return to Game', (400, 400), menu_font, screen, GRAY, u'Return to Game')
+    bmaboo_button_image_path = "Assets/img/bamboo.png"
+    water_button_image_path = "Assets/img/bamboo.png"
+    buy_food_button = img_Button(u'3 dollar', (30, 400), menu_font, screen, bmaboo_button_image_path, u'- 3兩')
+    # buy_water_button = Button(u'Water: 1 dollar', (200, 400), menu_font, screen, GRAY, u'Water: 1 dollar')
+    buy_water_button = img_Button(u'1 dollar', (200, 400), menu_font, screen, water_button_image_path, u'- 1兩')
+    return_to_game_button = Button(u'Return', (400, 400), menu_font, screen, GRAY, u'Return')
 
     while True:
         for event in pygame.event.get():
@@ -39,6 +41,7 @@ def open_shop(screen, pet):
         buy_food_button.show()
         buy_water_button.show()
         return_to_game_button.show()
+
 
         money_text = menu_font.render(f'Money: {pet.money}', True, WHITE)
         screen.blit(money_text, (500, 100))
