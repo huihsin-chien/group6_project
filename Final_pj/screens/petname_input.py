@@ -25,9 +25,7 @@ input_active = False
 # 创建输入框和确认按钮
 input_box = pygame.Rect(250, 200, 300, 50)
 confirm_button = pygame.Rect(350, 300, 100, 50)
-
-# Tkinter 中文输入函数
-def handle_chinese_input():
+def handle_chinese_input(initial_text=''):
     def on_confirm():
         global user_text
         user_text = entry.get()
@@ -40,6 +38,7 @@ def handle_chinese_input():
     label.pack(pady=10)
 
     entry = tk.Entry(root, font=("Arial", 16))
+    entry.insert(0, initial_text)  # 在输入框中插入初始文本
     entry.pack(pady=10)
 
     confirm_button = tk.Button(root, text="確定", font=("Arial", 16), command=on_confirm)
@@ -52,23 +51,20 @@ def petname(screen, pet):
     last_blink_time = time.time()
     cursor_visible = True
     global user_text, input_active
+    user_text = ''
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                # 检查鼠标点击位置是否在输入框内
                 if input_box.collidepoint(event.pos):
                     input_active = True
-                    handle_chinese_input()  # 调用 Tkinter 处理中文输入
+                    handle_chinese_input(user_text)  # 调用 Tkinter 处理中文输入，并传入当前已输入的文字
                     pet.name = user_text
                 else:
                     input_active = False
-                # 检查鼠标点击位置是否在确认按钮内
                 if confirm_button.collidepoint(event.pos):
-                    # handle_chinese_input()  # 调用 Tkinter 处理中文输入
-                    # pet.name = user_text
                     print(f"愛寵名: {pet.name}")
                     return True
             elif event.type == pygame.KEYDOWN:
