@@ -187,7 +187,10 @@ def game_screen(screen, pet):
         draw_player_info(screen, shop_button, settings_button, play_game_earn_money_button)
         current_time = time()
         if pet_is_happy and current_time - pet_happy_start_time >= 3:
+            music_path = "Assets/Bgm/happy.mp3"
+            play_sound_effect(music_path)
             pet_image_path = settings.baby_pet_image_path if pet.state == 'baby' else (settings.teen_pet_image_path if pet.state == 'teen' else settings.adult_pet_image_path)
+            pygame.mixer.music.unpause()
             pet_is_happy = False
         if pet_is_speeching and current_time - pet_speech_start_time >= 3:
             pet_image_path = settings.baby_pet_image_path if pet.state == 'baby' else (settings.teen_pet_image_path if pet.state == 'teen' else settings.adult_pet_image_path)
