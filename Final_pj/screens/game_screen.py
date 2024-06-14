@@ -23,14 +23,14 @@ GRAY = (169, 169, 169)
 pet = Pet()
 menu_font = pygame.font.Font(settings_general.font_path, settings_general.menu_font_size)
 
-def draw_pet_location(screen, pet_image_path):
+def draw_pet_location(screen, pet, pet_image_path):
     pet.image = pygame.image.load(pet_image_path)
     pet.rect = pet.image.get_rect(topleft=(pet.x, pet.y))
     img_width, img_height = pet.image.get_size()
     screen.blit(pet.image, pet.rect.topleft)
     return img_width, img_height
 
-def draw_pet_attributes(screen, food_button, water_button, achieve_button, speech_recognition_button):
+def draw_pet_attributes(screen,pet, food_button, water_button, achieve_button, speech_recognition_button):
     hungry_text = menu_font.render(f'Hungry Level', True, WHITE)
     screen.blit(hungry_text, (50, 50))
     draw_progress_bar(screen, 50, 100, 200, 20, (255, 0, 0), pet.hungry_level)
@@ -48,7 +48,7 @@ def draw_pet_attributes(screen, food_button, water_button, achieve_button, speec
     water_button.show()
     achieve_button.show()
 
-def draw_player_info(screen, shop_button, settings_button, play_game_earn_money_button):
+def draw_player_info(screen,pet, shop_button, settings_button, play_game_earn_money_button):
     state_text = menu_font.render(f'State: {pet.state}', True, WHITE)
     screen.blit(state_text, (500, 50))
 
@@ -64,7 +64,7 @@ def draw_player_info(screen, shop_button, settings_button, play_game_earn_money_
     shop_button.show()
     play_game_earn_money_button.show()
 
-def change_direction():
+def change_direction(pet):
     pet.speed_x = random.choice([-1, 0, 1])
     pet.speed_y = random.choice([-1, 0, 1])
     pet.update_position()  # Update position after changing direction
@@ -96,9 +96,10 @@ def game_screen(screen, pet):
     pet_speech_start_time = 0
     pet_is_speeching = False
 
-    change_direction()
+    change_direction(pet)
 
     while True:
+        
         game_background_image = pygame.image.load(settings.game_background_image_path)
         game_background_image = pygame.transform.scale(game_background_image, settings.screen_size)
         screen.blit(game_background_image, (0, 0))
@@ -160,9 +161,9 @@ def game_screen(screen, pet):
                     pet_is_happy = True
                 if speech_recognition_button.click(event):
                     pet_image_path = listen_to_speech_pet_path
-                    draw_pet_location(screen, listen_to_speech_pet_path)
-                    draw_pet_attributes(screen, food_button, water_button, achieve_button, speech_recognition_button)
-                    draw_player_info(screen, shop_button, settings_button, play_game_earn_money_button)
+                    draw_pet_location(screen,pet, listen_to_speech_pet_path)
+                    draw_pet_attributes(screen,pet, food_button, water_button, achieve_button, speech_recognition_button)
+                    draw_player_info(screen, pet,shop_button, settings_button, play_game_earn_money_button)
                     pygame.display.update()
                     sentiment, text = recognize_speech()
                     pet_speech_start_time = current_time
@@ -182,14 +183,18 @@ def game_screen(screen, pet):
 
                     continue
                 if achieve_button.click(event):
-                    achievement(screen, pet)
+                    achievement()
                 if play_game_earn_money_button.click(event):
                     play_game(screen, pet)
                     play_game_earn_money_button = Button(u'Play Game to Earn Money', (500, 350), menu_font, screen, GRAY, u'Play Game to Earn Money')
+            elif event.type == pygame.MOUSEBUTTONUP:
+                shop_button.release(event)
+                food_button.release(event)
+                water_button.release(event)
 
-        draw_pet_location(screen, pet_image_path)
-        draw_pet_attributes(screen, food_button, water_button, achieve_button, speech_recognition_button)
-        draw_player_info(screen, shop_button, settings_button, play_game_earn_money_button)
+        draw_pet_location(screen,pet, pet_image_path)
+        draw_pet_attributes(screen, pet,food_button, water_button, achieve_button, speech_recognition_button)
+        draw_player_info(screen,pet, shop_button, settings_button, play_game_earn_money_button)
         current_time = time()
         if pet_is_happy and current_time - pet_happy_start_time >= 3:
             pet_image_path = settings.baby_pet_image_path if pet.state == 'baby' else (settings.teen_pet_image_path if pet.state == 'teen' else settings.adult_pet_image_path)
@@ -197,15 +202,46 @@ def game_screen(screen, pet):
         if pet_is_speeching and current_time - pet_speech_start_time >= 3:
             pet_image_path = settings.baby_pet_image_path if pet.state == 'baby' else (settings.teen_pet_image_path if pet.state == 'teen' else settings.adult_pet_image_path)
             pet_is_speeching = False
-        if current_time - direction_change_time >= 3:
-            change_direction()
+        if current_time - direction_change_time >= 2:
+            change_direction(pet)
             direction_change_time = current_time
-        pet.move()
-        pet.x = max(0, min(pet.x, settings.screen_size[0] - pet.rect.width))
-        pet.y = max(0, min(pet.y, settings.screen_size[1] - pet.rect.height))
+        if current_time - last_update_time >= 1:
+            # print(1)
+            pet.update_hour()
+            print(pet.hour)
+            print(pet.hungry_level)
+            last_update_time = current_time
+
+        if current_time - last_update_time >= 0.5 and current_time - last_update_time <= 0.55 or \
+           current_time - last_update_time >= 0.95 and current_time - last_update_time <= 1:
+            pet.x += pet.speed_x
+            pet.y += pet.speed_y
+            print(pet.speed_x, pet.speed_y)
+            pet.update_position()
+            # change_direction(pet)
+
+        #check if pet is out of screen
+        if pet.x < 0:
+            pet.x = 0
+            change_direction(pet)
+        elif pet.x > game_background_image.get_width() - pet.rect.width:
+            pet.x = game_background_image.get_width() - pet.rect.width
+            change_direction(pet)
+
+        if pet.y < 0:
+            pet.y = 0
+            change_direction(pet)
+        elif pet.y > game_background_image.get_height() - pet.rect.height:
+            pet.y = game_background_image.get_height() - pet.rect.height
+            change_direction(pet)
+
+
+        # pet.move()
+        # pet.x = max(0, min(pet.x, settings.screen_size[0] - pet.rect.width))
+        # pet.y = max(0, min(pet.y, settings.screen_size[1] - pet.rect.height))
         pet.update_position()
         pygame.display.update()
-        clock.tick(60)
+        # clock.tick(60)
 
 def game_over_screen(screen):
     import settings_general as settings

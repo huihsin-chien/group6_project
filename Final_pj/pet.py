@@ -19,8 +19,8 @@ class Pet:
         self.time_since_last_hour = 0  # 距离上次小时的时间
         self.x = 200
         self.y = 400
-        self.speed_x = 0.0000001
-        self.speed_y = 0.0000001
+        self.speed_x = 1
+        self.speed_y = 1
         self.name = ''
         self.gender = ''
         
@@ -38,6 +38,7 @@ class Pet:
     def move(self):
         self.x += self.speed_x
         self.y += self.speed_y
+        print(self.x, self.y)
         self.update_position()
 
 
