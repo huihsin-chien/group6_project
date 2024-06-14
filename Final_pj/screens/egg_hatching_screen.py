@@ -11,8 +11,10 @@ pet = Pet()
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GRAY = (169, 169, 169)
-heads_image = pygame.image.load('Assets\img\Resized\Male.jpg')
-tails_image = pygame.image.load('Assets\img\Resized\Female.jpg')
+heads_image = pygame.image.load('Assets\img\male.png')
+heads_image = pygame.transform.scale(heads_image, (200, 200))
+tails_image = pygame.image.load('Assets\img/female.png')
+tails_image = pygame.transform.scale(tails_image, (200, 200))
 menu_font = pygame.font.Font(settings.font_path, settings.menu_font_size)
 
 def egg_hatching_screen(screen):
