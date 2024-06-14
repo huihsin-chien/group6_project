@@ -10,9 +10,12 @@ def play_background_music(background_music_path):
     pygame.mixer.music.load(background_music_path)
     pygame.mixer.music.play(-1)  # 循环播放背景音乐
 
-def play_sound_effect(sound_effect_path):
-    sound_effect = pygame.mixer.Sound(sound_effect_path)
-    sound_effect.play()
+def play_sound_effect(sound_effect_path = None):
+    if sound_effect_path is None:
+        return
+    else:
+        sound_effect = pygame.mixer.Sound(sound_effect_path)
+        sound_effect.play()
     # while pygame.mixer.get_busy():
     #     pygame.time.wait(100)  # 等待音效播放完毕
 

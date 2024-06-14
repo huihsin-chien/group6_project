@@ -87,6 +87,7 @@ def game_screen(screen, pet):
     speech_recognition_button = Button(u'Speech Recognition', (500, 300), menu_font, screen, GRAY, u'Speech Recognition')
     play_game_earn_money_button = Button(u'Play Game to Earn Money', (500, 350), menu_font, screen, GRAY, u'Play Game to Earn Money')
 
+    music_path = None
     pet_image_path = settings.baby_pet_image_path if pet.state == 'baby' else (settings.teen_pet_image_path if pet.state == 'teen' else settings.adult_pet_image_path)
     happy_pet_image_path = settings.happy_pet_image_path
     sad_pet_image_path = settings.sad_pet_image_path
@@ -170,12 +171,14 @@ def game_screen(screen, pet):
                     pet_is_speeching = True
                     if sentiment == 'positive (stars 4 and 5)':
                         pet_image_path = happy_pet_image_path
+                        music_path = "Assets/Bgm/happy.mp3"
                         if "麥當勞" in text:
                             pet.happy_level += 15
                         else:
                             pet.happy_level += 10
                     elif sentiment == 'negative (stars 1, 2 and 3)':
                         pet_image_path = sad_pet_image_path
+                        music_path = "Assets/Bgm/sad.mp3"
                         if "麥當勞" in text:
                             pet.happy_level -= 5
                         else:
@@ -191,16 +194,18 @@ def game_screen(screen, pet):
                 shop_button.release(event)
                 food_button.release(event)
                 water_button.release(event)
-
+        
+        play_sound_effect(music_path)
         draw_pet_location(screen,pet, pet_image_path)
+        pygame.mixer.music.unpause()
         draw_pet_attributes(screen, pet,food_button, water_button, achieve_button, speech_recognition_button)
         draw_player_info(screen,pet, shop_button, settings_button, play_game_earn_money_button)
         current_time = time()
         if pet_is_happy and current_time - pet_happy_start_time >= 3:
-            music_path = "Assets/Bgm/happy.mp3"
-            play_sound_effect(music_path)
+           
+            
             pet_image_path = settings.baby_pet_image_path if pet.state == 'baby' else (settings.teen_pet_image_path if pet.state == 'teen' else settings.adult_pet_image_path)
-            pygame.mixer.music.unpause()
+            
             pet_is_happy = False
         if pet_is_speeching and current_time - pet_speech_start_time >= 3:
             pet_image_path = settings.baby_pet_image_path if pet.state == 'baby' else (settings.teen_pet_image_path if pet.state == 'teen' else settings.adult_pet_image_path)
