@@ -106,7 +106,7 @@ def game_screen(screen, pet):
 
         current_time = time()
         if pet.status == 'dead' or pet.happy_level <= 0 or pet.hungry_level <= 0 or pet.healthy_level <= 0:
-            game_over_screen(screen)
+            game_over_screen(screen, pet)
             break
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -211,15 +211,15 @@ def game_screen(screen, pet):
         if current_time - last_update_time >= 1:
             # print(1)
             pet.update_hour()
-            print(pet.hour)
-            print(pet.hungry_level)
+            # print(pet.hour)
+            # print(pet.hungry_level)
             last_update_time = current_time
 
         if current_time - last_update_time >= 0.5 and current_time - last_update_time <= 0.55 or \
            current_time - last_update_time >= 0.95 and current_time - last_update_time <= 1:
             pet.x += pet.speed_x
             pet.y += pet.speed_y
-            print(pet.speed_x, pet.speed_y)
+            # print(pet.speed_x, pet.speed_y)
             pet.update_position()
             # change_direction(pet)
 
@@ -283,12 +283,12 @@ def show_leaderboard_with_chart(screen):
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if return_button.click(event):
-                    game_over_screen(screen)
+                    game_over_screen(screen,pet)
                     return
             elif event.type == pygame.MOUSEBUTTONUP:
                 return_button.release(event)
 
-def game_over_screen(screen):
+def game_over_screen(screen,pet):
     from screens.main_menu import main_menu
     game_over_text = menu_font.render(u'Game Over', True, WHITE)
     screen.fill(BLACK)

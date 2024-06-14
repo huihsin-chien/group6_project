@@ -496,5 +496,17 @@
         "hungry_level": 50,
         "happy_level": 50,
         "healthy_level": 100
+    },
+    {
+        "hour": 0,
+        "hungry_level": 50,
+        "happy_level": 50,
+        "healthy_level": 100
+    },
+    {
+        "hour": 36,
+        "hungry_level": 0,
+        "happy_level": 40,
+        "healthy_level": 85
     }
 ]
