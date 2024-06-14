@@ -1,7 +1,7 @@
 # from time import time
 import pygame
 import sys
-import settings
+# import settings
 from time import time
 from button import Button
 
@@ -19,11 +19,15 @@ class Pet:
         self.time_since_last_hour = 0  # 距离上次小时的时间
         self.x = 200
         self.y = 400
-        self.speed_x = 0.0000001
-        self.speed_y = 0.0000001
+        self.speed_x = 1
+        self.speed_y = 1
         self.name = ''
         self.gender = ''
         
+        if self.gender == 'male':
+            import settings_male as settings
+        else:
+            import settings_female as settings
         # Assuming an initial size for the pet's image
         self.image = pygame.image.load(settings.baby_pet_image_path)
         self.rect = self.image.get_rect(topleft=(self.x, self.y))
@@ -34,6 +38,7 @@ class Pet:
     def move(self):
         self.x += self.speed_x
         self.y += self.speed_y
+        print(self.x, self.y)
         self.update_position()
 
 

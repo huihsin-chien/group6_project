@@ -1,6 +1,6 @@
 import pygame
 import sys
-import settings
+import settings_general as settings
 from button import Button
 
 pygame.init()
