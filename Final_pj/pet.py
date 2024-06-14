@@ -30,7 +30,7 @@ class Pet:
         # Assuming an initial size for the pet's image
         # self.image = pygame.image.load(settings.baby_pet_image_path)
 
-        from Final_pj.settings_gs import Pet_img
+        from settings_gs import Pet_img
         self.image = pygame.image.load(Pet_img.load_images(self, 'baby'))
         self.rect = self.image.get_rect(topleft=(self.x, self.y))
 
