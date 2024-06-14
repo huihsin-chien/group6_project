@@ -48,7 +48,7 @@ def toss_coin():
 
 def display_result(screen, result):
     screen.fill((BLACK))  # 清屏，填充白色
-    if result == "Female":
+    if result == "Male":
         screen.blit(heads_image, (300, 300))
     else:
         screen.blit(tails_image, (300, 300))
