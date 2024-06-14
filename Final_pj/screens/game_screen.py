@@ -319,14 +319,16 @@ def show_leaderboard_with_chart(screen):
                 return_button.release(event)
 
 def game_over_screen(screen,pet):
+    import settings_general as settings
     from screens.main_menu import main_menu
-    game_over_text = game_screen_font.render(u'Game Over', True, WHITE)
+
+    game_over_text = render_text_with_outline(f'{pet.name}死亡...！', game_screen_font, text_color, outline_color, outline_thickness)
     screen.fill(BLACK)
     screen.blit(game_over_text, (300, 200))
     record_text = game_screen_font.render(f'{pet.name} final hour: {pet.hour}', True, WHITE)
     screen.blit(record_text, (300, 250))
-    play_again_button = Button(u'Play Again', (300, 300), game_screen_font, screen, GRAY, u'Play Again')
-    leaderboard_button = Button(u'Leaderboard', (300, 400), game_screen_font, screen, GRAY, u'Leaderboard')
+    play_again_button = Button(u'再玩一次', (300, 300), game_screen_font, screen, GRAY, u'再玩一次')
+    leaderboard_button = Button(u'排行榜', (300, 400), game_screen_font, screen, GRAY, u'排行榜')
     play_again_button.show()
     leaderboard_button.show()
     pygame.display.update()
