@@ -6,7 +6,6 @@ from pet import Pet
 import time
 import tkinter as tk
 
-pet = Pet()
 pygame.init()
 
 pygame.display.set_caption("幫你的小寶貝取名字吧")
@@ -23,8 +22,9 @@ user_text = ''
 input_active = False
 
 # 创建输入框和确认按钮
-input_box = pygame.Rect(250, 200, 300, 50)
-confirm_button = pygame.Rect(350, 300, 100, 50)
+input_box = pygame.Rect(250, 150, 300, 50)
+confirm_button = pygame.Rect(350, 225, 100, 50)
+
 def handle_chinese_input(initial_text=''):
     def on_confirm():
         global user_text
@@ -34,7 +34,7 @@ def handle_chinese_input(initial_text=''):
     root = tk.Tk()
     root.title("中文輸入")
 
-    label = tk.Label(root, text="請輸入寵物名稱：", font=("Arial", 18))
+    label = tk.Label(root, text="請輸入愛寵姓名：", font=("Arial", 18))
     label.pack(pady=10)
 
     entry = tk.Entry(root, font=("Arial", 16))
@@ -45,7 +45,6 @@ def handle_chinese_input(initial_text=''):
     confirm_button.pack(pady=10)
 
     root.mainloop()
-
 
 def petname(screen, pet):
     last_blink_time = time.time()
@@ -83,14 +82,19 @@ def petname(screen, pet):
             last_blink_time = current_time
 
         # 绘制输入框和确认按钮
-        pygame.draw.rect(screen, WHITE, (230, 180, 350, 200))
+        pygame.draw.rect(screen, WHITE, (230, 70, 350, 230))
+        
         pygame.draw.rect(screen, LIGHTGRAY if input_active else GRAY, input_box)
         pygame.draw.rect(screen, GRAY, confirm_button)
         
         # 绘制按钮文字
-        confirm_text = font.render('確認', True, BLACK)
-        screen.blit(confirm_text, (confirm_button.x + 20, confirm_button.y + 10))
-        
+        confirm_text = font.render('確定', True, BLACK)
+        screen.blit(confirm_text, (confirm_button.x + 15, confirm_button.y))
+        #hint text
+        gender_result_text = font.render(pet.gender, True, BLACK)
+        screen.blit(gender_result_text, (350,65))
+        hint_text = font.render('請輸入愛寵姓名：', True, BLACK)
+        screen.blit(hint_text, (270,100))
         # 绘制输入框内容
         text_surface = font.render(user_text, True, BLACK)
         screen.blit(text_surface, (input_box.x + 10, input_box.y + 10))
