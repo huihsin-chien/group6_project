@@ -13,3 +13,4 @@ pygame.display.set_caption('寵物蛋遊戲')
 main_menu(screen)
 
 
+    

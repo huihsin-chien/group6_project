@@ -10,8 +10,8 @@ class Pet:
         self.hour = 0  # 寵物活了幾小時
         self.status = 'hungry'  # 寵物狀態（hungry, full）
         self.hungry_level = 50  # 飢餓程度（0-100%）
-        self.happy_level = 50  # 快樂程度（0-100%）
-        self.healthy_level = 100  # 健康程度（0-100%）
+        self.happy_level = 100  # 快樂程度（0-100%）
+        self.healthy_level = 50  # 健康程度（0-100%）
         self.state = 'baby'  # 寵物狀態（baby, teens, adult）
         self.food_amount = 2  # 玩家擁有的食物數量
         self.water_amount = 2  # 玩家擁有的水數量
@@ -155,17 +155,19 @@ class Pet:
         self.hour = 0  # 寵物活了幾小時
         self.status = 'hungry'  # 寵物狀態（hungry, full）
         self.hungry_level = 50  # 飢餓程度（0-100%）
-        self.happy_level = 50  # 快樂程度（0-100%）
-        self.healthy_level = 100  # 健康程度（0-100%）
+        self.happy_level = 100  # 快樂程度（0-100%）
+        self.healthy_level = 50  # 健康程度（0-100%）
         self.state = 'baby'  # 寵物狀態（baby, teens, adult）
-        self.food_amount = 10  # 玩家擁有的食物數量
-        self.water_amount = 10  # 玩家擁有的水數量
+        self.food_amount = 2  # 玩家擁有的食物數量
+        self.water_amount = 2  # 玩家擁有的水數量
         self.money = 100  # 玩家擁有的金錢數量
         self.time_since_last_hour = 0  # 距离上次小时的时间
-        self.x = 100
-        self.y = 100
-        self.speed_x = 0.0000001
-        self.speed_y = 0.0000001
+        self.x = 200
+        self.y = 400
+        self.speed_x = 1
+        self.speed_y = 0
+        self.name = ''
+        self.gender = ''
     def get_summary(self):
         return {
             'hour': self.hour,

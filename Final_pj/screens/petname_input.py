@@ -3,6 +3,7 @@ import sys
 from button import Button
 import settings_general as settings
 from pet import Pet
+import time
 
 pet = Pet()
 pygame.init()
@@ -24,9 +25,13 @@ input_active = False
 input_box = pygame.Rect(250, 200, 300, 50)
 confirm_button = pygame.Rect(350, 300, 100, 50)
 
+
+
 # 主循环
-def petname(screen):
-    global user_text, input_active
+def petname(screen, pet):
+    last_blink_time = time.time()
+    cursor_visible = True
+    global user_text,input_active
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -40,7 +45,7 @@ def petname(screen):
                     input_active = False
                 # 检查鼠标点击位置是否在确认按钮内
                 if confirm_button.collidepoint(event.pos):
-                    pet.name += user_text
+                    pet.name = user_text
                     print(f"愛寵名: {pet.name}")
                     
                     return True
@@ -53,7 +58,11 @@ def petname(screen):
                         user_text = user_text[:-1]
                     else:
                         user_text += event.unicode
-
+        
+        current_time = time.time()
+        if current_time - last_blink_time >= 0.5:  # 光标每0.5秒闪烁一次
+            cursor_visible = not cursor_visible
+            last_blink_time = current_time
         # 绘制输入框和确认按钮
         pygame.draw.rect(screen, WHITE, (230, 180, 350, 200))
         pygame.draw.rect(screen, LIGHTGRAY if input_active else GRAY, input_box)
@@ -64,5 +73,11 @@ def petname(screen):
         # 绘制输入框内容blit
         text_surface = font.render(user_text, True, BLACK)
         screen.blit(text_surface, (input_box.x + 10, input_box.y + 10))
+        if cursor_visible and input_active:
+            cursor_x = input_box.x + 10 + text_surface.get_width() + 2
+            cursor_y = input_box.y + 10
+            cursor_height = font.get_height()
+            pygame.draw.line(screen, BLACK, (cursor_x, cursor_y), (cursor_x, cursor_y + cursor_height), 2)
+        
         # 更新显示
         pygame.display.flip()

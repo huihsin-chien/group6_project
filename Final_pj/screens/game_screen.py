@@ -197,6 +197,11 @@ def game_screen(screen, pet):
                         music_path = "Assets/Bgm/happy.mp3"
                         play_sound_effect(music_path)
                     elif sentiment == 'negative (stars 1, 2 and 3)':
+                        if "去讀書" in text:
+                            pet.status = 'dead'
+                            pet.happy_level = 0
+                        
+                        pet.happy_level -= 10
                         pet_is_sad = True
                         pet_sad_start_time = current_time
                         pet_image_path = sad_pet_image_path
@@ -210,6 +215,7 @@ def game_screen(screen, pet):
                     play_game(screen, pet)
                     play_game_earn_money_button = Button(u'賺錢', (550, 195), game_screen_font, screen, GRAY, u'賺錢')
             elif event.type == pygame.MOUSEBUTTONUP:
+                speech_recognition_button.release(event)
                 shop_button.release(event)
                 food_button.release(event)
                 water_button.release(event)
@@ -285,7 +291,7 @@ def game_over_screen(screen):
     pygame.time.wait(3000)
     sys.exit()
     
-def show_leaderboard_with_chart(screen):
+def show_leaderboard_with_chart(screen, pet):
     try:
         with open('leaderboard.json', 'r') as f:
             data = json.load(f)
@@ -325,10 +331,10 @@ def game_over_screen(screen,pet):
     game_over_text = render_text_with_outline(f'{pet.name}死亡...！', game_screen_font, text_color, outline_color, outline_thickness)
     screen.fill(BLACK)
     screen.blit(game_over_text, (300, 200))
-    record_text = game_screen_font.render(f'{pet.name} final hour: {pet.hour}', True, WHITE)
+    record_text = game_screen_font.render(f'{pet.name} 壽命: {pet.hour}', True, WHITE)
     screen.blit(record_text, (300, 250))
     play_again_button = Button(u'再玩一次', (300, 300), game_screen_font, screen, GRAY, u'再玩一次')
-    leaderboard_button = Button(u'排行榜', (300, 400), game_screen_font, screen, GRAY, u'排行榜')
+    leaderboard_button = Button(u'排行榜', (300, 350), game_screen_font, screen, GRAY, u'排行榜')
     play_again_button.show()
     leaderboard_button.show()
     pygame.display.update()
@@ -346,7 +352,7 @@ def game_over_screen(screen,pet):
                     screen.fill(BLACK)
                     main_menu(screen)
                 if leaderboard_button.click(event):
-                    show_leaderboard_with_chart(screen)
+                    show_leaderboard_with_chart(screen,pet)
             elif event.type == pygame.MOUSEBUTTONUP:
                 play_again_button.release(event)
                 leaderboard_button.release(event)

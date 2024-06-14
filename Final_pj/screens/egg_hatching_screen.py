@@ -34,7 +34,7 @@ def egg_hatching_screen(screen):
                     pet.gender = result
                     display_result(screen, result)
                     pygame.time.wait(500)
-                    if petname(screen) == True:
+                    if petname(screen,pet) == True:
                         game_screen(screen, pet)
         
         pygame.display.update()
