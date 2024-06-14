@@ -5,7 +5,6 @@ import settings
 from time import time
 from button import Button
 
-
 class Pet:
     def __init__(self):
         self.hour = 0  # 寵物活了幾小時
@@ -24,6 +23,18 @@ class Pet:
         self.speed_y = 0.0000001
         self.name = ''
         self.gender = ''
+        
+        # Assuming an initial size for the pet's image
+        self.image = pygame.image.load(settings.baby_pet_image_path)
+        self.rect = self.image.get_rect(topleft=(self.x, self.y))
+
+    def update_position(self):
+        self.rect.topleft = (self.x, self.y)
+
+    def move(self):
+        self.x += self.speed_x
+        self.y += self.speed_y
+        self.update_position()
 
 
     def update_hour(self):
