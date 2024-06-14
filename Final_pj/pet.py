@@ -4,6 +4,7 @@ import sys
 # import settings
 from time import time
 from button import Button
+# from settings_male import Pet_img
 
 class Pet:
     def __init__(self):
@@ -22,14 +23,16 @@ class Pet:
         self.speed_x = 1
         self.speed_y = 0
         self.name = ''
-        self.gender = ''
-        
-        if self.gender == 'male':
-            import settings_male as settings
-        else:
-            import settings_female as settings
+        self.gender = None
+        # if self.gender == 'male':
+        #     import settings_male as settings
+        # else:
+        #     import settings_female as settings
         # Assuming an initial size for the pet's image
-        self.image = pygame.image.load(settings.baby_pet_image_path)
+        # self.image = pygame.image.load(settings.baby_pet_image_path)
+
+        from settings_male import Pet_img
+        self.image = pygame.image.load(Pet_img.load_images(self, 'baby'))
         self.rect = self.image.get_rect(topleft=(self.x, self.y))
 
     def update_position(self):

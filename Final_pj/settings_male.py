@@ -1,15 +1,18 @@
 import pygame
-from pet import Pet
+# from pet import Pet
 
 pygame.init()
 
-class Pet_img(Pet):
+# 延遲導入 繼承Pet
+class Pet_img():
     def __init__(self):
+        from pet import Pet
+        self.pet = Pet()
         self.images = self.load_images()
 
     def load_images(self, index):
         # 加載圖片
-        img_Paths =f"Assets/img/pet/{Pet.gender}/{Pet.status}/{index}.png"
+        img_Paths =f"Assets/img/pet/{self.gender}/{self.state}/{index}.png"
         return img_Paths
 
 
