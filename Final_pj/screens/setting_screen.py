@@ -1,6 +1,6 @@
 from button import Button
 import pygame
-import settings
+import settings_general as settings
 import sys
 from pet import Pet
 

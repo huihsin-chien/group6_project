@@ -1,7 +1,7 @@
 # from time import time
 import pygame
 import sys
-import settings
+# import settings
 from time import time
 from button import Button
 
@@ -24,6 +24,10 @@ class Pet:
         self.name = ''
         self.gender = ''
         
+        if self.gender == 'male':
+            import settings_male as settings
+        else:
+            import settings_female as settings
         # Assuming an initial size for the pet's image
         self.image = pygame.image.load(settings.baby_pet_image_path)
         self.rect = self.image.get_rect(topleft=(self.x, self.y))

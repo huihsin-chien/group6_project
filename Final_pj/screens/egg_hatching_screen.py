@@ -1,7 +1,7 @@
 import pygame
 import sys
 import random
-import settings
+import settings_general as settings
 from button import Button
 from screens.game_screen import game_screen
 from screens.petname_input import petname

@@ -2,7 +2,7 @@
 
 import pygame
 import sys
-import settings
+
 from screens.main_menu import main_menu
 
 pygame.init()

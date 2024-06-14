@@ -1,7 +1,7 @@
 import pygame
 import sys
 from button import Button
-import settings
+import settings_general as settings
 from pet import Pet
 
 pet = Pet()

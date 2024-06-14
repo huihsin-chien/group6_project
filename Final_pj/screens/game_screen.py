@@ -2,7 +2,8 @@ import pygame
 import sys
 from button import Button
 from pet import Pet
-import settings
+import settings_general
+
 from time import time
 import random
 from utils import draw_progress_bar, draw_chart, save_record
@@ -20,7 +21,7 @@ BLACK = (0, 0, 0)
 GRAY = (169, 169, 169)
 
 pet = Pet()
-menu_font = pygame.font.Font(settings.font_path, settings.menu_font_size)
+menu_font = pygame.font.Font(settings_general.font_path, settings_general.menu_font_size)
 
 def draw_pet_location(screen, pet_image_path):
     pet.image = pygame.image.load(pet_image_path)
@@ -70,6 +71,11 @@ def change_direction():
 
 
 def game_screen(screen, pet):
+    if pet.gender == 'male':
+        import settings_male as settings
+    else:
+        import settings_female as settings
+    
     clock = pygame.time.Clock()
     last_update_time = time()
     direction_change_time = time()
@@ -178,9 +184,8 @@ def game_screen(screen, pet):
                 if achieve_button.click(event):
                     achievement(screen, pet)
                 if play_game_earn_money_button.click(event):
-                    return_val = pet.play_game()
-                    if return_val:
-                        play_game_earn_money_button = Button(u'Play Game to Earn Money', (500, 350), menu_font, screen, GRAY, u'Play Game to Earn Money')
+                    play_game(screen, pet)
+                    play_game_earn_money_button = Button(u'Play Game to Earn Money', (500, 350), menu_font, screen, GRAY, u'Play Game to Earn Money')
 
         draw_pet_location(screen, pet_image_path)
         draw_pet_attributes(screen, food_button, water_button, achieve_button, speech_recognition_button)
@@ -203,6 +208,7 @@ def game_screen(screen, pet):
         clock.tick(60)
 
 def game_over_screen(screen):
+    import settings_general as settings
     font = pygame.font.Font(settings.font_path, 100)
     text_surface = font.render("Game Over", True, (255, 0, 0))
     screen.blit(text_surface, (200, 200))
@@ -276,7 +282,10 @@ def game_over_screen(screen):
 
 
 def play_game(screen, pet):
-    # ball_game_main()
+    if pet.gender == 'male':
+        import settings_male as settings
+    else:
+        import settings_female as settings
     paddle_image = pygame.image.load(settings.paddle_image_path)
     paddle_image = pygame.transform.scale(paddle_image, (100, 100))
     paddle_rect = paddle_image.get_rect()
@@ -388,7 +397,7 @@ def ball_game_over_screen(screen, pet, font):
                 # if leaderboard_button.click(event):
                 #     show_leaderboard_with_chart(screen)
                 if return_button.click(event):
-                    game_screen(screen)
+                    game_screen(screen, pet)
 
             elif event.type == pygame.MOUSEBUTTONUP:
                 play_again_button.release(event)

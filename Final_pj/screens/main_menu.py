@@ -3,7 +3,7 @@
 import pygame
 import sys
 from button import Button
-import settings
+import settings_general as settings
 from screens.egg_hatching_screen import egg_hatching_screen
 from screens.show_leaderboard import show_leaderboard
 from screens.music import sound_effects

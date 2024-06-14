@@ -2,7 +2,7 @@ import pygame
 import sys
 from button import Button
 import json
-import settings
+import settings_general as settings
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)

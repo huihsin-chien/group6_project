@@ -1,6 +1,6 @@
 import json
 import pygame
-import settings
+import settings_general as settings
 
 menu_font = pygame.font.Font(settings.font_path, settings.menu_font_size)
 
