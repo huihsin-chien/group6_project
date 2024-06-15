@@ -26,6 +26,9 @@ class Pet:
         self.gender = None
         self.touch = 0
         self.mac = 0
+        self.drunk = 0
+        self.c3 = False
+        self.c2 = False
         # if self.gender == 'male':
         #     import settings_male as settings
         # else:
@@ -99,8 +102,9 @@ class Pet:
                     self.hungry_level += 10
             else:
                 self.hungry_level = 100
-                if Achievement[2].completed == False:
+                if self.c2 == False:
                     achievement(True, 3)
+                    self.c2 = True
 
             if self.happy_level < 100:
                 if (self.happy_level + 5) > 100:

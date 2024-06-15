@@ -179,7 +179,7 @@ def game_screen(screen, pet):
                     if pet.state == 'teen':
                         pet.drunk += 1
                         if pet.drunk == 5:
-                            achievement(5)
+                            achievement(True,5)
 
                     if return_val != 'no water':
                         play_sound_effect(music_path)
@@ -494,8 +494,10 @@ def ball_game_over_screen(screen, pet, font):
     play_again_button.show()
     pygame.display.update()
 
-    if Achievement[3].completed == False and pet.money >= 100:
-        achievement(4)
+    if pet.c3 == False and pet.money >= 100:
+        achievement(True, 4)
+        pet.c3 = True
+
 
     # save_record(pet.get_summary())
 
