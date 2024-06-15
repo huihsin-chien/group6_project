@@ -41,14 +41,14 @@ class Achievement:
 
     def draw(self, screen):
         color = GREEN if self.completed else WHITE
-        pygame.draw.rect(screen, color, (*self.position, 150, 50))
+        pygame.draw.rect(screen, color, (*self.position, 550, 50))
         text = font.render(self.name, True, BLACK)
         screen.blit(text, (self.position[0] + 10, self.position[1] + 10))
 
 # 成就頁面類別
 class AchievementPage:
     def __init__(self):
-        self.achievements = [Achievement(f"Achievement {i+1}", (100 if i < 5 else 400, 50 + (i % 5) * 100)) for i in range(10)]
+        self.achievements = [Achievement(f"Achievement {i+1}", (100 if i < 5 else 400, 50 + (i % 5) * 100)) for i in range(5)]
 
     def complete_achievement(self, index):
         if 0 <= index < len(self.achievements):
@@ -63,7 +63,7 @@ class AchievementPage:
             achievement.draw(screen)
 
 # 主函數
-def achievement():
+def achievement(achieve = False, index = 0):
     clock = pygame.time.Clock()
     achievement_page = AchievementPage()
     show_achievement_page = True
@@ -73,9 +73,9 @@ def achievement():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_c:
-                    achievement_page.complete_achievement(0)
+            elif achieve:
+                achievement_page.complete_achievement(achieve)
+                achieve = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if return_button.click(event):
                     show_achievement_page = False
@@ -84,7 +84,7 @@ def achievement():
         achievement_page.update()
         achievement_page.draw(screen)
         
-        return_button = Button(u'Return', (300, 400), font, screen, GRAY, u'Return')
+        return_button = Button(u'Return', (300, 500), font, screen, GRAY, u'Return')
         return_button.show()
         
         pygame.display.flip()

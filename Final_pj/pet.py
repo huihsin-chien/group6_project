@@ -24,6 +24,7 @@ class Pet:
         self.name = ''
         self.gender = None
         self.touch = 0
+        self.mac = 0
         # if self.gender == 'male':
         #     import settings_male as settings
         # else:

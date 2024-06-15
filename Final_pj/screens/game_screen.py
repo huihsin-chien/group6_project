@@ -206,8 +206,8 @@ def game_screen(screen, pet):
                     music_path = "Assets/Bgm/happy.mp3"
                     play_sound_effect(music_path)
                     pet.touch += 1
-                    if(pet.touch == 10):
-                        achievement()
+                    if(pet.touch == 5):
+                        achievement(True, index = 1)
                 if speech_recognition_button.click(event):
                     pet_image_path = listen_to_speech_pet_path
                     draw_pet_location(screen,pet, listen_to_speech_pet_path)
@@ -223,6 +223,9 @@ def game_screen(screen, pet):
                         pet_image_path = happy_pet_image_path
                         if "麥當勞" in text:
                             pet.happy_level += 15
+                            pet.mac += 1
+                            if(pet.mac == 3):
+                                achievement(True, index = 2)
                         else:
                             pet.happy_level += 10
                         music_path = "Assets/Bgm/happy.mp3"
