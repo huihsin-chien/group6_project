@@ -41,7 +41,7 @@ class Achievement:
 
     def draw(self, screen):
         color = GREEN if self.completed else WHITE
-        pygame.draw.rect(screen, color, (*self.position, 550, 50))
+        pygame.draw.rect(screen, color, (*self.position, 550, 40))
         text = font.render(self.name, True, BLACK)
         screen.blit(text, (self.position[0] + 10, self.position[1] + 10))
 
@@ -74,7 +74,7 @@ def achievement(achieve = False, index = 0):
                 pygame.quit()
                 sys.exit()
             elif achieve:
-                achievement_page.complete_achievement(achieve)
+                achievement_page.complete_achievement(index - 1)
                 achieve = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if return_button.click(event):
@@ -84,7 +84,7 @@ def achievement(achieve = False, index = 0):
         achievement_page.update()
         achievement_page.draw(screen)
         
-        return_button = Button(u'Return', (300, 500), font, screen, GRAY, u'Return')
+        return_button = Button(u'Return', (300, 550), font, screen, GRAY, u'Return')
         return_button.show()
         
         pygame.display.flip()
