@@ -38,4 +38,4 @@ def remove_background(image_path, output_path):
     cv2.imwrite(output_path, image)
 
 # 使用示例
-remove_background(r'C:\Users\jianh\OneDrive\git_repo\group6_project\Final_pj\Assets\img\waterbottle.jpg', r'C:\Users\jianh\OneDrive\git_repo\group6_project\Final_pj\Assets\img\waterbottle.png')
+remove_background(r"C:/Users/88696/Downloads/enfg.jpg", r"C:/Users/88696/Documents/GitHub/group6_project/Final_pj/Assets/img/pet/Female/adult/pet.png")
