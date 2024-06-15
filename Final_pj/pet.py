@@ -23,6 +23,7 @@ class Pet:
         self.speed_y = 0
         self.name = ''
         self.gender = None
+        self.touch = 0
         # if self.gender == 'male':
         #     import settings_male as settings
         # else:

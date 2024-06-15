@@ -206,6 +206,9 @@ def game_screen(screen, pet):
                     pet_is_happy = True
                     music_path = "Assets/Bgm/happy.mp3"
                     play_sound_effect(music_path)
+                    pet.touch += 1
+                    if(pet.touch == 10):
+                        achievement()
                 if speech_recognition_button.click(event):
                     pet_image_path = listen_to_speech_pet_path
                     draw_pet_location(screen,pet, listen_to_speech_pet_path)
