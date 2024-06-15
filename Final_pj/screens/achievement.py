@@ -2,6 +2,7 @@ import pygame
 import sys
 import settings_general as settings
 from button import Button
+import json
 
 pygame.init()
 
@@ -42,6 +43,7 @@ class Achievement:
     def draw(self, screen):
         color = GREEN if self.completed else WHITE
         pygame.draw.rect(screen, color, (*self.position, 550, 40))
+        display_name = self.name if self.completed else "Achievement " + self.name.split()[1]
         text = font.render(self.name, True, BLACK)
         screen.blit(text, (self.position[0] + 10, self.position[1] + 10))
 
@@ -51,11 +53,13 @@ class AchievementPage:
         names = ["寵物摸摸大師", "麥當勞叔叔", "有種餓叫媽媽覺得你餓", "甚麼球都接得到喔", "酒鬼"]
         self.achievements = [Achievement(name, (100 if i < 5 else 400, 50 + (i % 5) * 100)) for i, name in enumerate(names)]
         self.completed_achievements = [False] * len(self.achievements)
+        self.load_state()
 
     def complete_achievement(self, index):
         if 0 <= index < len(self.achievements):
             self.achievements[index].complete()
             self.completed_achievements[index] = True
+            self.save_state()
 
     def update(self):
         for achievement in self.achievements:
@@ -66,19 +70,23 @@ class AchievementPage:
             achievement.draw(screen)
 
     def save_state(self):
-        return self.completed_achievements
+        with open('achievements.json', 'w') as file:
+            json.dump(self.completed_achievements, file)
 
-    def load_state(self, state):
-        for i, completed in enumerate(state):
-            if completed:
-                self.achievements[i].complete()
+    def load_state(self):
+        try:
+            with open('achievements.json', 'r') as file:
+                self.completed_achievements = json.load(file)
+                for i, completed in enumerate(self.completed_achievements):
+                    if completed:
+                        self.achievements[i].complete()
+        except FileNotFoundError:
+            pass
 
 # 主函數
-def achievement(achieve=False, index=0, saved_state=None):
+def achievement(achieve=False, index=0):
     clock = pygame.time.Clock()
     achievement_page = AchievementPage()
-    if saved_state:
-        achievement_page.load_state(saved_state)
 
     show_achievement_page = True
 
@@ -93,13 +101,14 @@ def achievement(achieve=False, index=0, saved_state=None):
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if return_button.click(event):
                     show_achievement_page = False
+
         screen.fill(BLACK)
         achievement_page.update()
         achievement_page.draw(screen)
-        
+
         return_button = Button(u'Return', (300, 550), font, screen, GRAY, u'Return')
         return_button.show()
-        
+
         pygame.display.flip()
         clock.tick(30)
 
