@@ -48,11 +48,14 @@ class Achievement:
 # 成就頁面類別
 class AchievementPage:
     def __init__(self):
-        self.achievements = [Achievement(f"Achievement {i+1}", (100 if i < 5 else 400, 50 + (i % 5) * 100)) for i in range(5)]
+        names = ["寵物摸摸大師", "麥當勞叔叔", "有種餓叫媽媽覺得你餓", "甚麼球都接得到喔", "酒鬼"]
+        self.achievements = [Achievement(name, (100 if i < 5 else 400, 50 + (i % 5) * 100)) for i, name in enumerate(names)]
+        self.completed_achievements = [False] * len(self.achievements)
 
     def complete_achievement(self, index):
         if 0 <= index < len(self.achievements):
             self.achievements[index].complete()
+            self.completed_achievements[index] = True
 
     def update(self):
         for achievement in self.achievements:
@@ -62,10 +65,21 @@ class AchievementPage:
         for achievement in self.achievements:
             achievement.draw(screen)
 
+    def save_state(self):
+        return self.completed_achievements
+
+    def load_state(self, state):
+        for i, completed in enumerate(state):
+            if completed:
+                self.achievements[i].complete()
+
 # 主函數
-def achievement(achieve = False, index = 0):
+def achievement(achieve=False, index=0, saved_state=None):
     clock = pygame.time.Clock()
     achievement_page = AchievementPage()
+    if saved_state:
+        achievement_page.load_state(saved_state)
+
     show_achievement_page = True
 
     while show_achievement_page:
@@ -79,7 +93,6 @@ def achievement(achieve = False, index = 0):
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if return_button.click(event):
                     show_achievement_page = False
-
         screen.fill(BLACK)
         achievement_page.update()
         achievement_page.draw(screen)
