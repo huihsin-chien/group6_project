@@ -68,7 +68,7 @@ class Pet:
             self.time_since_last_hour = 0
 
         # 根据hour更改state
-        if self.hour < 50:
+        if self.hour < 5:
             self.state = 'baby'
         elif self.hour < 150:
             self.state = 'teen'

@@ -15,11 +15,11 @@ def open_shop(screen, pet):
     shop_background_image = pygame.transform.scale(shop_background_image, settings.screen_size)
     # buy_food_button = Button(u'Food: 3 dollar', (10, 400), menu_font, screen, GRAY, u'Food: 3 dollar')
     bmaboo_button_image_path = "Assets/img/bamboo.png"
-    water_button_image_path = "Assets/img/bamboo.png"
+    water_button_image_path = "Assets/img/waterbottle.png"
     buy_food_button = img_Button(u'3 dollar', (30, 400), menu_font, screen, bmaboo_button_image_path, u'- 3兩')
     # buy_water_button = Button(u'Water: 1 dollar', (200, 400), menu_font, screen, GRAY, u'Water: 1 dollar')
     buy_water_button = img_Button(u'1 dollar', (200, 400), menu_font, screen, water_button_image_path, u'- 1兩')
-    return_to_game_button = Button(u'Return', (400, 400), menu_font, screen, GRAY, u'Return')
+    return_to_game_button = Button(u'回上頁', (400, 400), menu_font, screen, GRAY, u'回上頁')
 
     while True:
         for event in pygame.event.get():
@@ -43,10 +43,19 @@ def open_shop(screen, pet):
         return_to_game_button.show()
 
 
-        money_text = menu_font.render(f'Money: {pet.money}', True, WHITE)
+        if pet.state == 'baby':
+            water_name = '水'
+            food_name = '食物'
+        elif pet.state == 'teen':
+            water_name = '酒'
+            food_name = '漢堡'
+        else:
+            water_name = '枸杞茶'
+            food_name = '養生粥'
+        money_text = menu_font.render(f'阿堵物: {pet.money}', True, WHITE)
         screen.blit(money_text, (500, 100))
-        food_text = menu_font.render(f'Food: {pet.food_amount}', True, WHITE)
+        food_text = menu_font.render(f'{food_name}: {pet.food_amount}', True, WHITE)
         screen.blit(food_text, (500, 150))
-        water_text = menu_font.render(f'Water: {pet.water_amount}', True, WHITE)
+        water_text = menu_font.render(f'{water_name}: {pet.water_amount}', True, WHITE)
         screen.blit(water_text, (500, 200))
         pygame.display.update()
