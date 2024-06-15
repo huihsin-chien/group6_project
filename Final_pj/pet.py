@@ -4,7 +4,8 @@ import sys
 # import settings
 from time import time
 from button import Button
-
+from screens.achievement import achievement
+from screens.achievement import Achievement
 class Pet:
     def __init__(self):
         self.hour = 0  # 寵物活了幾小時
@@ -98,6 +99,8 @@ class Pet:
                     self.hungry_level += 10
             else:
                 self.hungry_level = 100
+                if Achievement[2].completed == False:
+                    achievement(True, 3)
 
             if self.happy_level < 100:
                 if (self.happy_level + 5) > 100:

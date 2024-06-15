@@ -14,6 +14,7 @@ from speech_recog import recognize_speech
 # from screens.update import animate_images
 from screens.music import play_sound_effect
 from screens.achievement import achievement
+from screens.achievement import Achievement
 from time import time
 
 WHITE = (255, 255, 255)
@@ -174,6 +175,11 @@ def game_screen(screen, pet):
                     draw_pet_location(screen,pet, listen_to_speech_pet_path)
                     draw_pet_attributes(screen,pet, food_button, water_button, achieve_button, speech_recognition_button)
                     draw_player_info(screen, pet,shop_button, settings_button, play_game_earn_money_button)
+
+                    if pet.state == 'teen':
+                        pet.drunk += 1
+                        if pet.drunk == 5:
+                            achievement(5)
 
                     if return_val != 'no water':
                         play_sound_effect(music_path)
@@ -487,6 +493,9 @@ def ball_game_over_screen(screen, pet, font):
     return_button.show()
     play_again_button.show()
     pygame.display.update()
+
+    if Achievement[3].completed == False and pet.money >= 100:
+        achievement(4)
 
     # save_record(pet.get_summary())
 

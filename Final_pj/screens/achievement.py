@@ -50,7 +50,7 @@ class Achievement:
 # 成就頁面類別
 class AchievementPage:
     def __init__(self):
-        names = ["寵物摸摸大師:摸寵物5下", "麥當勞叔叔:說出「麥當勞」3次", "有種餓叫媽媽覺得你餓:hungry level 100%", "甚麼球都接得到喔:賺錢遊戲15分", "酒鬼:在teen年齡段喝5次酒"]
+        names = ["寵物摸摸大師:摸寵物5下", "麥當勞叔叔:說出「麥當勞」3次", "有種餓叫媽媽覺得你餓:hungry level 100%", "有錢人:總資產超過100", "酒鬼:在teen年齡段喝5次酒"]
         self.achievements = [Achievement(name, (100 if i < 5 else 400, 50 + (i % 5) * 100)) for i, name in enumerate(names)]
         self.completed_achievements = [False] * len(self.achievements)
         self.load_state()
@@ -89,7 +89,7 @@ class AchievementPage:
     def draw_achievement_message(self, screen, index):
         message_rect = pygame.Rect((screen.get_width() // 2 - 75, 50, 150, 200))
         pygame.draw.rect(screen, GRAY, message_rect)
-        names = ["寵物摸摸大師", "麥當勞叔叔", "有種餓叫媽媽覺得你餓", "甚麼球都接得到喔", "酒鬼"]
+        names = ["寵物摸摸大師", "麥當勞叔叔", "有種餓叫媽媽覺得你餓", "有錢人", "酒鬼"]
         text = font.render("達成成就: " + names[index], True, BLACK)
         screen.blit(text, (screen.get_width() // 2 - 70, 140))
 
