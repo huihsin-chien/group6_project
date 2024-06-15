@@ -2,7 +2,7 @@ import json
 import pygame
 import settings_general as settings
 
-menu_font = pygame.font.Font(settings.font_path, 20)
+menu_font = pygame.font.Font(settings.font_path, 15)
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -32,27 +32,20 @@ def draw_chart(screen, data):
         screen.blit(tick_text, (chart_rect.x - 50, y - 10))
         pygame.draw.line(screen, WHITE, (chart_rect.x - 5, y), (chart_rect.x, y), 2)
 
-    bar_width = chart_rect.width // (len(data) * 2)
+    # Calculate bar width and padding
+    num_bars = len(data)
+    bar_width = chart_rect.width // (num_bars + (num_bars - 1) // 4)
     bar_padding = bar_width // 4
 
     for i, record in enumerate(data):
-        x = chart_rect.x + (i * (bar_width + bar_padding))
+        x = chart_rect.x + i * (bar_width + bar_padding)
         hour_height = chart_rect.height * record['hour'] // max_hour
         y = chart_rect.y + chart_rect.height - hour_height
 
         bar_rect = pygame.Rect(x, y, bar_width, hour_height)
-        pygame.draw.rect(screen, (0, 0, 255), bar_rect)
+        pygame.draw.rect(screen, (0,0,255), bar_rect)
 
-        # Draw data labels
-        # name_text = menu_font.render(record['name'], True, WHITE)
-        # hour_text = menu_font.render(f'{record["hour"]:.1f}', True, WHITE)
-        # screen.blit(name_text, (x, y - 30))
-        # screen.blit(hour_text, (x, y - 50))
-
-    # Draw axis labels
-    x_label = menu_font.render('Players', True, WHITE)
     y_label = menu_font.render('Hours', True, WHITE)
-    screen.blit(x_label, (chart_rect.x + chart_rect.width // 2 - x_label.get_width() // 2, chart_rect.y + chart_rect.height + 20))
     screen.blit(y_label, (chart_rect.x - 50, chart_rect.y - 50))
 
     
