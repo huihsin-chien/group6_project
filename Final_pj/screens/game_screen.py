@@ -77,7 +77,9 @@ def draw_player_info(screen, pet, shop_button, settings_button, play_game_earn_m
 def change_direction(pet):
     pet.speed_x = random.choice([-1, 0, 1])
     pet.update_position()
+
 def game_screen(screen, pet):
+    
     clock = pygame.time.Clock()
     last_update_time = time()
     direction_change_time = time()
@@ -103,7 +105,6 @@ def game_screen(screen, pet):
 
     pet_image_path = Pet_img.load_images(pet, pet.state)
     happy_pet_image_path = Pet_img.load_images(pet, 'happy')
-
     sad_pet_image_path = Pet_img.load_images(pet, 'sad')
     listen_to_speech_pet_path = settings_general.listen_to_speech_pet_path
 
@@ -153,6 +154,7 @@ def game_screen(screen, pet):
                     eat1_image = pygame.image.load(Pet_img.load_images(pet, 'eat1'))
                     eat2_image = pygame.image.load(Pet_img.load_images(pet, 'eat2'))
                     music_path = "Assets/Bgm/eat.mp3"
+                    draw_pet_location(screen, pet, listen_to_speech_pet_path)
                     draw_pet_attributes(screen, pet, food_button, water_button, achieve_button, speech_recognition_button)
                     draw_player_info(screen, pet, shop_button, settings_button, play_game_earn_money_button)
 
@@ -161,16 +163,7 @@ def game_screen(screen, pet):
                         animate_images(screen, pet, eat1_image, eat2_image, duration=2, switch_interval=0.2, x=pet.x, y=pet.y)
                         pygame.mixer.music.unpause()
                         pet.update_position()
-                    
-                    if pet.state == 'baby':
-                        water_text = '水'
-                        food_text = '食物'
-                    elif pet.state == 'teen':
-                        water_text = '酒'
-                        food_text = '漢堡'
-                    else:
-                        water_text = '枸杞茶'
-                        food_text = '養生粥'
+
                     food_button = Button(f'{food_text}:{pet.food_amount}', (25, 80), game_screen_font, screen, GRAY, f'{food_text}:{pet.food_amount}')
                     pygame.display.update()
                 if water_button.click(event):
@@ -178,6 +171,7 @@ def game_screen(screen, pet):
                     drink1_image = pygame.image.load(Pet_img.load_images(pet, 'drink1'))
                     drink2_image = pygame.image.load(Pet_img.load_images(pet, 'drink2'))
                     music_path = "Assets/Bgm/drink.mp3"
+                    draw_pet_location(screen,pet, listen_to_speech_pet_path)
                     draw_pet_attributes(screen,pet, food_button, water_button, achieve_button, speech_recognition_button)
                     draw_player_info(screen, pet,shop_button, settings_button, play_game_earn_money_button)
 
@@ -205,9 +199,6 @@ def game_screen(screen, pet):
                     pet_is_happy = True
                     music_path = "Assets/Bgm/happy.mp3"
                     play_sound_effect(music_path)
-                    pet.touch += 1
-                    if(pet.touch == 5):
-                        achievement(True, index = 1)
                 if speech_recognition_button.click(event):
                     pet_image_path = listen_to_speech_pet_path
                     draw_pet_location(screen,pet, listen_to_speech_pet_path)
@@ -219,13 +210,10 @@ def game_screen(screen, pet):
                     pet_is_speeching = True
                     if sentiment == 'positive (stars 4 and 5)':
                         pet_is_happy = True
-                        pet_happy_start_time = time()
+                        pet_happy_start_time = current_time
                         pet_image_path = happy_pet_image_path
                         if "麥當勞" in text:
                             pet.happy_level += 15
-                            pet.mac += 1
-                            if(pet.mac == 3):
-                                achievement(True, index = 2)
                         else:
                             pet.happy_level += 10
                         music_path = "Assets/Bgm/happy.mp3"
@@ -237,7 +225,7 @@ def game_screen(screen, pet):
                         
                         pet.happy_level -= 10
                         pet_is_sad = True
-                        pet_sad_start_time = time()
+                        pet_sad_start_time = current_time
                         pet_image_path = sad_pet_image_path
                         music_path = "Assets/Bgm/cry.mp3"
                         play_sound_effect(music_path)
@@ -269,18 +257,16 @@ def game_screen(screen, pet):
             # music_path = "Assets/Bgm/happy.mp3"
             # play_sound_effect(music_path)
             pet_image_path = Pet_img.load_images(pet, pet.state)
-            print(1)
             pygame.mixer.music.unpause()
             pet_is_happy = False
         #if pet is sad
         if pet_is_sad and current_time - pet_sad_start_time >= 3:
             # music_path = "Assets/Bgm/cry.mp3"
             # play_sound_effect(music_path)
-            print(1)
             pet_image_path = Pet_img.load_images(pet, pet.state)
             pygame.mixer.music.unpause()
             pet_is_sad = False
-        if pet_is_speeching and current_time - pet_speech_start_time >= 12:
+        if pet_is_speeching and current_time - pet_speech_start_time >= 3:
             pet_image_path = Pet_img.load_images(pet, pet.state)
             pet_is_speeching = False
         if current_time - direction_change_time >= 2:
@@ -340,18 +326,17 @@ def show_leaderboard_with_chart(screen, pet):
     except FileNotFoundError:
         data = []
 
-    screen.fill((30, 30, 30))  # Dark background for better contrast
-
-    title_text = game_screen_font.render('Leaderboard', True, (255, 255, 255))
+    screen.fill(BLACK)
+    title_text = game_screen_font.render('Leaderboard', True, WHITE)
     screen.blit(title_text, (300, 50))
 
     if data:
         draw_chart(screen, data)
     else:
-        no_data_text = game_screen_font.render('No data available', True, (255, 255, 255))
+        no_data_text = game_screen_font.render('No data available', True, WHITE)
         screen.blit(no_data_text, (300, 200))
 
-    return_button = Button('Return', (350, 500), game_screen_font, screen, (100, 100, 100), 'Return')
+    return_button = Button('Return', (300, 500), game_screen_font, screen, GRAY, 'Return')
     return_button.show()
     pygame.display.update()
 
@@ -362,7 +347,7 @@ def show_leaderboard_with_chart(screen, pet):
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if return_button.click(event):
-                    game_over_screen(screen, pet)
+                    game_over_screen(screen,pet)
                     return
             elif event.type == pygame.MOUSEBUTTONUP:
                 return_button.release(event)
