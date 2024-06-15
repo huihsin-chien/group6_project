@@ -154,7 +154,6 @@ def game_screen(screen, pet):
                     eat1_image = pygame.image.load(Pet_img.load_images(pet, 'eat1'))
                     eat2_image = pygame.image.load(Pet_img.load_images(pet, 'eat2'))
                     music_path = "Assets/Bgm/eat.mp3"
-                    draw_pet_location(screen, pet, listen_to_speech_pet_path)
                     draw_pet_attributes(screen, pet, food_button, water_button, achieve_button, speech_recognition_button)
                     draw_player_info(screen, pet, shop_button, settings_button, play_game_earn_money_button)
 
@@ -163,7 +162,16 @@ def game_screen(screen, pet):
                         animate_images(screen, pet, eat1_image, eat2_image, duration=2, switch_interval=0.2, x=pet.x, y=pet.y)
                         pygame.mixer.music.unpause()
                         pet.update_position()
-
+                    
+                    if pet.state == 'baby':
+                        water_text = '水'
+                        food_text = '食物'
+                    elif pet.state == 'teen':
+                        water_text = '酒'
+                        food_text = '漢堡'
+                    else:
+                        water_text = '枸杞茶'
+                        food_text = '養生粥'
                     food_button = Button(f'{food_text}:{pet.food_amount}', (25, 80), game_screen_font, screen, GRAY, f'{food_text}:{pet.food_amount}')
                     pygame.display.update()
                 if water_button.click(event):
@@ -171,7 +179,6 @@ def game_screen(screen, pet):
                     drink1_image = pygame.image.load(Pet_img.load_images(pet, 'drink1'))
                     drink2_image = pygame.image.load(Pet_img.load_images(pet, 'drink2'))
                     music_path = "Assets/Bgm/drink.mp3"
-                    draw_pet_location(screen,pet, listen_to_speech_pet_path)
                     draw_pet_attributes(screen,pet, food_button, water_button, achieve_button, speech_recognition_button)
                     draw_player_info(screen, pet,shop_button, settings_button, play_game_earn_money_button)
 

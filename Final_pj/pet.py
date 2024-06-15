@@ -70,7 +70,7 @@ class Pet:
         # 根据hour更改state
         if self.hour < 5:
             self.state = 'baby'
-        elif self.hour < 150:
+        elif self.hour < 50:
             self.state = 'teen'
         else:
             self.state = 'adult'
