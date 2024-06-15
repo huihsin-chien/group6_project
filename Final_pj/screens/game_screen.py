@@ -77,9 +77,7 @@ def draw_player_info(screen, pet, shop_button, settings_button, play_game_earn_m
 def change_direction(pet):
     pet.speed_x = random.choice([-1, 0, 1])
     pet.update_position()
-
 def game_screen(screen, pet):
-    
     clock = pygame.time.Clock()
     last_update_time = time()
     direction_change_time = time()
@@ -105,6 +103,7 @@ def game_screen(screen, pet):
 
     pet_image_path = Pet_img.load_images(pet, pet.state)
     happy_pet_image_path = Pet_img.load_images(pet, 'happy')
+
     sad_pet_image_path = Pet_img.load_images(pet, 'sad')
     listen_to_speech_pet_path = settings_general.listen_to_speech_pet_path
 
@@ -220,7 +219,7 @@ def game_screen(screen, pet):
                     pet_is_speeching = True
                     if sentiment == 'positive (stars 4 and 5)':
                         pet_is_happy = True
-                        pet_happy_start_time = current_time
+                        pet_happy_start_time = time()
                         pet_image_path = happy_pet_image_path
                         if "麥當勞" in text:
                             pet.happy_level += 15
@@ -238,7 +237,7 @@ def game_screen(screen, pet):
                         
                         pet.happy_level -= 10
                         pet_is_sad = True
-                        pet_sad_start_time = current_time
+                        pet_sad_start_time = time()
                         pet_image_path = sad_pet_image_path
                         music_path = "Assets/Bgm/cry.mp3"
                         play_sound_effect(music_path)
@@ -270,16 +269,18 @@ def game_screen(screen, pet):
             # music_path = "Assets/Bgm/happy.mp3"
             # play_sound_effect(music_path)
             pet_image_path = Pet_img.load_images(pet, pet.state)
+            print(1)
             pygame.mixer.music.unpause()
             pet_is_happy = False
         #if pet is sad
         if pet_is_sad and current_time - pet_sad_start_time >= 3:
             # music_path = "Assets/Bgm/cry.mp3"
             # play_sound_effect(music_path)
+            print(1)
             pet_image_path = Pet_img.load_images(pet, pet.state)
             pygame.mixer.music.unpause()
             pet_is_sad = False
-        if pet_is_speeching and current_time - pet_speech_start_time >= 3:
+        if pet_is_speeching and current_time - pet_speech_start_time >= 12:
             pet_image_path = Pet_img.load_images(pet, pet.state)
             pet_is_speeching = False
         if current_time - direction_change_time >= 2:
