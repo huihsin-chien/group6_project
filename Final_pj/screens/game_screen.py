@@ -130,6 +130,7 @@ def game_screen(screen, pet):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if shop_button.click(event):
+                    shop_button.release(event)
                     open_shop(screen, pet)
                     food_button = Button(f'食物:{pet.food_amount}', (25, 80), game_screen_font, screen, GRAY, f'食物{pet.food_amount}')
                     water_button = Button(f'水:{pet.water_amount}', (25, 110), game_screen_font, screen, GRAY, f'水:{pet.water_amount}')
@@ -139,6 +140,7 @@ def game_screen(screen, pet):
                     game_background_image = pygame.transform.scale(game_background_image, settings.screen_size)
                     screen.blit(game_background_image, (0, 0))
                     pygame.display.update()
+                    shop_button.release(event)
                     continue
                 if food_button.click(event):
                     return_val = pet.feed()
@@ -169,6 +171,7 @@ def game_screen(screen, pet):
 
                     water_button = Button(f'水:{pet.water_amount}', (25, 110), game_screen_font, screen, GRAY, f'水:{pet.water_amount}')
                 if settings_button.click(event):
+                    settings_button.release(event)
                     setting_screen(screen, pet)
                 if pet.rect.collidepoint(event.pos):
                     pet.touch_pet()
@@ -208,8 +211,10 @@ def game_screen(screen, pet):
                         music_path = "Assets/Bgm/cry.mp3"
                         play_sound_effect(music_path)
 
+                    speech_recognition_button.release(event)
                     continue
                 if achieve_button.click(event):
+                    achieve_button.release(event)
                     achievement()
                 if play_game_earn_money_button.click(event):
                     play_game(screen, pet)
@@ -219,6 +224,10 @@ def game_screen(screen, pet):
                 shop_button.release(event)
                 food_button.release(event)
                 water_button.release(event)
+                settings_button.release(event)
+                achieve_button.release(event)
+                play_game_earn_money_button.release(event)
+
 
         draw_pet_location(screen,pet, pet_image_path)
         draw_pet_attributes(screen, pet,food_button, water_button, achieve_button, speech_recognition_button)
@@ -373,8 +382,7 @@ def play_game(screen, pet):
     ball = pygame.Rect(screen.get_width() // 2, screen.get_height() // 2, ball_radius * 2, ball_radius * 2)
     font = pygame.font.SysFont(None, 36)
     last_score_time = time()
-    # def ball_game_main():
-        # global ball_speed_x, ball_speed_y, score
+    
     ball_speed_x = 5
     ball_speed_y = -5
     clock = pygame.time.Clock()
@@ -383,27 +391,20 @@ def play_game(screen, pet):
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                pygame.quit()
+                sys.exit()
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT] or keys[pygame.K_a]:
             paddle_rect.x -= 10
         if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
             paddle_rect.x += 10
-        # if keys[pygame.K_UP] or keys[pygame.K_w]:
-        #     paddle_rect.y -= 10
-        # if keys[pygame.K_DOWN] or keys[pygame.K_s]:
-        #     paddle_rect.y += 10
 
         # 防止球拍移出屏幕
         if paddle_rect.left < 0:
             paddle_rect.left = 0
         if paddle_rect.right > screen.get_width():
             paddle_rect.right = screen.get_width()
-        if paddle_rect.top < 0:
-            paddle_rect.top = 0
-        if paddle_rect.bottom > screen.get_height():
-            paddle_rect.bottom = screen.get_height()
 
         # 球移动
         ball.x += ball_speed_x
@@ -417,12 +418,16 @@ def play_game(screen, pet):
         if ball.top <= 0:
             ball_speed_y = -ball_speed_y
 
-        if (ball.colliderect(paddle_rect) and
-            ball.bottom >= paddle_rect.top and
-            ball.bottom <= paddle_rect.top + 5 and  # Ensure it's hitting near the top edge
-            ball_speed_y > 0):  # Ensure the ball is moving downwards
-
-            ball_speed_y = -ball_speed_y
+        # 碰到球拍
+        if ball.colliderect(paddle_rect):
+            if ball.bottom >= paddle_rect.top and ball.bottom <= paddle_rect.top + 5 and ball_speed_y > 0:
+                ball_speed_y = -ball_speed_y  # 上边
+            elif ball.top <= paddle_rect.bottom and ball.top >= paddle_rect.bottom - 5 and ball_speed_y < 0:
+                ball_speed_y = -ball_speed_y  # 下边
+            elif ball.right >= paddle_rect.left and ball.right <= paddle_rect.left + 5 and ball_speed_x > 0:
+                ball_speed_x = -ball_speed_x  # 左边
+            elif ball.left <= paddle_rect.right and ball.left >= paddle_rect.right - 5 and ball_speed_x < 0:
+                ball_speed_x = -ball_speed_x  # 右边
 
             # Score cooldown to prevent rapid scoring
             current_time = time()
@@ -437,15 +442,15 @@ def play_game(screen, pet):
 
         ball_draw_objects(screen, paddle_image, paddle_rect, ball, font, pet)
         clock.tick(60)
+
 def ball_draw_objects(screen, paddle_image, paddle_rect, ball, font, pet):
     import settings_general as settings
     game_background_image = pygame.image.load(settings.game_background_image_path)
     game_background_image = pygame.transform.scale(game_background_image, settings.screen_size)
     screen.blit(game_background_image, (0, 0))    
     screen.blit(paddle_image, paddle_rect.topleft)
-    pygame.draw.ellipse(screen, (0,0,255), ball)
-    score_text = render_text_with_outline(f"money: {pet.money}", game_screen_font, text_color, outline_color, outline_thickness)
-
+    pygame.draw.ellipse(screen, (0, 0, 255), ball)
+    score_text = font.render(f"money: {pet.money}", True, WHITE)
     screen.blit(score_text, (10, 10))
     pygame.display.flip()
 
