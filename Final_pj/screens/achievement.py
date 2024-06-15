@@ -54,16 +54,22 @@ class AchievementPage:
         self.achievements = [Achievement(name, (100 if i < 5 else 400, 50 + (i % 5) * 100)) for i, name in enumerate(names)]
         self.completed_achievements = [False] * len(self.achievements)
         self.load_state()
+        self.achievement_message_duration = 100  # 顯示成就訊息的時間（幀數）
+        self.achievement_message_counter = 0
 
     def complete_achievement(self, index):
         if 0 <= index < len(self.achievements):
             self.achievements[index].complete()
             self.completed_achievements[index] = True
             self.save_state()
+            self.show_achievement_complete_message()
 
     def update(self):
         for achievement in self.achievements:
             achievement.update()
+
+        if self.achievement_message_counter > 0:
+            self.achievement_message_counter -= 1
 
     def draw(self, screen):
         for achievement in self.achievements:
@@ -83,9 +89,20 @@ class AchievementPage:
         except FileNotFoundError:
             pass
 
+    def show_achievement_complete_message(self):
+        self.achievement_message_counter = self.achievement_message_duration
+
+    def draw_achievement_message(self, screen):
+        message_rect = pygame.Rect((screen.get_width() // 2 - 75, 50, 150, 200))
+        pygame.draw.rect(screen, GRAY, message_rect)
+        text = font.render("Achievement Complete!", True, BLACK)
+        screen.blit(text, (screen.get_width() // 2 - 70, 140))
+
 # 主函數
 def achievement(achieve=False, index=0):
     clock = pygame.time.Clock()
+    if achieve:
+        
     achievement_page = AchievementPage()
 
     show_achievement_page = True
