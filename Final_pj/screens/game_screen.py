@@ -340,17 +340,18 @@ def show_leaderboard_with_chart(screen, pet):
     except FileNotFoundError:
         data = []
 
-    screen.fill(BLACK)
-    title_text = game_screen_font.render('Leaderboard', True, WHITE)
+    screen.fill((30, 30, 30))  # Dark background for better contrast
+
+    title_text = game_screen_font.render('Leaderboard', True, (255, 255, 255))
     screen.blit(title_text, (300, 50))
 
     if data:
         draw_chart(screen, data)
     else:
-        no_data_text = game_screen_font.render('No data available', True, WHITE)
+        no_data_text = game_screen_font.render('No data available', True, (255, 255, 255))
         screen.blit(no_data_text, (300, 200))
 
-    return_button = Button('Return', (300, 500), game_screen_font, screen, GRAY, 'Return')
+    return_button = Button('Return', (350, 500), game_screen_font, screen, (100, 100, 100), 'Return')
     return_button.show()
     pygame.display.update()
 
@@ -361,7 +362,7 @@ def show_leaderboard_with_chart(screen, pet):
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if return_button.click(event):
-                    game_over_screen(screen,pet)
+                    game_over_screen(screen, pet)
                     return
             elif event.type == pygame.MOUSEBUTTONUP:
                 return_button.release(event)
