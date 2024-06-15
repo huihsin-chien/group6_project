@@ -62,14 +62,11 @@ class AchievementPage:
             self.achievements[index].complete()
             self.completed_achievements[index] = True
             self.save_state()
-            self.show_achievement_complete_message()
 
     def update(self):
         for achievement in self.achievements:
             achievement.update()
 
-        if self.achievement_message_counter > 0:
-            self.achievement_message_counter -= 1
 
     def draw(self, screen):
         for achievement in self.achievements:
@@ -89,23 +86,24 @@ class AchievementPage:
         except FileNotFoundError:
             pass
 
-    def show_achievement_complete_message(self):
-        self.achievement_message_counter = self.achievement_message_duration
-
-    def draw_achievement_message(self, screen):
+    def draw_achievement_message(self, screen, index):
         message_rect = pygame.Rect((screen.get_width() // 2 - 75, 50, 150, 200))
         pygame.draw.rect(screen, GRAY, message_rect)
-        text = font.render("Achievement Complete!", True, BLACK)
+        names = ["寵物摸摸大師", "麥當勞叔叔", "有種餓叫媽媽覺得你餓", "甚麼球都接得到喔", "酒鬼"]
+        text = font.render("達成成就: " + names[index], True, BLACK)
         screen.blit(text, (screen.get_width() // 2 - 70, 140))
 
 # 主函數
 def achievement(achieve=False, index=0):
     clock = pygame.time.Clock()
-    if achieve:
-        
+
     achievement_page = AchievementPage()
 
     show_achievement_page = True
+
+    if achieve:
+        achievement_page.draw_achievement_message(screen, index - 1)
+        pygame.time.delay(1000)
 
     while show_achievement_page:
         for event in pygame.event.get():
