@@ -55,7 +55,10 @@ class Pet:
                 else:
                     self.hungry_level -= 15
             if self.time_since_last_hour == 5 or self.time_since_last_hour == 0:
-                self.happy_level -= 5
+                if self.state == 'teen':
+                    self.happy_level -= 15
+                else:
+                    self.happy_level -= 5
             if self.time_since_last_hour == 7:
                 self.healthy_level -= 5
                 

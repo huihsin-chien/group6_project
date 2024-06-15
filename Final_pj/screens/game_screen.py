@@ -38,11 +38,10 @@ def draw_pet_location(screen, pet, pet_image_path):
     screen.blit(pet.image, pet.rect.topleft)
     return img_width, img_height
 
-def draw_pet_attributes(screen,pet, food_button, water_button, achieve_button, speech_recognition_button):
+def draw_pet_attributes(screen, pet, food_button, water_button, achieve_button, speech_recognition_button):
     hungry_text = render_text_with_outline(f'飢餓度', game_screen_font, text_color, outline_color, outline_thickness)
     screen.blit(hungry_text, (25, 0))
 
-    # draw_progress_bar
     draw_progress_bar(screen, 100, 10, 200, 18, (255, 0, 0), pet.hungry_level)
 
     happy_text = render_text_with_outline(f'快樂度', game_screen_font, text_color, outline_color, outline_thickness)
@@ -58,7 +57,7 @@ def draw_pet_attributes(screen,pet, food_button, water_button, achieve_button, s
     water_button.show()
     achieve_button.show()
 
-def draw_player_info(screen,pet, shop_button, settings_button, play_game_earn_money_button):
+def draw_player_info(screen, pet, shop_button, settings_button, play_game_earn_money_button):
     state_text = render_text_with_outline(f'成長階段: {pet.state}', game_screen_font, text_color, outline_color, outline_thickness)
     screen.blit(state_text, (550, 0))
 
@@ -77,9 +76,7 @@ def draw_player_info(screen,pet, shop_button, settings_button, play_game_earn_mo
 
 def change_direction(pet):
     pet.speed_x = random.choice([-1, 0, 1])
-    # pet.speed_y = random.choice([-1, 0, 1])
-    pet.update_position()  # Update position after changing direction
-
+    pet.update_position()
 
 def game_screen(screen, pet):
     if pet.gender == 'male':
@@ -90,9 +87,19 @@ def game_screen(screen, pet):
     clock = pygame.time.Clock()
     last_update_time = time()
     direction_change_time = time()
-    
-    food_button = Button(f'食物:{pet.food_amount}', (25, 80), game_screen_font, screen, GRAY, f'食物{pet.food_amount}')
-    water_button = Button(f'水:{pet.water_amount}', (25, 110), game_screen_font, screen, GRAY, f'水:{pet.water_amount}')
+
+    if pet.state == 'baby':
+        water_text = '水'
+        food_text = '食物'
+    elif pet.state == 'teen':
+        water_text = '酒'
+        food_text = '漢堡'
+    else:
+        water_text = '枸杞茶'
+        food_text = '養生粥'
+
+    food_button = Button(f'{food_text}:{pet.food_amount}', (25, 80), game_screen_font, screen, GRAY, f'{food_text}:{pet.food_amount}')
+    water_button = Button(f'{water_text}:{pet.water_amount}', (25, 110), game_screen_font, screen, GRAY, f'{water_text}:{pet.water_amount}')
     achieve_button = Button(u'成就', (25, 140), game_screen_font, screen, GRAY, u'成就')
     
     settings_button = Button(u'設定', (550, 105), game_screen_font, screen, GRAY, u'設定')
@@ -104,6 +111,7 @@ def game_screen(screen, pet):
     happy_pet_image_path = settings.happy_pet_image_path
     sad_pet_image_path = settings.sad_pet_image_path
     listen_to_speech_pet_path = settings_general.listen_to_speech_pet_path
+
     pet_happy_start_time = 0
     pet_is_happy = False
     pet_sad_start_time = 0
@@ -114,7 +122,6 @@ def game_screen(screen, pet):
     change_direction(pet)
 
     while True:
-        
         game_background_image = pygame.image.load(settings.game_background_image_path)
         game_background_image = pygame.transform.scale(game_background_image, settings.screen_size)
         screen.blit(game_background_image, (0, 0))
@@ -123,6 +130,7 @@ def game_screen(screen, pet):
         if pet.status == 'dead' or pet.happy_level <= 0 or pet.hungry_level <= 0 or pet.healthy_level <= 0:
             game_over_screen(screen, pet)
             break
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -132,30 +140,37 @@ def game_screen(screen, pet):
                 if shop_button.click(event):
                     shop_button.release(event)
                     open_shop(screen, pet)
-                    food_button = Button(f'食物:{pet.food_amount}', (25, 80), game_screen_font, screen, GRAY, f'食物{pet.food_amount}')
-                    water_button = Button(f'水:{pet.water_amount}', (25, 110), game_screen_font, screen, GRAY, f'水:{pet.water_amount}')
+                    food_button = Button(f'{food_text}:{pet.food_amount}', (25, 80), game_screen_font, screen, GRAY, f'{food_text}:{pet.food_amount}')
+                    water_button = Button(f'{water_text}:{pet.water_amount}', (25, 110), game_screen_font, screen, GRAY, f'{water_text}:{pet.water_amount}')
                     achieve_button = Button(u'成就', (25, 140), game_screen_font, screen, GRAY, u'成就')
                     
                     game_background_image = pygame.image.load(settings.game_background_image_path)
                     game_background_image = pygame.transform.scale(game_background_image, settings.screen_size)
                     screen.blit(game_background_image, (0, 0))
                     pygame.display.update()
-                    shop_button.release(event)
                     continue
+
                 if food_button.click(event):
+                    food_button.release(event)
                     return_val = pet.feed()
+
                     eat1_image = pygame.image.load(settings.baby_eat1_image_path)
                     eat2_image = pygame.image.load(settings.baby_eat2_image_path)
                     eat1_image = pygame.transform.scale(eat1_image, (150, 150))
                     eat2_image = pygame.transform.scale(eat2_image, (150, 150))
                     music_path = "Assets/Bgm/eat.mp3"
+                    draw_pet_location(screen, pet, listen_to_speech_pet_path)
+                    draw_pet_attributes(screen, pet, food_button, water_button, achieve_button, speech_recognition_button)
+                    draw_player_info(screen, pet, shop_button, settings_button, play_game_earn_money_button)
 
                     if return_val != 'no food':
                         play_sound_effect(music_path)
                         animate_images(screen, pet, eat1_image, eat2_image, duration=2, switch_interval=0.2, x=pet.x, y=pet.y)
                         pygame.mixer.music.unpause()
+                        pet.update_position()
 
-                    food_button = Button(f'食物:{pet.food_amount}', (25, 80), game_screen_font, screen, GRAY, f'食物{pet.food_amount}')
+                    food_button = Button(f'{food_text}:{pet.food_amount}', (25, 80), game_screen_font, screen, GRAY, f'{food_text}:{pet.food_amount}')
+                    pygame.display.update()
                 if water_button.click(event):
                     return_val = pet.drink()
                     drink1_image = pygame.image.load(settings.baby_eat1_image_path)
@@ -163,13 +178,24 @@ def game_screen(screen, pet):
                     drink1_image = pygame.transform.scale(drink1_image, (150, 150))
                     drink2_image = pygame.transform.scale(drink2_image, (150, 150))
                     music_path = "Assets/Bgm/drink.mp3"
+                    draw_pet_location(screen,pet, listen_to_speech_pet_path)
+                    draw_pet_attributes(screen,pet, food_button, water_button, achieve_button, speech_recognition_button)
+                    draw_player_info(screen, pet,shop_button, settings_button, play_game_earn_money_button)
 
                     if return_val != 'no water':
                         play_sound_effect(music_path)
                         animate_images(screen,pet, drink1_image, drink2_image, duration=2, switch_interval=0.2, x=pet.x, y=pet.y)
                         pygame.mixer.music.unpause()
-
-                    water_button = Button(f'水:{pet.water_amount}', (25, 110), game_screen_font, screen, GRAY, f'水:{pet.water_amount}')
+                    if pet.state == 'baby':
+                        water_text = '水'
+                        food_text = '食物'
+                    elif pet.state == 'teen':
+                        water_text = '酒'
+                        food_text = '漢堡'
+                    else:
+                        water_text = '枸杞茶'
+                        food_text = '養生粥'
+                    water_button = Button(f'{water_text}:{pet.water_amount}', (25, 110), game_screen_font, screen, GRAY, f'{water_text}:{pet.water_amount}')
                 if settings_button.click(event):
                     settings_button.release(event)
                     setting_screen(screen, pet)
@@ -495,8 +521,18 @@ def animate_images(screen,pet, img1, img2, duration=2, switch_interval=0.2, x = 
     start_time = time()
     last_switch_time = start_time
     current_image = img1
-    food_button = Button(f'食物:{pet.food_amount}', (25, 80), game_screen_font, screen, GRAY, f'食物{pet.food_amount}')
-    water_button = Button(f'水:{pet.water_amount}', (25, 110), game_screen_font, screen, GRAY, f'水:{pet.water_amount}')
+    if pet.state == 'baby':
+        water_text = '水'
+        food_text = '食物'
+    elif pet.state == 'teen':
+        water_text = '酒'
+        food_text = '漢堡'
+    else:
+        water_text = '枸杞茶'
+        food_text = '養生粥'
+
+    food_button = Button(f'{food_text}:{pet.food_amount}', (25, 80), game_screen_font, screen, GRAY, f'{food_text}{pet.food_amount}')
+    water_button = Button(f'{water_text}:{pet.water_amount}', (25, 110), game_screen_font, screen, GRAY, f'{water_text}:{pet.water_amount}')
     achieve_button = Button(u'成就', (25, 140), game_screen_font, screen, GRAY, u'成就')
     
     settings_button = Button(u'設定', (550, 105), game_screen_font, screen, GRAY, u'設定')
