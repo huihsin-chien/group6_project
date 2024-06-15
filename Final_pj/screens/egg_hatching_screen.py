@@ -11,28 +11,10 @@ pet = Pet()
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GRAY = (169, 169, 169)
-heads_image = pygame.image.load('Assets/img/Resized/Male.jpg').convert_alpha()
-heads_image_width, heads_image_height = heads_image.get_size()
-for x in range(heads_image_width):
-    for y in range(heads_image_height):
-        # 获取像素的颜色
-        r, g, b, a = heads_image.get_at((x, y))
-        
-        # 设置一个阈值，将接近白色的像素设置为透明
-        if r > 200 and g > 200 and b > 200:
-            heads_image.set_at((x, y), (r, g, b, 0))
-
-tails_image = pygame.image.load('Assets/img/Resized/Female.jpg').convert_alpha()
-tails_image_width, tails_image_height = tails_image.get_size()
-for x in range(tails_image_width):
-    for y in range(tails_image_height):
-        # 获取像素的颜色
-        r, g, b, a = tails_image.get_at((x, y))
-        
-        # 设置一个阈值，将接近白色的像素设置为透明
-        if r > 200 and g > 200 and b > 200:
-            tails_image.set_at((x, y), (r, g, b, 0))
-
+heads_image = pygame.image.load('Assets\img\male.png')
+heads_image = pygame.transform.scale(heads_image, (200, 200))
+tails_image = pygame.image.load('Assets\img/female.png')
+tails_image = pygame.transform.scale(tails_image, (200, 200))
 menu_font = pygame.font.Font(settings.font_path, settings.menu_font_size)
 
 def egg_hatching_screen(screen):
@@ -92,6 +74,14 @@ def egg_hatching_screen(screen):
 
 def toss_coin():
     return random.choice(["Female", "Male"])
+
+def display_result(screen, result):
+    screen.fill((BLACK))  # 清屏，填充白色
+    if result == "Female":
+        screen.blit(heads_image, (300, 300))
+    else:
+        screen.blit(tails_image, (300, 300))
+    pygame.display.flip()
 
 if __name__ == "__main__":
     pygame.init()

@@ -3,7 +3,7 @@ import sys
 from button import Button
 from pet import Pet
 import settings_general
-
+from settings_gs import Pet_img
 from time import time
 import random
 from utils import draw_progress_bar, draw_chart, save_record
@@ -79,10 +79,6 @@ def change_direction(pet):
     pet.update_position()
 
 def game_screen(screen, pet):
-    if pet.gender == 'male':
-        import settings_male as settings
-    else:
-        import settings_female as settings
     
     clock = pygame.time.Clock()
     last_update_time = time()
@@ -107,9 +103,9 @@ def game_screen(screen, pet):
     shop_button = Button(u'商店', (550, 165), game_screen_font, screen, GRAY, u'商店')
     play_game_earn_money_button = Button(u'賺錢', (550, 195), game_screen_font, screen, GRAY, u'賺錢')
 
-    pet_image_path = settings.baby_pet_image_path if pet.state == 'baby' else (settings.teen_pet_image_path if pet.state == 'teen' else settings.adult_pet_image_path)
-    happy_pet_image_path = settings.happy_pet_image_path
-    sad_pet_image_path = settings.sad_pet_image_path
+    pet_image_path = Pet_img.load_images(pet, pet.state)
+    happy_pet_image_path = Pet_img.load_images(pet, 'happy')
+    sad_pet_image_path = Pet_img.load_images(pet, 'sad')
     listen_to_speech_pet_path = settings_general.listen_to_speech_pet_path
 
     pet_happy_start_time = 0
@@ -122,6 +118,7 @@ def game_screen(screen, pet):
     change_direction(pet)
 
     while True:
+        import settings_general as settings
         game_background_image = pygame.image.load(settings.game_background_image_path)
         game_background_image = pygame.transform.scale(game_background_image, settings.screen_size)
         screen.blit(game_background_image, (0, 0))
@@ -154,10 +151,8 @@ def game_screen(screen, pet):
                     food_button.release(event)
                     return_val = pet.feed()
 
-                    eat1_image = pygame.image.load(settings.baby_eat1_image_path)
-                    eat2_image = pygame.image.load(settings.baby_eat2_image_path)
-                    eat1_image = pygame.transform.scale(eat1_image, (150, 150))
-                    eat2_image = pygame.transform.scale(eat2_image, (150, 150))
+                    eat1_image = pygame.image.load(Pet_img.load_images(pet, 'eat1'))
+                    eat2_image = pygame.image.load(Pet_img.load_images(pet, 'eat2'))
                     music_path = "Assets/Bgm/eat.mp3"
                     draw_pet_location(screen, pet, listen_to_speech_pet_path)
                     draw_pet_attributes(screen, pet, food_button, water_button, achieve_button, speech_recognition_button)
@@ -173,10 +168,8 @@ def game_screen(screen, pet):
                     pygame.display.update()
                 if water_button.click(event):
                     return_val = pet.drink()
-                    drink1_image = pygame.image.load(settings.baby_eat1_image_path)
-                    drink2_image = pygame.image.load(settings.baby_eat2_image_path)
-                    drink1_image = pygame.transform.scale(drink1_image, (150, 150))
-                    drink2_image = pygame.transform.scale(drink2_image, (150, 150))
+                    drink1_image = pygame.image.load(Pet_img.load_images(pet, 'drink1'))
+                    drink2_image = pygame.image.load(Pet_img.load_images(pet, 'drink2'))
                     music_path = "Assets/Bgm/drink.mp3"
                     draw_pet_location(screen,pet, listen_to_speech_pet_path)
                     draw_pet_attributes(screen,pet, food_button, water_button, achieve_button, speech_recognition_button)
@@ -201,7 +194,7 @@ def game_screen(screen, pet):
                     setting_screen(screen, pet)
                 if pet.rect.collidepoint(event.pos):
                     pet.touch_pet()
-                    pet_image_path = happy_pet_image_path
+                    pet_image_path = Pet_img.load_images(pet, 'touch')
                     pet_happy_start_time = current_time
                     pet_is_happy = True
                     music_path = "Assets/Bgm/happy.mp3"
@@ -263,18 +256,18 @@ def game_screen(screen, pet):
         if pet_is_happy and current_time - pet_happy_start_time >= 3:
             # music_path = "Assets/Bgm/happy.mp3"
             # play_sound_effect(music_path)
-            pet_image_path = settings.baby_pet_image_path if pet.state == 'baby' else (settings.teen_pet_image_path if pet.state == 'teen' else settings.adult_pet_image_path)
+            pet_image_path = Pet_img.load_images(pet, pet.state)
             pygame.mixer.music.unpause()
             pet_is_happy = False
         #if pet is sad
         if pet_is_sad and current_time - pet_sad_start_time >= 3:
             # music_path = "Assets/Bgm/cry.mp3"
             # play_sound_effect(music_path)
-            pet_image_path = settings.baby_pet_image_path if pet.state == 'baby' else (settings.teen_pet_image_path if pet.state == 'teen' else settings.adult_pet_image_path)
+            pet_image_path = Pet_img.load_images(pet, pet.state)
             pygame.mixer.music.unpause()
             pet_is_sad = False
         if pet_is_speeching and current_time - pet_speech_start_time >= 3:
-            pet_image_path = settings.baby_pet_image_path if pet.state == 'baby' else (settings.teen_pet_image_path if pet.state == 'teen' else settings.adult_pet_image_path)
+            pet_image_path = Pet_img.load_images(pet, pet.state)
             pet_is_speeching = False
         if current_time - direction_change_time >= 2:
             change_direction(pet)
@@ -394,10 +387,11 @@ def game_over_screen(screen,pet):
 
 
 def play_game(screen, pet):
-    if pet.gender == 'male':
-        import settings_male as settings
-    else:
-        import settings_female as settings
+    # if pet.gender == 'male':
+    #     import Final_pj.settings_gs as settings
+    # else:
+    #     import settings_female as settings
+    import settings_general as settings
     paddle_image = pygame.image.load(settings.paddle_image_path)
     paddle_image = pygame.transform.scale(paddle_image, (100, 100))
     paddle_rect = paddle_image.get_rect()
