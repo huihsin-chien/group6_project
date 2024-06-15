@@ -262,20 +262,23 @@ def game_screen(screen, pet):
         current_time = time()
         #if pet is happy
         if pet_is_happy and current_time - pet_happy_start_time >= 15:
-            # music_path = "Assets/Bgm/happy.mp3"
-            # play_sound_effect(music_path)
             pet_image_path = Pet_img.load_images(pet, pet.state)
             pygame.mixer.music.unpause()
             pet_is_happy = False
+
         #if pet is sad
         if pet_is_sad and current_time - pet_sad_start_time >= 15:
-            # music_path = "Assets/Bgm/cry.mp3"
-            # play_sound_effect(music_path)
             pet_image_path = Pet_img.load_images(pet, pet.state)
             pygame.mixer.music.unpause()
             pet_is_sad = False
         if pet_is_speeching and current_time - pet_speech_start_time >= 3:
-            pet_image_path = Pet_img.load_images(pet, pet.state)
+            if pet_is_happy:
+                pet_image_path = happy_pet_image_path
+            elif pet_is_sad:
+                pet_image_path = sad_pet_image_path
+            else:
+                pet_image_path = Pet_img.load_images(pet, pet.state)
+            # pet_image_path = Pet_img.load_images(pet, pet.state)
             pet_is_speeching = False
         if current_time - direction_change_time >= 2:
             change_direction(pet)
