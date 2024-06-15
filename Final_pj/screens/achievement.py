@@ -50,7 +50,7 @@ class Achievement:
 # 成就頁面類別
 class AchievementPage:
     def __init__(self):
-        names = ["寵物摸摸大師", "麥當勞叔叔", "有種餓叫媽媽覺得你餓", "甚麼球都接得到喔", "酒鬼"]
+        names = ["寵物摸摸大師:摸寵物5下", "麥當勞叔叔:說出「麥當勞」3次", "有種餓叫媽媽覺得你餓:hungry level 100%", "甚麼球都接得到喔:賺錢遊戲15分", "酒鬼:在teen年齡段喝5次酒"]
         self.achievements = [Achievement(name, (100 if i < 5 else 400, 50 + (i % 5) * 100)) for i, name in enumerate(names)]
         self.completed_achievements = [False] * len(self.achievements)
         self.load_state()
