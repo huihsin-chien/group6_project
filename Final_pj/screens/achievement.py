@@ -43,8 +43,8 @@ class Achievement:
     def draw(self, screen):
         color = GREEN if self.completed else WHITE
         pygame.draw.rect(screen, color, (*self.position, 550, 40))
-        display_name = self.name if self.completed else "Achievement " + self.name.split()[1]
-        text = font.render(self.name, True, BLACK)
+        display_name = self.name if self.completed else "Achievement Locked"
+        text = font.render(display_name, True, BLACK)
         screen.blit(text, (self.position[0] + 10, self.position[1] + 10))
 
 # 成就頁面類別
