@@ -103,7 +103,7 @@ def achievement(achieve=False, index=0):
 
     if achieve:
         achievement_page.draw_achievement_message(screen, index - 1)
-        pygame.time.delay(1000)
+        pygame.time.delay(1500)
 
     while show_achievement_page:
         for event in pygame.event.get():
@@ -115,7 +115,8 @@ def achievement(achieve=False, index=0):
                 achieve = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if return_button.click(event):
-                    show_achievement_page = False
+                    # show_achievement_page = False
+                    return
 
         screen.fill(BLACK)
         achievement_page.update()
