@@ -18,7 +18,7 @@ GREEN = (0, 255, 0)
 GRAY = (169, 169, 169)
 
 # 字體設定
-font = pygame.font.Font(settings.font_path, settings.menu_font_size)
+font = pygame.font.Font(settings.font_path, settings.game_screen_font_size)
 
 # 成就類別
 class Achievement:
