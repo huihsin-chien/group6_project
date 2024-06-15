@@ -1,0 +1,28 @@
+接下來想要寫遊戲執行部分：
+進到egg_hatching_screen後五秒跳轉至遊戲遊玩頁面
+此頁面有寵物管理、成長與進化、遊戲內經濟系統等
+寵物有幾個屬性：
+1. hour:寵物活了幾小時，每活10秒增加一小時
+2. status:有hungry, full
+3. hungry level: 0-100%，很餓的時候0%，很飽的時候100%
+4. happy level：0 - 100%滑鼠點擊寵物跟吃東西會增加happy level, 肚子餓跟口渴會降低happy level
+5. healthy level: 0-100%口渴時會降低
+5. food amount:玩家擁有的食物數量
+6. water amount:玩家擁有的水數量
+7. state: 依照活的時間長短區分，像是baby, teens, adult,...
+8. money：玩家擁有的金錢數量，可以用錢去商店買食物跟水
+
+畫面上有以下元素
+左側從上往下排列：
+hungry level
+happy level
+healthy level
+food amount
+ water amount
+
+右側從上往下排列
+state
+shop
+money
+
+請先幫我補完完整的遊戲規則
