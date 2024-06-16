@@ -489,6 +489,9 @@ def ball_draw_objects(screen, paddle_image, paddle_rect, ball, font, pet):
 
 def ball_game_over_screen(screen, pet, font):
     # game_over_text = font.render(u'Game Over', True, WHITE)
+    if pet.c3 == False and pet.money >= 100:
+        achievement(True, 4)
+        pet.c3 = True
     game_over_text = render_text_with_outline(f'Game Over', game_screen_font, text_color, outline_color, outline_thickness)
     screen.fill(BLACK)
     screen.blit(game_over_text, (300, 200))
@@ -501,9 +504,9 @@ def ball_game_over_screen(screen, pet, font):
     play_again_button.show()
     pygame.display.update()
 
-    if pet.c3 == False and pet.money >= 100:
-        achievement(True, 4)
-        pet.c3 = True
+    # if pet.c3 == False and pet.money >= 100:
+    #     achievement(True, 4)
+    #     pet.c3 = True
 
 
     # save_record(pet.get_summary())

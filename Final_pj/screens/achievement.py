@@ -94,11 +94,13 @@ class AchievementPage:
         self.achievement_message_counter = self.achievement_message_duration
 
     def draw_achievement_message(self, screen, index):
-        message_rect = pygame.Rect((screen.get_width() // 2 - 75, 50, 150, 200))
+        message_rect = pygame.Rect((screen.get_width() // 2 -100, screen.get_height() // 2 - 50, 200, 100))
         pygame.draw.rect(screen, GRAY, message_rect)
         names = ["寵物摸摸大師", "麥當勞叔叔", "有種餓叫媽媽覺得你餓", "有錢人", "酒鬼"]
-        text = font.render("達成成就: " + names[index], True, BLACK)
-        screen.blit(text, (screen.get_width() // 2 - 70, 140))
+        text = font.render("達成成就: " , True, BLACK)
+        text2 = font.render(names[index], True, BLACK)
+        screen.blit(text, (screen.get_width() // 2 - 70, screen.get_height() // 2 - 30))
+        screen.blit(text2, (screen.get_width() // 2 - 70, screen.get_height() // 2))
 
 # 主函數
 def achievement(achieve=False, index=0):
