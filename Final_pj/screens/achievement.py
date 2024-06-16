@@ -62,15 +62,19 @@ class AchievementPage:
             self.achievements[index].complete()
             self.completed_achievements[index] = True
             self.save_state()
+            self.show_achievement_complete_message()
 
     def update(self):
         for achievement in self.achievements:
             achievement.update()
-
+        if self.achievement_message_counter > 0:
+            self.achievement_message_counter -= 1
 
     def draw(self, screen):
         for achievement in self.achievements:
             achievement.draw(screen)
+        if self.achievement_message_counter > 0:
+            self.draw_achievement_message(screen)
 
     def save_state(self):
         with open('achievements.json', 'w') as file:
@@ -85,6 +89,9 @@ class AchievementPage:
                         self.achievements[i].complete()
         except FileNotFoundError:
             pass
+    
+    def show_achievement_complete_message(self):
+        self.achievement_message_counter = self.achievement_message_duration
 
     def draw_achievement_message(self, screen, index):
         message_rect = pygame.Rect((screen.get_width() // 2 - 75, 50, 150, 200))
