@@ -70,11 +70,11 @@ class AchievementPage:
         if self.achievement_message_counter > 0:
             self.achievement_message_counter -= 1
 
-    def draw(self, screen):
+    def draw(self, screen, index = 0):
         for achievement in self.achievements:
             achievement.draw(screen)
         if self.achievement_message_counter > 0:
-            self.draw_achievement_message(screen)
+            self.draw_achievement_message(screen, index)
 
     def save_state(self):
         with open('achievements.json', 'w') as file:
@@ -127,7 +127,7 @@ def achievement(achieve=False, index=0):
 
         screen.fill(BLACK)
         achievement_page.update()
-        achievement_page.draw(screen)
+        achievement_page.draw(screen, index - 1)
 
         return_button = Button(u'Return', (300, 550), font, screen, GRAY, u'Return')
         return_button.show()
