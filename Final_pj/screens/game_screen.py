@@ -202,10 +202,12 @@ def game_screen(screen, pet):
                     pet_image_path = Pet_img.load_images(pet, 'touch')
                     pet_happy_start_time = current_time
                     pet_is_happy = True
-                    music_path = "Assets/Bgm/happy.mp3"
-                    play_sound_effect(music_path)
+                    pet.touch += 1
                     if pet.touch == 5:
                         achievement(True, 1)
+                    music_path = "Assets/Bgm/happy.mp3"
+                    play_sound_effect(music_path)
+                    
                         
                 if speech_recognition_button.click(event):
                     pet_image_path = listen_to_speech_pet_path
@@ -222,6 +224,9 @@ def game_screen(screen, pet):
                         pet_image_path = happy_pet_image_path
                         if "麥當勞" in text:
                             pet.happy_level += 15
+                            pet.mac += 1
+                            if pet.mac == 3:
+                                achievement(True, 2)
                         else:
                             pet.happy_level += 10
                         music_path = "Assets/Bgm/happy.mp3"
@@ -262,23 +267,20 @@ def game_screen(screen, pet):
         current_time = time()
         #if pet is happy
         if pet_is_happy and current_time - pet_happy_start_time >= 15:
+            # music_path = "Assets/Bgm/happy.mp3"
+            # play_sound_effect(music_path)
             pet_image_path = Pet_img.load_images(pet, pet.state)
             pygame.mixer.music.unpause()
             pet_is_happy = False
-
         #if pet is sad
         if pet_is_sad and current_time - pet_sad_start_time >= 15:
+            # music_path = "Assets/Bgm/cry.mp3"
+            # play_sound_effect(music_path)
             pet_image_path = Pet_img.load_images(pet, pet.state)
             pygame.mixer.music.unpause()
             pet_is_sad = False
         if pet_is_speeching and current_time - pet_speech_start_time >= 3:
-            if pet_is_happy:
-                pet_image_path = happy_pet_image_path
-            elif pet_is_sad:
-                pet_image_path = sad_pet_image_path
-            else:
-                pet_image_path = Pet_img.load_images(pet, pet.state)
-            # pet_image_path = Pet_img.load_images(pet, pet.state)
+            pet_image_path = Pet_img.load_images(pet, pet.state)
             pet_is_speeching = False
         if current_time - direction_change_time >= 2:
             change_direction(pet)

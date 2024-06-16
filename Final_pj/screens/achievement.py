@@ -18,7 +18,7 @@ GREEN = (0, 255, 0)
 GRAY = (169, 169, 169)
 
 # 字體設定
-font = pygame.font.Font(settings.font_path, settings.menu_font_size)
+font = pygame.font.Font(settings.font_path, settings.game_screen_font_size)
 
 # 成就類別
 class Achievement:
@@ -101,9 +101,9 @@ def achievement(achieve=False, index=0):
 
     show_achievement_page = True
 
-    if achieve:
-        achievement_page.draw_achievement_message(screen, index - 1)
-        pygame.time.delay(1500)
+    # if achieve:
+    #     achievement_page.draw_achievement_message(screen, index - 1)
+    #     pygame.time.delay(1500)
 
     while show_achievement_page:
         for event in pygame.event.get():
@@ -127,4 +127,7 @@ def achievement(achieve=False, index=0):
 
         pygame.display.flip()
         clock.tick(30)
+
+def new_func():
+    return
 
