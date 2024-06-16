@@ -1,0 +1,6 @@
+我想加入chatgpt api，我已經申請好api key了，請教我如何使用chatgpt api
+
+我想要把pet.state, pet.healthy_level, pet.happy_level, pet.hungry_level 還有 user_text_input送給api，讓chatgpt能根據寵物的狀態和使用者輸入做出文字回應。
+如果pet.state == 'teen'，chatgpt就要做出像青少年易怒、急躁、叛逆期的語氣，比如說，如果pet.state == 'teen'且pet.hungry_level很低，chatgpt可能就要做出"我就是想吃垃圾食物，干你屁事"的回應。如果pet.state == 'teen'且pet.happy_level很低，chatgpt可能就要做出"老子今天就是不爽"的回應。
+
+如果pet.state == 'adult'，chatgpt就要做出像青少年易怒、急躁、叛逆期的語氣，
