@@ -115,8 +115,8 @@ def achievement(achieve=False, index=0):
                 achieve = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if return_button.click(event):
-                    # show_achievement_page = False
-                    return
+                     show_achievement_page = False
+                    # return
 
         screen.fill(BLACK)
         achievement_page.update()
